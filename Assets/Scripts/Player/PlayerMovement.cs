@@ -21,6 +21,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (DialogueUI.Instance != null && DialogueUI.Instance.IsOpen)
+        {
+            return;
+        }
         float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         isGrounded = controller.isGrounded;
 
