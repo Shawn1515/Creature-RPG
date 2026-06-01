@@ -23,6 +23,9 @@ public class CreatureWander : MonoBehaviour
 
     void Update()
     {
+        if(DialogueUI.Instance != null && DialogueUI.Instance.IsOpen) {
+            return;
+        }
         if (isWaiting)
         {
             waitTimer -= Time.deltaTime;

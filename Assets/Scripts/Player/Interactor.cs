@@ -17,7 +17,7 @@ public class Interactor : MonoBehaviour
     }
 
     void TryInteract() {
-        Ray ray = new Ray(transform.position + Vector3.up * 1f, transform.forward);
+        Ray ray = new Ray(transform.position, transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
         {

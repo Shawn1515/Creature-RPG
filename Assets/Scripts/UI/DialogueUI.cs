@@ -20,6 +20,12 @@ public class DialogueUI : MonoBehaviour
 
     public bool IsOpen => dialoguePanel.activeSelf;
     public bool IsTyping => isTyping;
+    private CreatureData pendingBattleCreature;
+
+    public void SetPendingBattle(CreatureData creature)
+    {
+        pendingBattleCreature = creature;
+    }
 
     private void Awake()
     {
@@ -90,5 +96,10 @@ public class DialogueUI : MonoBehaviour
     public void HideDialogue()
     {
         dialoguePanel.SetActive(false);
+
+        if (pendingBattleCreature != null) {
+            BattleManager.Instance.StartBattle(pendingBattleCreature);
+            pendingBattleCreature = null;
+        }
     }
 }
