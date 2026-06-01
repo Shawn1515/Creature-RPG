@@ -7,6 +7,9 @@ public class CreatureData : ScriptableObject
     public int maxHP;
     public int attack;
     public int defense;
+    public int speed;
+    
+    public MoveData[] moves;
 
     [TextArea]
     public string[] encounterText;

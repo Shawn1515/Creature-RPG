@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (DialogueUI.Instance != null && DialogueUI.Instance.IsOpen)
+        if (GameManager.Instance.CurrentState != GameState.Exploration)
         {
             return;
         }

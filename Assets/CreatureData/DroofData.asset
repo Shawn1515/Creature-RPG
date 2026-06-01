@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06072ef578fa5184fbb2797d3f993289, type: 3}
+  m_Name: DroofData
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureData
+  creatureName: Droof
+  maxHP: 20
+  attack: 5
+  defense: 3
+  speed: 3
+  moves:
+  - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+  encounterText:
+  - A wild Droof appeared!
+  - It wants to beat you up!

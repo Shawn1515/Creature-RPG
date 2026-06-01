@@ -34,6 +34,7 @@ public class DialogueUI : MonoBehaviour
 
     public void StartDialogue(string[] dialogueLines)
     {
+        GameManager.Instance.SetState(GameState.Dialogue);
         currentDialogue = dialogueLines;
         dialogueIndex = 0;
 
@@ -95,6 +96,7 @@ public class DialogueUI : MonoBehaviour
 
     public void HideDialogue()
     {
+        GameManager.Instance.SetState(GameState.Exploration);
         dialoguePanel.SetActive(false);
 
         if (pendingBattleCreature != null) {
