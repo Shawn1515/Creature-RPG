@@ -5,6 +5,9 @@ using Unity.Cinemachine;
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
+    public Transform playerTransform;
+    public Transform playerCreatureTransform;
+    public GameObject enemyHPBarCanvas;
 
     [Header("UI")]
     public GameObject battlePanel;
@@ -49,6 +52,7 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(CreatureData creature)
     {
+        enemyHPBarCanvas.SetActive(true);
         playerCreature = PlayerCreatureManager.Instance.starterCreature;
 
         enemyCreature = creature;
@@ -57,6 +61,10 @@ public class BattleManager : MonoBehaviour
         enemyCurrentHP = enemyCreature.maxHP;
 
         GameManager.Instance.SetState(GameState.Battle);
+
+        playerTransform.position = BattlePositions.Instance.playerSpot.position;
+        playerCreatureTransform.position = BattlePositions.Instance.playerCreatureSpot.position;
+        //enemyCreature.transform.position = BattlePositions.Instance.enemySpot.position;
 
         exploreCamera.Priority = 10;
         battleCamera.Priority = 20;
@@ -74,6 +82,7 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
+        enemyHPBarCanvas.SetActive(false);
         battleCamera.Priority = 10;
         exploreCamera.Priority = 20;
 

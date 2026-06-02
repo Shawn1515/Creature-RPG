@@ -22,4 +22,9 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Game State: " + newState);
     }
+
+    public GameState GetState()
+    {
+        return CurrentState;
+    }
 }

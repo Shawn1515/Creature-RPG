@@ -23,6 +23,10 @@ public class CreatureWander : MonoBehaviour
 
     void Update()
     {
+        if(GameManager.Instance.GetState() != GameState.Exploration)
+        {
+            return;
+        }
         if(DialogueUI.Instance != null && DialogueUI.Instance.IsOpen) {
             return;
         }
