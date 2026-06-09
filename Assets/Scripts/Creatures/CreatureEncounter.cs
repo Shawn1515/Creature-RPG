@@ -15,7 +15,7 @@ public class CreatureEncounter : MonoBehaviour
             Vector3 direction = other.transform.position - transform.position;
             direction.y = 0f;
             transform.rotation = Quaternion.LookRotation(direction);
-            DialogueUI.Instance.SetPendingBattle(creatureData);
+            DialogueUI.Instance.SetPendingBattle(creatureData, transform);
             DialogueUI.Instance.StartDialogue(creatureData.encounterText);
         }
     }

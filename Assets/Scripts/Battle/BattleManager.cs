@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class BattleManager : MonoBehaviour
     [Header("UI")]
     public GameObject battlePanel;
     public TextMeshProUGUI creatureNameText;
-    public TextMeshProUGUI playerHPText;
-    public TextMeshProUGUI enemyHPText;
+    public TextMeshProUGUI playerCreatureName;
+    public TextMeshProUGUI enemyName;
     public TextMeshProUGUI battleLogText;
+    public Slider playerHPBar;
+    public Slider enemyHPBar;
 
     [Header("Cameras")]
     public CinemachineCamera exploreCamera;
@@ -25,6 +28,7 @@ public class BattleManager : MonoBehaviour
 
     private int playerCurrentHP;
     private int enemyCurrentHP;
+    private Transform enemyTransform;
 
     private void Awake()
     {
@@ -50,21 +54,26 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void StartBattle(CreatureData creature)
+    public void StartBattle(CreatureData creature, Transform enemy)
     {
         enemyHPBarCanvas.SetActive(true);
+
         playerCreature = PlayerCreatureManager.Instance.starterCreature;
 
         enemyCreature = creature;
+        enemyTransform = enemy;
 
+        enemyTransform.GetComponent<CreatureWander>()?.StopMoving();
         playerCurrentHP = playerCreature.maxHP;
         enemyCurrentHP = enemyCreature.maxHP;
 
-        GameManager.Instance.SetState(GameState.Battle);
+        GameManager.Instance.SetState(
+            GameState.Battle
+        );
 
-        playerTransform.position = BattlePositions.Instance.playerSpot.position;
-        playerCreatureTransform.position = BattlePositions.Instance.playerCreatureSpot.position;
-        //enemyCreature.transform.position = BattlePositions.Instance.enemySpot.position;
+        PositionBattleParticipants();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         exploreCamera.Priority = 10;
         battleCamera.Priority = 20;
@@ -89,6 +98,8 @@ public class BattleManager : MonoBehaviour
         GameManager.Instance.SetState(GameState.Exploration);
 
         battlePanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void UpdateMoveText()
@@ -103,11 +114,11 @@ public class BattleManager : MonoBehaviour
 
     void UpdateHPUI()
     {
-        playerHPText.text =
-            $"{playerCreature.creatureName} HP: {playerCurrentHP}/{playerCreature.maxHP}";
+        playerCreatureName.text = $"{playerCreature.creatureName}";
+        enemyName.text =  $"Wild {enemyCreature.creatureName}";
 
-        enemyHPText.text =
-            $"Wild {enemyCreature.creatureName} HP: {enemyCurrentHP}/{enemyCreature.maxHP}";
+        playerHPBar.value = (float)playerCurrentHP / playerCreature.maxHP;
+        enemyHPBar.value = (float)enemyCurrentHP / enemyCreature.maxHP;
     }
 
     void BattleRound(MoveData playerMove)
@@ -146,6 +157,8 @@ public class BattleManager : MonoBehaviour
             enemyCurrentHP = 0;
         }
 
+        UpdateHPUI();
+
         battleLogText.text = $"{playerCreature.creatureName} used {move.moveName}!";
 
         if (enemyCurrentHP <= 0)
@@ -165,6 +178,8 @@ public class BattleManager : MonoBehaviour
         if (playerCurrentHP < 0) {
             playerCurrentHP = 0;
         }
+
+        UpdateHPUI();
         
         battleLogText.text += $"\nWild {enemyCreature.creatureName} used {move.moveName}!";
 
@@ -190,5 +205,42 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("Ran Away!");
         EndBattle();
+    }
+
+    Vector3 GetGroundPosition(Vector3 position)
+    {
+        if (Physics.Raycast(position + Vector3.up * 20f, Vector3.down, out RaycastHit hit, 100f))
+        {
+            return hit.point;
+        }
+        return position;
+    }
+
+    void PositionBattleParticipants()
+    {
+        Vector3 enemyPos =
+            GetGroundPosition(
+                BattlePositions.Instance.enemySpot.position
+            );
+        Vector3 playerCreaturePos =
+            GetGroundPosition(
+                BattlePositions.Instance.playerCreatureSpot.position
+            );
+        Vector3 playerPos =
+            GetGroundPosition(
+                BattlePositions.Instance.playerSpot.position
+            );
+        playerTransform.position = playerPos;
+        playerCreatureTransform.position = playerCreaturePos;
+        enemyTransform.position = enemyPos;
+        Vector3 enemyLookPos = enemyTransform.position;
+        enemyLookPos.y = playerCreatureTransform.position.y;
+
+        playerCreatureTransform.LookAt(enemyLookPos);
+
+        Vector3 playerLookPos = playerCreatureTransform.position;
+        playerLookPos.y = enemyTransform.position.y;
+
+        enemyTransform.LookAt(playerLookPos);
     }
 }

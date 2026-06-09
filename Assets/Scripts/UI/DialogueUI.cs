@@ -21,10 +21,12 @@ public class DialogueUI : MonoBehaviour
     public bool IsOpen => dialoguePanel.activeSelf;
     public bool IsTyping => isTyping;
     private CreatureData pendingBattleCreature;
+    private Transform pendingEnemyTransform;
 
-    public void SetPendingBattle(CreatureData creature)
+    public void SetPendingBattle(CreatureData creature, Transform enemyTransform)
     {
         pendingBattleCreature = creature;
+        pendingEnemyTransform = enemyTransform;
     }
 
     private void Awake()
@@ -99,9 +101,11 @@ public class DialogueUI : MonoBehaviour
         GameManager.Instance.SetState(GameState.Exploration);
         dialoguePanel.SetActive(false);
 
-        if (pendingBattleCreature != null) {
-            BattleManager.Instance.StartBattle(pendingBattleCreature);
+        if (pendingBattleCreature != null)
+        {
+            BattleManager.Instance.StartBattle(pendingBattleCreature, pendingEnemyTransform);
             pendingBattleCreature = null;
+            pendingEnemyTransform = null;
         }
     }
 }

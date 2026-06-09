@@ -8,8 +8,6 @@ public class BillboardUI : MonoBehaviour
         mainCamera = Camera.main;
     }
     void LateUpdate() {
-        Vector3 direction = transform.position - mainCamera.transform.position;
-        direction.y = 0f;
-        transform.forward = direction;
+        transform.forward = mainCamera.transform.forward;
     }
 }

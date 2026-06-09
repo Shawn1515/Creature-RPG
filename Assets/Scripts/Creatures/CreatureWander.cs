@@ -14,6 +14,7 @@ public class CreatureWander : MonoBehaviour
 
     private float waitTimer;
     private bool isWaiting;
+    private bool canMove = true;
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class CreatureWander : MonoBehaviour
 
     void Update()
     {
-        if(GameManager.Instance.GetState() != GameState.Exploration)
+        if (!canMove)
         {
             return;
         }
@@ -68,5 +69,15 @@ public class CreatureWander : MonoBehaviour
     {
         isWaiting = true;
         waitTimer = waitTime;
+    }
+
+    public void StopMoving()
+    {
+        canMove = false;
+    }
+
+    public void StartMoving()
+    {
+        canMove = true;
     }
 }
