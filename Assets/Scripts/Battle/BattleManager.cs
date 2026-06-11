@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine.UI;
 
@@ -101,10 +102,28 @@ public class BattleManager : MonoBehaviour
 
     void UpdateHPUI()
     {
-        playerHPBar.value =
-            (float)playerCurrentHP / playerCreature.maxHP;
-        enemyHPBar.value =
-            (float)enemyCurrentHP / enemyCreature.maxHP;
+        StartCoroutine(AnimateHPBar(playerHPBar, (float)playerCurrentHP / playerCreature.maxHP));
+        StartCoroutine(AnimateHPBar(enemyHPBar, (float)enemyCurrentHP / enemyCreature.maxHP));
+    }
+
+    IEnumerator AnimateHPBar(Slider bar, float targetValue)
+    {
+        float startValue = bar.value;
+        float timer = 0f;
+        float duration = 0.5f;
+        while(timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            bar.value = Mathf.Lerp(
+                startValue,
+                targetValue,
+                timer / duration
+            );
+
+            yield return null;
+        }
+        bar.value = targetValue;
     }
 
 
@@ -150,7 +169,7 @@ public class BattleManager : MonoBehaviour
     void SelectMove(MoveData move)
     {
         selectedMove = move;
-        enemyMove = enemyCreature.moves[0];
+        enemyMove = enemyCreature.moves[Random.Range(0, enemyCreature.moves.Length)];
         SetMoveButtonsActive(false);
 
         BattleDialogueUI.Instance.ShowMessage(
@@ -182,6 +201,8 @@ public class BattleManager : MonoBehaviour
         {
             enemyCurrentHP = 0;
         }
+
+        StartCoroutine(AttackAnimation(playerCreatureTransform, enemyTransform));
 
         UpdateHPUI();
 
@@ -216,6 +237,8 @@ public class BattleManager : MonoBehaviour
         {
             playerCurrentHP = 0;
         }
+
+        StartCoroutine(AttackAnimation(enemyTransform, playerCreatureTransform));
 
         UpdateHPUI();
 
@@ -298,5 +321,39 @@ public class BattleManager : MonoBehaviour
             first.rotation =
                 Quaternion.LookRotation(direction);
         }
+    }
+    IEnumerator AttackAnimation(Transform attacker, Transform target)
+    {
+        Vector3 startPosition = attacker.position;
+        Vector3 direction =(target.position - attacker.position).normalized;
+        Vector3 attackPosition = target.position - direction * 8f;
+
+        float timer = 0f;
+        while (timer < 0.2f)
+        {
+            timer += Time.deltaTime;
+            attacker.position = Vector3.Lerp(
+                startPosition,
+                attackPosition,
+                timer / 0.2f
+            );
+
+            yield return null;
+        }
+
+        timer = 0f;
+        while (timer < 0.2f)
+        {
+            timer += Time.deltaTime;
+
+            attacker.position = Vector3.Lerp(
+                attackPosition,
+                startPosition,
+                timer / 0.2f
+            );
+
+            yield return null;
+        }
+        attacker.position = startPosition;
     }
 }
