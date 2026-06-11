@@ -8,17 +8,9 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance;
 
     public Transform playerCreatureTransform;
+
     public GameObject enemyHPBarCanvas;
     public GameObject playerHPBarCanvas;
-
-    public enum BattlePhase
-    {
-        ChoosingMove,
-        PlayerAttackMessage,
-        PlayerDamage,
-        EnemyAttackMessage,
-        EnemyDamage
-    }
 
     [Header("Battle Buttons")]
     public Button[] moveButtons;
@@ -26,16 +18,15 @@ public class BattleManager : MonoBehaviour
 
     [Header("UI")]
     public GameObject battlePanel;
-    public TextMeshProUGUI creatureNameText;
     public TextMeshProUGUI playerCreatureName;
     public TextMeshProUGUI enemyName;
-    public TextMeshProUGUI battleLogText;
     public Slider playerHPBar;
     public Slider enemyHPBar;
 
     [Header("Cameras")]
     public CinemachineCamera exploreCamera;
     public CinemachineCamera battleCamera;
+
 
     private CreatureData playerCreature;
     private CreatureData enemyCreature;
@@ -45,26 +36,12 @@ public class BattleManager : MonoBehaviour
 
     private Transform enemyTransform;
 
-    private BattlePhase phase;
-
     private MoveData selectedMove;
     private MoveData enemyMove;
-    private bool playerGoesFirst;
 
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Update()
-    {
-        if (GameManager.Instance.CurrentState != GameState.Battle)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            AdvanceBattle();
-        }
     }
 
     public void StartBattle(CreatureData creature, Transform enemy)
@@ -91,22 +68,18 @@ public class BattleManager : MonoBehaviour
 
         exploreCamera.Priority = 10;
         battleCamera.Priority = 20;
-
         battlePanel.SetActive(true);
 
-        creatureNameText.text = playerCreature.creatureName;
-        playerCreatureName.text = enemyCreature.creatureName;
+        enemyName.text =
+            "Wild " + enemyCreature.creatureName;
+        playerCreatureName.text =
+            playerCreature.creatureName;
 
         UpdateHPUI();
-
         SetupMoveButtons();
-
-        phase = BattlePhase.ChoosingMove;
-
-        battleLogText.text = "Choose a move!";
-
         SetMoveButtonsActive(true);
     }
+
 
     public void EndBattle()
     {
@@ -122,162 +95,18 @@ public class BattleManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
     }
 
-    void SelectMove(MoveData move)
-    {
-        if (phase != BattlePhase.ChoosingMove)
-            return;
-
-        selectedMove = move;
-        enemyMove = enemyCreature.moves[0];
-
-        playerGoesFirst =
-            playerCreature.speed >= enemyCreature.speed;
-
-        SetMoveButtonsActive(false);
-
-        if (playerGoesFirst)
-        {
-            phase = BattlePhase.PlayerAttackMessage;
-
-            battleLogText.text =
-                $"{playerCreature.creatureName} used {move.moveName}!";
-        }
-        else
-        {
-            phase = BattlePhase.EnemyAttackMessage;
-
-            battleLogText.text =
-                $"Wild {enemyCreature.creatureName} used {enemyMove.moveName}!";
-        }
-    }
-
-    void AdvanceBattle()
-    {
-        switch (phase)
-        {
-            case BattlePhase.PlayerAttackMessage:
-                DoPlayerDamage();
-                break;
-
-            case BattlePhase.PlayerDamage:
-                StartEnemyTurn();
-                break;
-
-            case BattlePhase.EnemyAttackMessage:
-                DoEnemyDamage();
-                break;
-
-            case BattlePhase.EnemyDamage:
-                StartPlayerTurn();
-                break;
-        }
-    }
-
-    void DoPlayerDamage()
-    {
-        int damage = Mathf.Max(
-            1,
-            playerCreature.attack +
-            selectedMove.power -
-            enemyCreature.defense
-        );
-
-        enemyCurrentHP -= damage;
-
-        if (enemyCurrentHP < 0)
-            enemyCurrentHP = 0;
-
-        UpdateHPUI();
-
-        if (enemyCurrentHP <= 0)
-        {
-            battleLogText.text = $"Wild {enemyCreature.creatureName} fainted!";
-            Invoke(nameof(EndBattle), 1.5f);
-            return;
-        }
-
-        battleLogText.text =
-            $"Wild {enemyCreature.creatureName} took {damage} damage!";
-
-        phase = BattlePhase.PlayerDamage;
-    }
-
-    void StartEnemyTurn()
-    {
-        phase = BattlePhase.EnemyAttackMessage;
-
-        battleLogText.text =
-            $"Wild {enemyCreature.creatureName} used {enemyMove.moveName}!";
-    }
-
-    void DoEnemyDamage()
-    {
-        int damage = Mathf.Max(
-            1,
-            enemyCreature.attack +
-            enemyMove.power -
-            playerCreature.defense
-        );
-
-        playerCurrentHP -= damage;
-
-        if (playerCurrentHP < 0)
-            playerCurrentHP = 0;
-
-        UpdateHPUI();
-
-        if (playerCurrentHP <= 0)
-        {
-            battleLogText.text =
-                $"{playerCreature.creatureName} fainted!";
-
-            Invoke(nameof(EndBattle), 1.5f);
-            return;
-        }
-
-        battleLogText.text =
-            $"{playerCreature.creatureName} took {damage} damage!";
-
-        phase = BattlePhase.EnemyDamage;
-    }
-
-    void StartPlayerTurn()
-    {
-        phase = BattlePhase.ChoosingMove;
-
-        battleLogText.text = "Choose a move!";
-
-        SetMoveButtonsActive(true);
-    }
-
-    void SetMoveButtonsActive(bool active)
-    {
-        foreach (Button button in moveButtons)
-        {
-            button.interactable = active;
-        }
-
-        runButton.interactable = active;
-    }
 
     void UpdateHPUI()
     {
-        playerCreatureName.text =
-            playerCreature.creatureName;
-
-        enemyName.text =
-            "Wild " + enemyCreature.creatureName;
-
         playerHPBar.value =
             (float)playerCurrentHP / playerCreature.maxHP;
-
         enemyHPBar.value =
             (float)enemyCurrentHP / enemyCreature.maxHP;
     }
+
 
     void SetupMoveButtons()
     {
@@ -285,15 +114,19 @@ public class BattleManager : MonoBehaviour
         {
             moveButtons[i].onClick.RemoveAllListeners();
 
+
             if (i < playerCreature.moves.Length)
             {
                 MoveData move = playerCreature.moves[i];
 
+
                 moveButtons[i].gameObject.SetActive(true);
+
 
                 moveButtons[i]
                     .GetComponentInChildren<TextMeshProUGUI>()
                     .text = move.moveName;
+
 
                 moveButtons[i].onClick.AddListener(() =>
                 {
@@ -307,18 +140,107 @@ public class BattleManager : MonoBehaviour
         }
 
         runButton.onClick.RemoveAllListeners();
-
         runButton.onClick.AddListener(() =>
         {
             RunAway();
         });
     }
 
+
+    void SelectMove(MoveData move)
+    {
+        selectedMove = move;
+        enemyMove = enemyCreature.moves[0];
+        SetMoveButtonsActive(false);
+
+        BattleDialogueUI.Instance.ShowMessage(
+            $"{playerCreature.creatureName} used {move.moveName}!",
+            PlayerAttack
+        );
+    }
+
+
     void RunAway()
     {
-        battleLogText.text = "Got away safely!";
-        Invoke(nameof(EndBattle), 1f);
+        BattleDialogueUI.Instance.ShowMessage(
+            "Got away safely!",
+            EndBattle
+        );
     }
+    void PlayerAttack()
+    {
+        int damage = Mathf.Max(
+            1,
+            playerCreature.attack +
+            selectedMove.power -
+            enemyCreature.defense
+        );
+
+        enemyCurrentHP -= damage;
+
+        if (enemyCurrentHP < 0)
+        {
+            enemyCurrentHP = 0;
+        }
+
+        UpdateHPUI();
+
+        if (enemyCurrentHP <= 0)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Wild {enemyCreature.creatureName} fainted!",
+                EndBattle
+            );
+
+            return;
+        }
+
+        BattleDialogueUI.Instance.ShowMessage(
+            $"Wild {enemyCreature.creatureName} used {enemyMove.moveName}!",
+            EnemyAttack
+        );
+    }
+
+
+    void EnemyAttack()
+    {
+        int damage = Mathf.Max(
+            1,
+            enemyCreature.attack +
+            enemyMove.power -
+            playerCreature.defense
+        );
+        playerCurrentHP -= damage;
+
+        if (playerCurrentHP < 0)
+        {
+            playerCurrentHP = 0;
+        }
+
+        UpdateHPUI();
+
+        if (playerCurrentHP <= 0)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{playerCreature.creatureName} fainted!",
+                EndBattle
+            );
+
+            return;
+        }
+        SetMoveButtonsActive(true);
+    }
+
+    void SetMoveButtonsActive(bool active)
+    {
+        foreach (Button button in moveButtons)
+        {
+            button.interactable = active;
+        }
+
+        runButton.interactable = active;
+    }
+
 
     Vector3 GetGroundPosition(Vector3 position)
     {
@@ -346,22 +268,35 @@ public class BattleManager : MonoBehaviour
                 BattlePositions.Instance.playerCreatureSpot.position
             );
 
-        playerCreatureTransform.position = playerCreaturePos;
-        enemyTransform.position = enemyPos;
 
-        FaceHorizontally(playerCreatureTransform, enemyTransform);
-        FaceHorizontally(enemyTransform, playerCreatureTransform);
+        enemyTransform.position = enemyPos;
+        playerCreatureTransform.position = playerCreaturePos;
+
+        FaceHorizontally(
+            playerCreatureTransform,
+            enemyTransform
+        );
+
+        FaceHorizontally(
+            enemyTransform,
+            playerCreatureTransform
+        );
     }
 
-    void FaceHorizontally(Transform a, Transform b)
+    void FaceHorizontally(
+        Transform first,
+        Transform second
+    )
     {
-        Vector3 direction = b.position - a.position;
+        Vector3 direction =
+            second.position - first.position;
 
         direction.y = 0f;
 
         if (direction != Vector3.zero)
         {
-            a.rotation = Quaternion.LookRotation(direction);
+            first.rotation =
+                Quaternion.LookRotation(direction);
         }
     }
 }
