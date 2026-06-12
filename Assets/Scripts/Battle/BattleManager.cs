@@ -16,6 +16,7 @@ public class BattleManager : MonoBehaviour
     [Header("Battle Buttons")]
     public Button[] moveButtons;
     public Button runButton;
+    public Button catchButton;
 
     [Header("UI")]
     public GameObject battlePanel;
@@ -39,6 +40,7 @@ public class BattleManager : MonoBehaviour
 
     private MoveData selectedMove;
     private MoveData enemyMove;
+    private bool playerFirst;
 
     private void Awake()
     {
@@ -163,6 +165,11 @@ public class BattleManager : MonoBehaviour
         {
             RunAway();
         });
+        catchButton.onClick.RemoveAllListeners();
+        catchButton.onClick.AddListener(() =>
+        {
+            TryCatch();
+        });
     }
 
 
@@ -172,10 +179,22 @@ public class BattleManager : MonoBehaviour
         enemyMove = enemyCreature.moves[Random.Range(0, enemyCreature.moves.Length)];
         SetMoveButtonsActive(false);
 
-        BattleDialogueUI.Instance.ShowMessage(
-            $"{playerCreature.creatureName} used {move.moveName}!",
-            PlayerAttack
-        );
+        if(playerCreature.speed > enemyCreature.speed || (playerCreature.speed == enemyCreature.speed && Random.Range(0f, 1.0f) > 0.5f))
+        {
+            playerFirst = true;
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{playerCreature.creatureName} used {move.moveName}!",
+                PlayerAttack
+            );
+        }
+        else
+        {
+            playerFirst = false;
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Wild {enemyCreature.creatureName} used {enemyMove.moveName}!",
+                EnemyAttack
+            );
+        }
     }
 
 
@@ -216,10 +235,16 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        BattleDialogueUI.Instance.ShowMessage(
-            $"Wild {enemyCreature.creatureName} used {enemyMove.moveName}!",
-            EnemyAttack
-        );
+        if(playerFirst) {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Wild {enemyCreature.creatureName} used {enemyMove.moveName}!",
+                EnemyAttack
+            );
+        }
+        else
+        {
+            SetMoveButtonsActive(true);
+        }
     }
 
 
@@ -251,7 +276,16 @@ public class BattleManager : MonoBehaviour
 
             return;
         }
-        SetMoveButtonsActive(true);
+        if(!playerFirst) {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{playerCreature.creatureName} used {selectedMove.moveName}!",
+                PlayerAttack
+            );
+        }
+        else
+        {
+            SetMoveButtonsActive(true);
+        }
     }
 
     void SetMoveButtonsActive(bool active)
@@ -262,7 +296,53 @@ public class BattleManager : MonoBehaviour
         }
 
         runButton.interactable = active;
+        catchButton.interactable = active;
     }
+
+    void TryCatch()
+{
+    SetMoveButtonsActive(false);
+
+    float hpPercent =
+        (float)enemyCurrentHP / enemyCreature.maxHP;
+
+
+    float catchChance =
+        1f - hpPercent;
+
+
+    float roll =
+        Random.Range(0f, 1f);
+
+
+    if (roll < catchChance)
+    {
+        BattleDialogueUI.Instance.ShowMessage(
+            "Gotcha! " +
+            enemyCreature.creatureName +
+            " was caught!",
+            CatchSuccess
+        );
+    }
+    else
+    {
+        BattleDialogueUI.Instance.ShowMessage(
+            enemyCreature.creatureName +
+            " broke free!",
+            CatchFailed
+        );
+    }
+}
+
+void CatchFailed()
+{
+    SetMoveButtonsActive(true);
+}
+
+void CatchSuccess()
+{
+    EndBattle();
+}
 
 
     Vector3 GetGroundPosition(Vector3 position)
