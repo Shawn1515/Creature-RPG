@@ -20,10 +20,10 @@ public class DialogueUI : MonoBehaviour
 
     public bool IsOpen => dialoguePanel.activeSelf;
     public bool IsTyping => isTyping;
-    private CreatureData pendingBattleCreature;
+    private CreatureInstance pendingBattleCreature;
     private Transform pendingEnemyTransform;
 
-    public void SetPendingBattle(CreatureData creature, Transform enemyTransform)
+    public void SetPendingBattle(CreatureInstance creature, Transform enemyTransform)
     {
         pendingBattleCreature = creature;
         pendingEnemyTransform = enemyTransform;

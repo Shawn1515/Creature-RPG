@@ -3,9 +3,15 @@ using UnityEngine;
 public class PlayerCreatureManager : MonoBehaviour
 {
     public static PlayerCreatureManager Instance;
-    public CreatureData starterCreature;
+
+    [Header("Starter Creature")]
+    public CreatureData starterCreatureData;
+
+    public CreatureInstance starterCreature;
+
     private void Awake()
     {
         Instance = this;
+        starterCreature = new CreatureInstance(starterCreatureData);
     }
 }
