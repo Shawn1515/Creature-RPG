@@ -291,49 +291,49 @@ public class BattleManager : MonoBehaviour
     }
 
     void TryCatch()
-{
-    SetMoveButtonsActive(false);
-
-    float hpPercent =
-        (float)enemyCreature.currentHP / enemyCreature.MaxHP;
-
-
-    float catchChance =
-        1f - hpPercent;
-
-
-    float roll =
-        Random.Range(0f, 1f);
-
-
-    if (roll < catchChance)
     {
-        BattleDialogueUI.Instance.ShowMessage(
-            "Gotcha! " +
-            enemyCreature.CreatureName +
-            " was caught!",
-            CatchSuccess
-        );
+        SetMoveButtonsActive(false);
+
+        float hpPercent = (float)enemyCreature.currentHP / enemyCreature.MaxHP;
+        float catchChance = 1f - hpPercent;
+        float roll = Random.Range(0f, 1f);
+
+        if (roll < catchChance)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "Gotcha! " +
+                enemyCreature.CreatureName +
+                " was caught!",
+                CatchSuccess
+            );
+        }
+        else
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                enemyCreature.CreatureName +
+                " broke free!",
+                CatchFailed
+            );
+        }
     }
-    else
+
+    void CatchFailed()
     {
-        BattleDialogueUI.Instance.ShowMessage(
-            enemyCreature.CreatureName +
-            " broke free!",
-            CatchFailed
-        );
+        SetMoveButtonsActive(true);
     }
-}
 
-void CatchFailed()
-{
-    SetMoveButtonsActive(true);
-}
-
-void CatchSuccess()
-{
-    EndBattle();
-}
+    void CatchSuccess()
+    {
+        if(PartyManager.Instance.AddCreature(enemyCreature))
+        {
+            Destroy(enemyTransform.gameObject);
+            EndBattle();
+        }
+        else
+        {
+            //party is full message
+        }
+    }
 
 
     Vector3 GetGroundPosition(Vector3 position)
