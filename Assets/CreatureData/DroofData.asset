@@ -19,6 +19,7 @@ MonoBehaviour:
   speed: 3
   moves:
   - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+  creaturePrefab: {fileID: 3143027034710270513, guid: 226677be437e04943b4e1474d0d4baa0, type: 3}
   encounterText:
   - A wild Droof appeared!
   - It wants to beat you up!

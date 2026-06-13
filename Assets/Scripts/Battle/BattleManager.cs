@@ -8,8 +8,6 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
 
-    public Transform playerCreatureTransform;
-
 
     [Header("Battle Buttons")]
     public Button[] moveButtons;
@@ -34,6 +32,7 @@ public class BattleManager : MonoBehaviour
     private bool playerFirst;
     private CreatureBattleUI playerUI;
     private CreatureBattleUI enemyUI;
+    private Transform playerCreatureTransform;
 
     private void Awake()
     {
@@ -42,7 +41,8 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(CreatureInstance creature, Transform enemy)
     {
-        playerCreature = PlayerCreatureManager.Instance.starterCreature;
+        playerCreature = PartyManager.Instance.GetActiveCreature();
+        playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
 
         enemyCreature = creature;
         enemyTransform = enemy;

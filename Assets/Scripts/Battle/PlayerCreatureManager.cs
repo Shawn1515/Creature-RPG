@@ -7,11 +7,12 @@ public class PlayerCreatureManager : MonoBehaviour
     [Header("Starter Creature")]
     public CreatureData starterCreatureData;
 
-    public CreatureInstance starterCreature;
+    private CreatureInstance starterCreature;
 
     private void Awake()
     {
         Instance = this;
         starterCreature = new CreatureInstance(starterCreatureData);
+        PartyManager.Instance.AddCreature(starterCreature);
     }
 }

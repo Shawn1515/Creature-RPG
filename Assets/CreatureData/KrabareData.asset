@@ -20,6 +20,7 @@ MonoBehaviour:
   moves:
   - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
   - {fileID: 11400000, guid: 21f5c6bcf0cfc6f46a102bb9742da5e6, type: 2}
+  creaturePrefab: {fileID: 3143027034710270513, guid: 226677be437e04943b4e1474d0d4baa0, type: 3}
   encounterText:
   - A wild Krabare appeared!
   - It wants to beat you up!

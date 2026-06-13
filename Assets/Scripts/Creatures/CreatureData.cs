@@ -10,6 +10,7 @@ public class CreatureData : ScriptableObject
     public int speed;
     
     public MoveData[] moves;
+    public GameObject creaturePrefab;
 
     [TextArea]
     public string[] encounterText;

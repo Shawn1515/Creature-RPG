@@ -21,8 +21,10 @@ public class CreatureInstance
         currentHP = data.maxHP;
 
         experience = 0;
+
     }
 
+    public GameObject CreaturePrefab => species.creaturePrefab;
     public string CreatureName => species.creatureName;
 
     public int MaxHP => species.maxHP;
