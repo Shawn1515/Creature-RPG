@@ -22,21 +22,37 @@ public class FollowerManager : MonoBehaviour
     {
         if (currentFollower != null)
         {
-            Destroy(currentFollower);
+            GameObject temp = currentFollower;
+            CreatureInstance leader = PartyManager.Instance.GetActiveCreature();
+
+            GameObject prefab = leader.species.creaturePrefab;
+
+            currentFollower =
+                Instantiate(
+                    prefab,
+                    temp.transform.position,
+                    Quaternion.identity
+                );
+            FollowerCreature follower =
+                currentFollower.GetComponent<FollowerCreature>();
+            follower.player = player;
+            Destroy(temp);
         }
+        else
+        {
+            CreatureInstance leader = PartyManager.Instance.GetActiveCreature();
 
-        CreatureInstance leader = PartyManager.Instance.GetActiveCreature();
+            GameObject prefab = leader.species.creaturePrefab;
 
-        GameObject prefab = leader.species.creaturePrefab;
-
-        currentFollower =
-            Instantiate(
-                prefab,
-                player.position,
-                Quaternion.identity
-            );
-        FollowerCreature follower =
-            currentFollower.GetComponent<FollowerCreature>();
-        follower.player = player;
+            currentFollower =
+                Instantiate(
+                    prefab,
+                    player.position,
+                    Quaternion.identity
+                );
+            FollowerCreature follower =
+                currentFollower.GetComponent<FollowerCreature>();
+            follower.player = player;
+        }
     }
 }

@@ -3,7 +3,8 @@ public enum GameState
 {
     Exploration,
     Dialogue,
-    Battle
+    Battle,
+    Party
 }
 
 public class GameManager : MonoBehaviour

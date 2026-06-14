@@ -26,4 +26,14 @@ public class PartyManager : MonoBehaviour
         party.Add(creature);
         return true;
     }
+
+    public void SetLeader(int index)
+    {
+        if(index <= 0 || index >= party.Count)
+        {
+            return;
+        }
+        (party[index], party[0]) = (party[0], party[index]);
+        FollowerManager.Instance.SpawnFollower();
+    }
 }
