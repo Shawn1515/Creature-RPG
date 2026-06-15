@@ -11,6 +11,16 @@ public class CreatureInstance
 
     public int experience;
 
+    public int MaxHP;
+
+    public int Attack;
+
+    public int Defense;
+
+    public int Speed;
+
+    public MoveData[] Moves;
+
 
     public CreatureInstance(CreatureData data)
     {
@@ -22,18 +32,47 @@ public class CreatureInstance
 
         experience = 0;
 
+        MaxHP = species.maxHP;
+
+        Attack = species.attack;
+
+        Defense = species.defense;
+
+        Speed = species.speed;
+
+        Moves = species.moves;
+
     }
 
     public GameObject CreaturePrefab => species.creaturePrefab;
     public string CreatureName => species.creatureName;
 
-    public int MaxHP => species.maxHP;
+    public int ExperienceNeeded()
+    {
+        return level * 25;
+    }
 
-    public int Attack => species.attack;
+    public void GainExperience(int amount)
+    {
+        experience += amount;
+        while(experience >= ExperienceNeeded())
+        {
+            experience -= ExperienceNeeded();
+            LevelUp();
+        }
+    }
 
-    public int Defense => species.defense;
+    void LevelUp()
+    {
+        level++;
 
-    public int Speed => species.speed;
+        MaxHP += 5;
+        Attack += 2;
+        Defense += 2;
+        Speed += 1;
 
-    public MoveData[] Moves => species.moves;
+        currentHP += 5;
+
+        Debug.Log("Level " + level);
+    }
 }

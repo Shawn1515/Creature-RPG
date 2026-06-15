@@ -220,7 +220,7 @@ public class BattleManager : MonoBehaviour
         {
             BattleDialogueUI.Instance.ShowMessage(
                 $"Wild {enemyCreature.CreatureName} fainted!",
-                EndBattle
+                GiveExperience
             );
 
             return;
@@ -236,6 +236,16 @@ public class BattleManager : MonoBehaviour
         {
             SetMoveButtonsActive(true);
         }
+    }
+
+    void GiveExperience()
+    {
+        int xp = enemyCreature.species.experienceReward;
+        playerCreature.GainExperience(xp);
+        BattleDialogueUI.Instance.ShowMessage(
+            $"{playerCreature.CreatureName} gained {xp} XP!",
+            EndBattle
+        );
     }
 
 

@@ -14,4 +14,7 @@ public class CreatureData : ScriptableObject
 
     [TextArea]
     public string[] encounterText;
+
+    [Header("Rewards")]
+    public int experienceReward = 20;
 }
