@@ -28,8 +28,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1206944398669893840}
   m_LocalRotation: {x: 0.14359128, y: -0.5537925, z: 0.09764857, w: 0.81434655}
-  m_LocalPosition: {x: 0, y: 0, z: 8.174507}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 426885850151326231}
@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 5, y: 3.75}
+  m_AnchoredPosition: {x: 1, y: 2}
   m_SizeDelta: {x: 950, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8306604016264116671
@@ -539,15 +539,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
       propertyPath: m_LocalPosition.x
@@ -858,7 +858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowerCreature
   player: {fileID: 0}
-  followDistance: 4
+  followDistance: 6
   moveSpeed: 4
   rotationSpeed: 10
   gravity: -25

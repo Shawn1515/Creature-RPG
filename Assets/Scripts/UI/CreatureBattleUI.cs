@@ -10,10 +10,6 @@ public class CreatureBattleUI : MonoBehaviour
 
     public Slider hpSlider;
 
-    private void Awake()
-    {
-        Hide();
-    }
     public void Setup(CreatureInstance creature)
     {
         nameText.text = creature.CreatureName;

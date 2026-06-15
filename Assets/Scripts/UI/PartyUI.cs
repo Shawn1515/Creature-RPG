@@ -10,6 +10,18 @@ public class PartyUI : MonoBehaviour
     public Button closeButton;
     private int selectedIndex = -1;
 
+    [Header("Details Panel")]
+    public GameObject detailsPanel;
+
+    public TextMeshProUGUI creatureNameText;
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI hpText;
+    public TextMeshProUGUI attackText;
+    public TextMeshProUGUI defenseText;
+    public TextMeshProUGUI speedText;
+    public TextMeshProUGUI xpText;
+    public TextMeshProUGUI movesText;
+
     void Start()
     {
         partyPanel.SetActive(false);
@@ -41,6 +53,7 @@ public class PartyUI : MonoBehaviour
         GameManager.Instance.SetState(GameState.Party);
 
         partyPanel.SetActive(true);
+        detailsPanel.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -93,10 +106,7 @@ public class PartyUI : MonoBehaviour
 
         selectedIndex = index;
 
-        Debug.Log(
-            "Selected " +
-            PartyManager.Instance.party[index].species.creatureName
-        );
+        DisplayCreature(PartyManager.Instance.party[index]);
     }
 
     void MakeLeader()
@@ -109,7 +119,29 @@ public class PartyUI : MonoBehaviour
         PartyManager.Instance.SetLeader(selectedIndex);
 
         UpdateSlots();
+        detailsPanel.SetActive(false);
 
         selectedIndex = -1;
+    }
+
+    void DisplayCreature(CreatureInstance creature)
+    {
+        detailsPanel.SetActive(true);
+        creatureNameText.text = creature.CreatureName;
+
+        levelText.text = "Level: " + creature.level;
+        hpText.text = "HP: " + creature.currentHP + "/" + creature.MaxHP;
+        attackText.text = "Attack: " + creature.Attack;
+        defenseText.text = "Defense: " + creature.Defense;
+        speedText.text = "Speed: " + creature.Speed;
+        xpText.text = "XP: " + creature.experience + "/" + creature.ExperienceNeeded();
+        string moveString = "Moves:\n";
+
+        foreach (MoveData move in creature.Moves)
+        {
+            moveString += move.moveName + "\n";
+        }
+
+        movesText.text = moveString;
     }
 }

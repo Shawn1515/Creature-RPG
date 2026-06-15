@@ -267,7 +267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3710890030528580375
 RectTransform:
   m_ObjectHideFlags: 0
@@ -276,8 +276,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7430322349940957634}
   m_LocalRotation: {x: 0.14359128, y: -0.5537925, z: 0.09764857, w: 0.81434655}
-  m_LocalPosition: {x: 0, y: 0, z: 8.174507}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalPosition: {x: 0, y: 0, z: 4}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6233527393203174615}
@@ -286,7 +286,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.5432682, y: 1.1695342}
+  m_AnchoredPosition: {x: 0, y: 1.1695342}
   m_SizeDelta: {x: 950, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6868865364935346417
@@ -539,15 +539,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1aae12fad2efe8745b9b1847541b0964, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1aae12fad2efe8745b9b1847541b0964, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1aae12fad2efe8745b9b1847541b0964, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1aae12fad2efe8745b9b1847541b0964, type: 3}
       propertyPath: m_LocalPosition.x
@@ -682,7 +682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowerCreature
   player: {fileID: 0}
-  followDistance: 4
+  followDistance: 6
   moveSpeed: 4
   rotationSpeed: 10
   gravity: -25
