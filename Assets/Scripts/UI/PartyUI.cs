@@ -9,6 +9,7 @@ public class PartyUI : MonoBehaviour
     public Button makeLeaderButton;
     public Button closeButton;
     private int selectedIndex = -1;
+    private bool isBattleSwitch = false;
 
     [Header("Details Panel")]
     public GameObject detailsPanel;
@@ -21,6 +22,13 @@ public class PartyUI : MonoBehaviour
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI xpText;
     public TextMeshProUGUI movesText;
+
+    public static PartyUI Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -55,6 +63,10 @@ public class PartyUI : MonoBehaviour
         partyPanel.SetActive(true);
         detailsPanel.SetActive(false);
 
+        makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Make Leader";
+        makeLeaderButton.onClick.RemoveAllListeners();
+        makeLeaderButton.onClick.AddListener(MakeLeader);
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         UpdateSlots();
@@ -63,10 +75,24 @@ public class PartyUI : MonoBehaviour
 
     void CloseParty()
     {
-        GameManager.Instance.SetState(GameState.Exploration);
         partyPanel.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        detailsPanel.SetActive(false);
+
+        if(isBattleSwitch)
+        {
+            GameManager.Instance.SetState(GameState.Battle);
+            BattleManager.Instance.SetBattleButtonsActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            GameManager.Instance.SetState(GameState.Exploration);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        makeLeaderButton.gameObject.SetActive(true);
+        isBattleSwitch = false;
     }
 
     void UpdateSlots()
@@ -105,7 +131,6 @@ public class PartyUI : MonoBehaviour
         }
 
         selectedIndex = index;
-
         DisplayCreature(PartyManager.Instance.party[index]);
     }
 
@@ -143,5 +168,24 @@ public class PartyUI : MonoBehaviour
         }
 
         movesText.text = moveString;
+    }
+
+    public void OpenForBattle()
+    {
+        isBattleSwitch = true;
+        partyPanel.SetActive(true);
+        makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Switch";
+        makeLeaderButton.onClick.RemoveAllListeners();
+        makeLeaderButton.onClick.AddListener(() =>
+        {
+            if(selectedIndex == -1)
+            {
+                return;
+            }
+            BattleManager.Instance.TrySwitchCreature(PartyManager.Instance.party[selectedIndex]);
+        });
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        UpdateSlots();
     }
 }

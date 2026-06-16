@@ -14,7 +14,7 @@ public class CameraOrbit : MonoBehaviour
 
     void Update()
     {
-        if(GameManager.Instance.CurrentState == GameState.Battle || GameManager.Instance.CurrentState == GameState.Party)
+        if(GameManager.Instance.CurrentState == GameState.Battle || GameManager.Instance.CurrentState == GameState.Party || GameManager.Instance.CurrentState == GameState.BattleParty)
         {
             return;
         }

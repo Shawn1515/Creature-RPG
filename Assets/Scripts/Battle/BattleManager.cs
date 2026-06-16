@@ -13,6 +13,7 @@ public class BattleManager : MonoBehaviour
     public Button[] moveButtons;
     public Button runButton;
     public Button catchButton;
+    public Button switchButton;
 
     [Header("UI")]
     public GameObject battlePanel;
@@ -161,6 +162,11 @@ public class BattleManager : MonoBehaviour
         {
             TryCatch();
         });
+        switchButton.onClick.RemoveAllListeners();
+        switchButton.onClick.AddListener(() =>
+        {
+            OpenSwitchMenu();
+        });
     }
 
 
@@ -195,6 +201,30 @@ public class BattleManager : MonoBehaviour
             "Got away safely!",
             EndBattle
         );
+    }
+
+    public void SetBattleButtonsActive(bool active)
+    {
+        foreach(Button button in moveButtons)
+        {
+            button.interactable = active;
+        }
+
+        runButton.interactable = active;
+        switchButton.interactable = active;
+        catchButton.interactable = active;
+    }
+
+    public void TrySwitchCreature(CreatureInstance newCreature)
+    {
+        Debug.Log("Trying to switch to " + newCreature.CreatureName);
+    }
+
+    void OpenSwitchMenu()
+    {
+        SetBattleButtonsActive(false);
+        GameManager.Instance.SetState(GameState.BattleParty);
+        PartyUI.Instance.OpenForBattle();
     }
     void PlayerAttack()
     {

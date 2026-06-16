@@ -4,7 +4,8 @@ public enum GameState
     Exploration,
     Dialogue,
     Battle,
-    Party
+    Party,
+    BattleParty
 }
 
 public class GameManager : MonoBehaviour
