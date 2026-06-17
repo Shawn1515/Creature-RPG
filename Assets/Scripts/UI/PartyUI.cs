@@ -73,7 +73,7 @@ public class PartyUI : MonoBehaviour
         selectedIndex = -1;
     }
 
-    void CloseParty()
+    public void CloseParty()
     {
         partyPanel.SetActive(false);
         detailsPanel.SetActive(false);
@@ -81,7 +81,6 @@ public class PartyUI : MonoBehaviour
         if(isBattleSwitch)
         {
             GameManager.Instance.SetState(GameState.Battle);
-            BattleManager.Instance.SetBattleButtonsActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -182,7 +181,7 @@ public class PartyUI : MonoBehaviour
             {
                 return;
             }
-            BattleManager.Instance.TrySwitchCreature(PartyManager.Instance.party[selectedIndex]);
+            BattleManager.Instance.SwitchCreature(selectedIndex);
         });
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

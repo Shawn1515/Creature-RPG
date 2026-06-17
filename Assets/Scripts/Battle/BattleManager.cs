@@ -22,8 +22,6 @@ public class BattleManager : MonoBehaviour
     public CinemachineCamera exploreCamera;
     public CinemachineCamera battleCamera;
 
-
-    private CreatureInstance playerCreature;
     private CreatureInstance enemyCreature;
 
     private Transform enemyTransform;
@@ -34,6 +32,7 @@ public class BattleManager : MonoBehaviour
     private CreatureBattleUI playerUI;
     private CreatureBattleUI enemyUI;
     private Transform playerCreatureTransform;
+    private bool enemyFreeTurn;
 
     private void Awake()
     {
@@ -42,7 +41,6 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(CreatureInstance creature, Transform enemy)
     {
-        playerCreature = PartyManager.Instance.GetActiveCreature();
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
 
         enemyCreature = creature;
@@ -55,7 +53,7 @@ public class BattleManager : MonoBehaviour
         playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
         enemyUI = enemyTransform.GetComponent<CreatureBattleUI>();
 
-        playerUI.Setup(playerCreature);
+        playerUI.Setup(PartyManager.Instance.GetActiveCreature());
         enemyUI.Setup(enemyCreature);
 
         playerUI.Show();
@@ -96,7 +94,7 @@ public class BattleManager : MonoBehaviour
 
     void UpdateHPUI()
     {
-        StartCoroutine(AnimateHPBar(playerUI.hpSlider, (float)playerCreature.currentHP / playerCreature.MaxHP));
+        StartCoroutine(AnimateHPBar(playerUI.hpSlider, (float)PartyManager.Instance.GetActiveCreature().currentHP / PartyManager.Instance.GetActiveCreature().MaxHP));
         StartCoroutine(AnimateHPBar(enemyUI.hpSlider, (float)enemyCreature.currentHP / enemyCreature.MaxHP));
     }
 
@@ -128,9 +126,9 @@ public class BattleManager : MonoBehaviour
             moveButtons[i].onClick.RemoveAllListeners();
 
 
-            if (i < playerCreature.Moves.Length)
+            if (i < PartyManager.Instance.GetActiveCreature().Moves.Length)
             {
-                MoveData move = playerCreature.Moves[i];
+                MoveData move = PartyManager.Instance.GetActiveCreature().Moves[i];
 
 
                 moveButtons[i].gameObject.SetActive(true);
@@ -176,11 +174,11 @@ public class BattleManager : MonoBehaviour
         enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Length)];
         SetMoveButtonsActive(false);
 
-        if(playerCreature.Speed > enemyCreature.Speed || (playerCreature.Speed == enemyCreature.Speed && Random.Range(0f, 1.0f) > 0.5f))
+        if(PartyManager.Instance.GetActiveCreature().Speed > enemyCreature.Speed || (PartyManager.Instance.GetActiveCreature().Speed == enemyCreature.Speed && Random.Range(0f, 1.0f) > 0.5f))
         {
             playerFirst = true;
             BattleDialogueUI.Instance.ShowMessage(
-                $"{playerCreature.CreatureName} used {move.moveName}!",
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {move.moveName}!",
                 PlayerAttack
             );
         }
@@ -203,26 +201,42 @@ public class BattleManager : MonoBehaviour
         );
     }
 
-    public void SetBattleButtonsActive(bool active)
+    public void SwitchCreature(int partyIndex)
     {
-        foreach(Button button in moveButtons)
+        if (partyIndex <= 0)
         {
-            button.interactable = active;
+            return;
         }
 
-        runButton.interactable = active;
-        switchButton.interactable = active;
-        catchButton.interactable = active;
-    }
+        CreatureInstance creature = PartyManager.Instance.party[partyIndex];
 
-    public void TrySwitchCreature(CreatureInstance newCreature)
-    {
-        Debug.Log("Trying to switch to " + newCreature.CreatureName);
+        if (creature.currentHP <= 0)
+        {
+            return;
+        }
+
+        PartyManager.Instance.SetLeader(partyIndex);
+
+        playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
+
+        playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
+        playerUI.Setup(PartyManager.Instance.GetActiveCreature());
+        playerUI.Show();
+
+        SetupMoveButtons();
+        UpdateHPUI();
+
+        PartyUI.Instance.CloseParty();
+
+        BattleDialogueUI.Instance.ShowMessage(
+            $"Go {creature.CreatureName}!",
+            EnemyFreeAttack
+        );
     }
 
     void OpenSwitchMenu()
     {
-        SetBattleButtonsActive(false);
+        SetMoveButtonsActive(false);
         GameManager.Instance.SetState(GameState.BattleParty);
         PartyUI.Instance.OpenForBattle();
     }
@@ -230,7 +244,7 @@ public class BattleManager : MonoBehaviour
     {
         int damage = Mathf.Max(
             1,
-            playerCreature.Attack +
+            PartyManager.Instance.GetActiveCreature().Attack +
             selectedMove.power -
             enemyCreature.Defense
         );
@@ -271,11 +285,19 @@ public class BattleManager : MonoBehaviour
     void GiveExperience()
     {
         int xp = enemyCreature.species.experienceReward;
-        playerCreature.GainExperience(xp);
+        PartyManager.Instance.GetActiveCreature().GainExperience(xp);
         BattleDialogueUI.Instance.ShowMessage(
-            $"{playerCreature.CreatureName} gained {xp} XP!",
+            $"{PartyManager.Instance.GetActiveCreature().CreatureName} gained {xp} XP!",
             EndBattle
         );
+    }
+
+    void EnemyFreeAttack()
+    {
+        enemyFreeTurn = true;
+        enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Length)];
+
+        BattleDialogueUI.Instance.ShowMessage($"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!", EnemyAttack);
     }
 
 
@@ -285,31 +307,37 @@ public class BattleManager : MonoBehaviour
             1,
             enemyCreature.Attack +
             enemyMove.power -
-            playerCreature.Defense
+            PartyManager.Instance.GetActiveCreature().Defense
         );
-        playerCreature.currentHP -= damage;
+        PartyManager.Instance.GetActiveCreature().currentHP -= damage;
 
-        if (playerCreature.currentHP < 0)
+        if (PartyManager.Instance.GetActiveCreature().currentHP < 0)
         {
-            playerCreature.currentHP = 0;
+            PartyManager.Instance.GetActiveCreature().currentHP = 0;
         }
 
         StartCoroutine(AttackAnimation(enemyTransform, playerCreatureTransform));
 
         UpdateHPUI();
 
-        if (playerCreature.currentHP <= 0)
+        if (PartyManager.Instance.GetActiveCreature().currentHP <= 0)
         {
             BattleDialogueUI.Instance.ShowMessage(
-                $"{playerCreature.CreatureName} fainted!",
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} fainted!",
                 EndBattle
             );
 
             return;
         }
-        if(!playerFirst) {
+        if (enemyFreeTurn)
+        {
+            enemyFreeTurn = false;
+            SetMoveButtonsActive(true);
+        }
+        else if (!playerFirst)
+        {
             BattleDialogueUI.Instance.ShowMessage(
-                $"{playerCreature.CreatureName} used {selectedMove.moveName}!",
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {selectedMove.moveName}!",
                 PlayerAttack
             );
         }
@@ -319,7 +347,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    void SetMoveButtonsActive(bool active)
+    public void SetMoveButtonsActive(bool active)
     {
         foreach (Button button in moveButtons)
         {
@@ -328,6 +356,7 @@ public class BattleManager : MonoBehaviour
 
         runButton.interactable = active;
         catchButton.interactable = active;
+        switchButton.interactable = active;
     }
 
     void TryCatch()
@@ -352,14 +381,9 @@ public class BattleManager : MonoBehaviour
             BattleDialogueUI.Instance.ShowMessage(
                 enemyCreature.CreatureName +
                 " broke free!",
-                CatchFailed
+                EnemyFreeAttack
             );
         }
-    }
-
-    void CatchFailed()
-    {
-        SetMoveButtonsActive(true);
     }
 
     void CatchSuccess()
