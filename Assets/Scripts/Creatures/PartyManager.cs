@@ -36,4 +36,24 @@ public class PartyManager : MonoBehaviour
         (party[index], party[0]) = (party[0], party[index]);
         FollowerManager.Instance.SpawnFollower();
     }
+
+    public bool HasUsableCreature()
+    {
+        foreach(CreatureInstance creature in party)
+        {
+            if(creature.currentHP > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void HealParty()
+    {
+        foreach(CreatureInstance creature in party)
+        {
+            creature.HealFull();
+        }
+    }
 }

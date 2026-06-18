@@ -33,6 +33,8 @@ public class BattleManager : MonoBehaviour
     private CreatureBattleUI enemyUI;
     private Transform playerCreatureTransform;
     private bool enemyFreeTurn;
+    private bool run;
+    private bool forcedSwitch;
 
     private void Awake()
     {
@@ -41,6 +43,8 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(CreatureInstance creature, Transform enemy)
     {
+        forcedSwitch = false;
+        run = false;
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
 
         enemyCreature = creature;
@@ -88,7 +92,13 @@ public class BattleManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
+        if(!run)
+        {
+            Destroy(enemyTransform.gameObject);
+        }
+        else {
+            enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
+        }
     }
 
 
@@ -195,6 +205,7 @@ public class BattleManager : MonoBehaviour
 
     void RunAway()
     {
+        run = true;
         BattleDialogueUI.Instance.ShowMessage(
             "Got away safely!",
             EndBattle
@@ -218,6 +229,10 @@ public class BattleManager : MonoBehaviour
         PartyManager.Instance.SetLeader(partyIndex);
 
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
+        FaceHorizontally(
+            playerCreatureTransform,
+            enemyTransform
+        );
 
         playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
         playerUI.Setup(PartyManager.Instance.GetActiveCreature());
@@ -228,10 +243,24 @@ public class BattleManager : MonoBehaviour
 
         PartyUI.Instance.CloseParty();
 
-        BattleDialogueUI.Instance.ShowMessage(
-            $"Go {creature.CreatureName}!",
-            EnemyFreeAttack
-        );
+        if (forcedSwitch)
+        {
+            forcedSwitch = false;
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Go {creature.CreatureName}!",
+                () =>
+                {
+                    SetMoveButtonsActive(true);
+                }
+            );
+        }
+        else
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Go {creature.CreatureName}!",
+                EnemyFreeAttack
+            );
+        }
     }
 
     void OpenSwitchMenu()
@@ -285,11 +314,26 @@ public class BattleManager : MonoBehaviour
     void GiveExperience()
     {
         int xp = enemyCreature.species.experienceReward;
-        PartyManager.Instance.GetActiveCreature().GainExperience(xp);
-        BattleDialogueUI.Instance.ShowMessage(
+        if(PartyManager.Instance.GetActiveCreature().GainExperience(xp))
+        {
+            BattleDialogueUI.Instance.ShowMessage(
             $"{PartyManager.Instance.GetActiveCreature().CreatureName} gained {xp} XP!",
-            EndBattle
+            LevelUpText
         );
+        }
+        else
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} gained {xp} XP!",
+                EndBattle
+            );
+        }
+    }
+
+    void LevelUpText()
+    {
+        BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} grew to level {PartyManager.Instance.GetActiveCreature().level}!",
+            EndBattle);
     }
 
     void EnemyFreeAttack()
@@ -324,7 +368,7 @@ public class BattleManager : MonoBehaviour
         {
             BattleDialogueUI.Instance.ShowMessage(
                 $"{PartyManager.Instance.GetActiveCreature().CreatureName} fainted!",
-                EndBattle
+                OnPlayerCreatureFainted
             );
 
             return;
@@ -345,6 +389,17 @@ public class BattleManager : MonoBehaviour
         {
             SetMoveButtonsActive(true);
         }
+    }
+
+    void OnPlayerCreatureFainted()
+    {
+        if(!PartyManager.Instance.HasUsableCreature())
+        {
+            EndBattle();
+            return;
+        }
+        forcedSwitch = true;
+        PartyUI.Instance.OpenForBattle();
     }
 
     public void SetMoveButtonsActive(bool active)
@@ -491,4 +546,6 @@ public class BattleManager : MonoBehaviour
         }
         attacker.position = startPosition;
     }
+
+    public bool IsForcedSwitch => forcedSwitch;
 }

@@ -52,14 +52,17 @@ public class CreatureInstance
         return level * 25;
     }
 
-    public void GainExperience(int amount)
+    public bool GainExperience(int amount)
     {
+        bool up = false;
         experience += amount;
         while(experience >= ExperienceNeeded())
         {
             experience -= ExperienceNeeded();
+            up = true;
             LevelUp();
         }
+        return up;
     }
 
     void LevelUp()
@@ -72,7 +75,10 @@ public class CreatureInstance
         Speed += 1;
 
         currentHP += 5;
+    }
 
-        Debug.Log("Level " + level);
+    public void HealFull()
+    {
+        currentHP = MaxHP;
     }
 }

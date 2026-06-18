@@ -66,6 +66,7 @@ public class PartyUI : MonoBehaviour
         makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Make Leader";
         makeLeaderButton.onClick.RemoveAllListeners();
         makeLeaderButton.onClick.AddListener(MakeLeader);
+        closeButton.interactable = true;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -81,6 +82,7 @@ public class PartyUI : MonoBehaviour
         if(isBattleSwitch)
         {
             GameManager.Instance.SetState(GameState.Battle);
+            BattleManager.Instance.SetMoveButtonsActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -135,7 +137,7 @@ public class PartyUI : MonoBehaviour
 
     void MakeLeader()
     {
-        if (selectedIndex == -1)
+        if (selectedIndex == -1 || PartyManager.Instance.party[selectedIndex].currentHP <= 0)
         {
             return;
         }
@@ -173,6 +175,7 @@ public class PartyUI : MonoBehaviour
     {
         isBattleSwitch = true;
         partyPanel.SetActive(true);
+        closeButton.interactable = !BattleManager.Instance.IsForcedSwitch;
         makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Switch";
         makeLeaderButton.onClick.RemoveAllListeners();
         makeLeaderButton.onClick.AddListener(() =>
