@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 1.5f;
     public float gravity = -25f;
     public Transform cameraTransform;
+    public Transform playerModel;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -48,6 +49,16 @@ public class PlayerMovement : MonoBehaviour
 
             Vector3 direction =
                 Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+            
+            Quaternion targetRotation =
+                Quaternion.LookRotation(direction);
+
+            playerModel.rotation =
+                Quaternion.Slerp(
+                    playerModel.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.deltaTime
+                );
 
             move = direction.normalized * moveSpeed;
         }

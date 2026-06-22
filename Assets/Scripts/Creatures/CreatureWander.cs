@@ -28,7 +28,7 @@ public class CreatureWander : MonoBehaviour
         {
             return;
         }
-        if(DialogueUI.Instance != null && DialogueUI.Instance.IsOpen) {
+        if(GameManager.Instance.CurrentState != GameState.Exploration) {
             return;
         }
         if (isWaiting)
@@ -57,7 +57,8 @@ public class CreatureWander : MonoBehaviour
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        transform.position += direction.normalized * moveSpeed * Time.deltaTime;
+        Debug.DrawLine(transform.position, targetPosition, Color.red);
     }
 
     void PickNewTarget() {

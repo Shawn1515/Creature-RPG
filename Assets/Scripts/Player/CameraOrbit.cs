@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour
 {
-    public Transform player;
+    public Transform cameraPivot;
     public float mouseSensitivity = 120f;
     private float verticalRotation = 0f;
 
@@ -21,7 +21,7 @@ public class CameraOrbit : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        player.Rotate(Vector3.up * mouseX);
+        cameraPivot.Rotate(Vector3.up * mouseX);
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, -20f, 45f);
 

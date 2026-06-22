@@ -22,6 +22,8 @@ public class BattleManager : MonoBehaviour
     public CinemachineCamera exploreCamera;
     public CinemachineCamera battleCamera;
 
+    public Transform playerTransform;
+
     private CreatureInstance enemyCreature;
 
     private Transform enemyTransform;
@@ -458,14 +460,14 @@ public class BattleManager : MonoBehaviour
     Vector3 GetGroundPosition(Vector3 position)
     {
         if (Physics.Raycast(
-            position + Vector3.up * 20f,
+            position + Vector3.up * 50f,
             Vector3.down,
             out RaycastHit hit,
-            100f))
+            200f, LayerMask.GetMask("Ground")))
         {
             return hit.point + Vector3.up * 1.1f;
         }
-
+        Debug.LogWarning("Ground raycast missed at " + position);
         return position;
     }
 
@@ -492,6 +494,11 @@ public class BattleManager : MonoBehaviour
 
         FaceHorizontally(
             enemyTransform,
+            playerCreatureTransform
+        );
+
+        FaceHorizontally(
+            playerTransform,
             playerCreatureTransform
         );
     }
