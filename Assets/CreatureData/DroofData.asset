@@ -24,3 +24,5 @@ MonoBehaviour:
   - A wild Droof appeared!
   - It wants to beat you up!
   experienceReward: 50
+  evolution: {fileID: 0}
+  evolutionLevel: 0

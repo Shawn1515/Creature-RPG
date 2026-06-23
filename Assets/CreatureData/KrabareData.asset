@@ -24,3 +24,6 @@ MonoBehaviour:
   encounterText:
   - A wild Krabare appeared!
   - It wants to beat you up!
+  experienceReward: 20
+  evolution: {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
+  evolutionLevel: 2

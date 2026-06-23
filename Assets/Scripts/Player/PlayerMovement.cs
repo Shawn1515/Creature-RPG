@@ -73,4 +73,21 @@ public class PlayerMovement : MonoBehaviour
         Vector3 finalMove = move * Time.deltaTime + velocity * Time.deltaTime;
         controller.Move(finalMove);
     }
+    
+    public void SnapToGround()
+    {
+        if(
+            Physics.Raycast(
+                transform.position + Vector3.up * 50f,
+                Vector3.down,
+                out RaycastHit hit,
+                200f, LayerMask.GetMask("Ground")
+            )
+        )
+        {
+            transform.position = hit.point + Vector3.up;
+        }
+
+        velocity.y = 0f;
+    }
 }

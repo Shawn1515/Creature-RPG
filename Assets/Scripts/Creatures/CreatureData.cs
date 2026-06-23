@@ -17,4 +17,8 @@ public class CreatureData : ScriptableObject
 
     [Header("Rewards")]
     public int experienceReward = 20;
+
+    [Header("Evolution")]
+    public CreatureData evolution;
+    public int evolutionLevel;
 }

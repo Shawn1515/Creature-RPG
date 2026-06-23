@@ -24,11 +24,8 @@ public class CreatureWander : MonoBehaviour
 
     void Update()
     {
-        if (!canMove)
+        if (!canMove || GameManager.Instance.CurrentState != GameState.Exploration)
         {
-            return;
-        }
-        if(GameManager.Instance.CurrentState != GameState.Exploration) {
             return;
         }
         if (isWaiting)

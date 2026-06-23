@@ -4,9 +4,12 @@ public class CreatureEncounter : MonoBehaviour
 {
     public CreatureData creatureSpecies;
     private CreatureInstance creature;
+    private PlayerMovement playerMovement;
     void Start()
     {
-        creature = new CreatureInstance(creatureSpecies);
+        int level = Random.Range(2, 8);
+        creature = new CreatureInstance(creatureSpecies, level);
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +17,7 @@ public class CreatureEncounter : MonoBehaviour
             Vector3 direction = other.transform.position - transform.position;
             direction.y = 0f;
             transform.rotation = Quaternion.LookRotation(direction);
+            playerMovement?.SnapToGround();
             DialogueUI.Instance.SetPendingBattle(creature, transform);
             DialogueUI.Instance.StartDialogue(creatureSpecies.encounterText);
         }

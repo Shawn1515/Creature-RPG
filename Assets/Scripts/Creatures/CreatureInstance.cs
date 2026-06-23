@@ -44,6 +44,29 @@ public class CreatureInstance
 
     }
 
+    public CreatureInstance(CreatureData data, int lvl)
+    {
+        species = data;
+
+        level = lvl;
+
+
+        experience = 0;
+
+        MaxHP = species.maxHP + (level - 1) * 2;
+
+        currentHP = MaxHP;
+
+        Attack = species.attack + (level - 1);
+
+        Defense = species.defense + (level - 1);
+
+        Speed = species.speed + (level - 1) * 2;
+
+        Moves = species.moves;
+
+    }
+
     public GameObject CreaturePrefab => species.creaturePrefab;
     public string CreatureName => species.creatureName;
 
@@ -80,5 +103,22 @@ public class CreatureInstance
     public void HealFull()
     {
         currentHP = MaxHP;
+    }
+
+    public bool CheckEvolution()
+    {
+        if(species.evolution != null && level >= species.evolutionLevel)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void Evolve()
+    {
+        BattleManager.Instance.EndBattle();
+        species = species.evolution;
+        FollowerManager.Instance.SpawnFollower();
+        Moves = species.moves;
     }
 }

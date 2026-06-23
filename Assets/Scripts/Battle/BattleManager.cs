@@ -335,7 +335,23 @@ public class BattleManager : MonoBehaviour
     void LevelUpText()
     {
         BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} grew to level {PartyManager.Instance.GetActiveCreature().level}!",
-            EndBattle);
+            PossibleEvolveText);
+    }
+
+    void PossibleEvolveText()
+    {
+        if(PartyManager.Instance.GetActiveCreature().CheckEvolution())
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} evolved into {PartyManager.Instance.GetActiveCreature().species.evolution.creatureName}!",
+                PartyManager.Instance.GetActiveCreature().Evolve
+            );
+        }
+        else
+        {
+            EndBattle();
+        }
+
     }
 
     void EnemyFreeAttack()

@@ -12,7 +12,7 @@ public class CreatureBattleUI : MonoBehaviour
 
     public void Setup(CreatureInstance creature)
     {
-        nameText.text = creature.CreatureName;
+        nameText.text = creature.CreatureName + " Lv. " + creature.level;
         hpSlider.value = (float)creature.currentHP / creature.MaxHP;
     }
 
