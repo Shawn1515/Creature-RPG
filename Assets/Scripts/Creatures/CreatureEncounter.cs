@@ -5,6 +5,10 @@ public class CreatureEncounter : MonoBehaviour
     public CreatureData creatureSpecies;
     private CreatureInstance creature;
     private PlayerMovement playerMovement;
+
+    [HideInInspector]
+    public CreatureSpawnPoint spawnPoint;
+
     void Start()
     {
         int level = Random.Range(2, 8);

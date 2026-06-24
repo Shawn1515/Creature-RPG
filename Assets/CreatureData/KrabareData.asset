@@ -21,9 +21,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
   - {fileID: 11400000, guid: 21f5c6bcf0cfc6f46a102bb9742da5e6, type: 2}
   creaturePrefab: {fileID: 2147605610853272528, guid: bf68e2b2e40348b4d910a4bded23cbbe, type: 3}
+  wildPrefab: {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   encounterText:
   - A wild Krabare appeared!
   - It wants to beat you up!
   experienceReward: 20
-  evolution: {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
-  evolutionLevel: 2
+  evolution: {fileID: 0}
+  evolutionLevel: 0

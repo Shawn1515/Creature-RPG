@@ -96,11 +96,18 @@ public class BattleManager : MonoBehaviour
         Cursor.visible = false;
         if(!run)
         {
-            Destroy(enemyTransform.gameObject);
+            DestroyEnemy();
         }
         else {
             enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
         }
+    }
+
+    void DestroyEnemy()
+    {
+        CreatureEncounter encounter = enemyTransform.GetComponent<CreatureEncounter>();
+        encounter?.spawnPoint.CreatureDefeated();
+        Destroy(enemyTransform.gameObject);
     }
 
 
@@ -463,7 +470,7 @@ public class BattleManager : MonoBehaviour
     {
         if(PartyManager.Instance.AddCreature(enemyCreature))
         {
-            Destroy(enemyTransform.gameObject);
+            DestroyEnemy();
             EndBattle();
         }
         else

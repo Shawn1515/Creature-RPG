@@ -68,6 +68,7 @@ public class CreatureInstance
     }
 
     public GameObject CreaturePrefab => species.creaturePrefab;
+    public GameObject WildPrefab => species.wildPrefab;
     public string CreatureName => species.creatureName;
 
     public int ExperienceNeeded()
