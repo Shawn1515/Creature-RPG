@@ -8,6 +8,8 @@ public class CreatureData : ScriptableObject
     public int attack;
     public int defense;
     public int speed;
+
+    public float groundOffset;
     
     public MoveData[] moves;
     public GameObject creaturePrefab;

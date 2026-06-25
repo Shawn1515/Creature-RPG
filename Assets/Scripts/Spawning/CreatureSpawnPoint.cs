@@ -35,6 +35,11 @@ public class CreatureSpawnPoint : MonoBehaviour
 
         CreatureEncounter encounter =
             currentCreature.GetComponent<CreatureEncounter>();
+        
+        Physics.Raycast(transform.position + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 200f, LayerMask.GetMask("Ground"));
+        Vector3 pos = hit.point + Vector3.up * encounter.creatureSpecies.groundOffset;
+
+        currentCreature.transform.position = pos;
 
         encounter.spawnPoint = this;
     }

@@ -27,10 +27,13 @@ public class FollowerManager : MonoBehaviour
 
             GameObject prefab = leader.species.creaturePrefab;
 
+            Physics.Raycast(temp.transform.position + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 200f, LayerMask.GetMask("Ground"));
+            Vector3 pos = hit.point + Vector3.up * leader.species.groundOffset;
+            
             currentFollower =
                 Instantiate(
                     prefab,
-                    temp.transform.position,
+                    pos,
                     Quaternion.identity
                 );
             FollowerCreature follower =
@@ -44,10 +47,13 @@ public class FollowerManager : MonoBehaviour
 
             GameObject prefab = leader.species.creaturePrefab;
 
+            Physics.Raycast(player.position + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 200f, LayerMask.GetMask("Ground"));
+            Vector3 pos = hit.point + Vector3.up * leader.species.groundOffset;
+            
             currentFollower =
                 Instantiate(
                     prefab,
-                    player.position,
+                    pos + Vector3.right * 5f,
                     Quaternion.identity
                 );
             FollowerCreature follower =

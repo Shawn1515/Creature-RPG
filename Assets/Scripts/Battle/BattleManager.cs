@@ -480,7 +480,7 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    Vector3 GetGroundPosition(Vector3 position)
+    Vector3 GetGroundPosition(Vector3 position, CreatureInstance creature)
     {
         if (Physics.Raycast(
             position + Vector3.up * 50f,
@@ -488,7 +488,7 @@ public class BattleManager : MonoBehaviour
             out RaycastHit hit,
             200f, LayerMask.GetMask("Ground")))
         {
-            return hit.point + Vector3.up * 1.1f;
+            return hit.point + Vector3.up * creature.species.groundOffset;
         }
         Debug.LogWarning("Ground raycast missed at " + position);
         return position;
@@ -498,12 +498,14 @@ public class BattleManager : MonoBehaviour
     {
         Vector3 enemyPos =
             GetGroundPosition(
-                BattlePositions.Instance.enemySpot.position
+                BattlePositions.Instance.enemySpot.position,
+                enemyCreature
             );
 
         Vector3 playerCreaturePos =
             GetGroundPosition(
-                BattlePositions.Instance.playerCreatureSpot.position
+                BattlePositions.Instance.playerCreatureSpot.position,
+                PartyManager.Instance.GetActiveCreature()
             );
 
 

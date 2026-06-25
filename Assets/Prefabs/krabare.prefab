@@ -838,7 +838,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 2.3
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
@@ -859,7 +859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FollowerCreature
   player: {fileID: 0}
   followDistance: 6
-  moveSpeed: 4
+  moveSpeed: 5
   rotationSpeed: 10
   gravity: -25
 --- !u!114 &2657324772270251982
