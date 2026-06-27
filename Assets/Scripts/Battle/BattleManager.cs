@@ -45,6 +45,7 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(CreatureInstance creature, Transform enemy)
     {
+        enemyFreeTurn = false;
         forcedSwitch = false;
         run = false;
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
@@ -189,6 +190,7 @@ public class BattleManager : MonoBehaviour
 
     void SelectMove(MoveData move)
     {
+        Debug.Log("Move Selected!");
         selectedMove = move;
         enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Length)];
         SetMoveButtonsActive(false);
@@ -280,6 +282,7 @@ public class BattleManager : MonoBehaviour
     }
     void PlayerAttack()
     {
+        Debug.Log("Player Attack!");
         int damage = Mathf.Max(
             1,
             PartyManager.Instance.GetActiveCreature().Attack +
@@ -372,6 +375,9 @@ public class BattleManager : MonoBehaviour
 
     void EnemyAttack()
     {
+        Debug.Log("Enemy Attack!");
+        Debug.Log($"enemyFreeTurn = {enemyFreeTurn}");
+        Debug.Log($"playerFirst = {playerFirst}");
         int damage = Mathf.Max(
             1,
             enemyCreature.Attack +
@@ -391,6 +397,7 @@ public class BattleManager : MonoBehaviour
 
         if (PartyManager.Instance.GetActiveCreature().currentHP <= 0)
         {
+            enemyFreeTurn = false;
             BattleDialogueUI.Instance.ShowMessage(
                 $"{PartyManager.Instance.GetActiveCreature().CreatureName} fainted!",
                 OnPlayerCreatureFainted
@@ -400,11 +407,13 @@ public class BattleManager : MonoBehaviour
         }
         if (enemyFreeTurn)
         {
+            Debug.Log("Enemy attack for free");
             enemyFreeTurn = false;
             SetMoveButtonsActive(true);
         }
         else if (!playerFirst)
         {
+            Debug.Log("Player about to attack");
             BattleDialogueUI.Instance.ShowMessage(
                 $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {selectedMove.moveName}!",
                 PlayerAttack
@@ -412,6 +421,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("Else attack happens");
             SetMoveButtonsActive(true);
         }
     }
