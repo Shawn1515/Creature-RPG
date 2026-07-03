@@ -45,6 +45,11 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(CreatureInstance creature, Transform enemy)
     {
+        Vector3 forward = exploreCamera.transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+        BattlePositions.Instance.battleCenter.rotation = Quaternion.LookRotation(forward);
+        BattlePositions.Instance.battleCameraTarget.rotation = Quaternion.LookRotation(forward) * Quaternion.Euler(20f, 40f, 0f);
         enemyFreeTurn = false;
         forcedSwitch = false;
         run = false;
@@ -506,6 +511,7 @@ public class BattleManager : MonoBehaviour
 
     void PositionBattleParticipants()
     {
+        Vector3 forward = exploreCamera.transform.forward;
         Vector3 enemyPos =
             GetGroundPosition(
                 BattlePositions.Instance.enemySpot.position,
