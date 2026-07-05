@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
             )
         )
         {
-            transform.position = hit.point + Vector3.up;
+            transform.position = hit.point + Vector3.up * 2f;
         }
 
         velocity.y = 0f;
