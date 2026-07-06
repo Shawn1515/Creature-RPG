@@ -20,6 +20,12 @@ public class CreatureSpawnPoint : MonoBehaviour
             return;
         }
 
+        if(GameManager.Instance.CurrentState != GameState.Exploration)
+        {
+            CreatureDefeated();
+            return;
+        }
+
         int index =
             Random.Range(
                 0,

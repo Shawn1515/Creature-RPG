@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Scratch
   m_EditorClassIdentifier: Assembly-CSharp::MoveData
   moveName: Scratch
+  type: Normal
   power: 4

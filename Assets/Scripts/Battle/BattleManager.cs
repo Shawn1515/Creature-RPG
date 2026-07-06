@@ -288,11 +288,16 @@ public class BattleManager : MonoBehaviour
     void PlayerAttack()
     {
         Debug.Log("Player Attack!");
+        float multiplier = TypeChart.GetMultiplier(selectedMove.moveType, enemyCreature.species.primaryType);
+        if(selectedMove.moveType == PartyManager.Instance.GetActiveCreature().species.primaryType)
+        {
+            multiplier *= 1.5f;
+        }
         int damage = Mathf.Max(
             1,
-            PartyManager.Instance.GetActiveCreature().Attack +
+            Mathf.RoundToInt(multiplier * (PartyManager.Instance.GetActiveCreature().Attack +
             selectedMove.power -
-            enemyCreature.Defense
+            enemyCreature.Defense))
         );
 
         enemyCreature.currentHP -= damage;
@@ -306,6 +311,48 @@ public class BattleManager : MonoBehaviour
 
         UpdateHPUI();
 
+        if(multiplier > 1f)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "It's super effective!",
+                PlayerEffect
+            );
+            return;
+        }
+
+        if(multiplier < 1f)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "It's not very effective...",
+                PlayerEffect
+            );
+            return;
+        }
+
+        if (enemyCreature.currentHP <= 0)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Wild {enemyCreature.CreatureName} fainted!",
+                GiveExperience
+            );
+
+            return;
+        }
+
+        if(playerFirst) {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
+                EnemyAttack
+            );
+        }
+        else
+        {
+            SetMoveButtonsActive(true);
+        }
+    }
+
+    void PlayerEffect()
+    {
         if (enemyCreature.currentHP <= 0)
         {
             BattleDialogueUI.Instance.ShowMessage(
@@ -380,15 +427,17 @@ public class BattleManager : MonoBehaviour
 
     void EnemyAttack()
     {
-        Debug.Log("Enemy Attack!");
-        Debug.Log($"enemyFreeTurn = {enemyFreeTurn}");
-        Debug.Log($"playerFirst = {playerFirst}");
+        float multiplier = TypeChart.GetMultiplier(enemyMove.moveType, PartyManager.Instance.GetActiveCreature().species.primaryType);
+        if(enemyMove.moveType == enemyCreature.species.primaryType)
+        {
+            multiplier *= 1.5f;
+        }
         int damage = Mathf.Max(
             1,
-            enemyCreature.Attack +
+            Mathf.RoundToInt(multiplier * (enemyCreature.Attack +
             enemyMove.power -
             PartyManager.Instance.GetActiveCreature().Defense
-        );
+        )));
         PartyManager.Instance.GetActiveCreature().currentHP -= damage;
 
         if (PartyManager.Instance.GetActiveCreature().currentHP < 0)
@@ -399,6 +448,24 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(AttackAnimation(enemyTransform, playerCreatureTransform));
 
         UpdateHPUI();
+
+        if(multiplier > 1f)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "It's super effective!",
+                EnemyEffect
+            );
+            return;
+        }
+
+        if(multiplier < 1f)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "It's not very effective...",
+                EnemyEffect
+            );
+            return;
+        }
 
         if (PartyManager.Instance.GetActiveCreature().currentHP <= 0)
         {
@@ -412,13 +479,11 @@ public class BattleManager : MonoBehaviour
         }
         if (enemyFreeTurn)
         {
-            Debug.Log("Enemy attack for free");
             enemyFreeTurn = false;
             SetMoveButtonsActive(true);
         }
         else if (!playerFirst)
         {
-            Debug.Log("Player about to attack");
             BattleDialogueUI.Instance.ShowMessage(
                 $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {selectedMove.moveName}!",
                 PlayerAttack
@@ -426,7 +491,36 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Else attack happens");
+            SetMoveButtonsActive(true);
+        }
+    }
+
+    void EnemyEffect()
+    {
+        if (PartyManager.Instance.GetActiveCreature().currentHP <= 0)
+        {
+            enemyFreeTurn = false;
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} fainted!",
+                OnPlayerCreatureFainted
+            );
+
+            return;
+        }
+        if (enemyFreeTurn)
+        {
+            enemyFreeTurn = false;
+            SetMoveButtonsActive(true);
+        }
+        else if (!playerFirst)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {selectedMove.moveName}!",
+                PlayerAttack
+            );
+        }
+        else
+        {
             SetMoveButtonsActive(true);
         }
     }

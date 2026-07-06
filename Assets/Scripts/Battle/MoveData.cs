@@ -7,5 +7,7 @@ using UnityEngine;
 public class MoveData : ScriptableObject
 {
     public string moveName;
+
+    public CreatureType moveType;
     public int power = 5;
 }

@@ -24,4 +24,7 @@ public class CreatureData : ScriptableObject
     [Header("Evolution")]
     public CreatureData evolution;
     public int evolutionLevel;
+
+    [Header("Typing")]
+    public CreatureType primaryType;
 }

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Leaf Kick
   m_EditorClassIdentifier: Assembly-CSharp::MoveData
   moveName: Leaf Kick
+  moveType: 3
   power: 8

@@ -28,3 +28,4 @@ MonoBehaviour:
   experienceReward: 50
   evolution: {fileID: 0}
   evolutionLevel: 0
+  primaryType: 5
