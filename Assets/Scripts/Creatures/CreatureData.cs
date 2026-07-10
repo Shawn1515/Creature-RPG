@@ -11,7 +11,11 @@ public class CreatureData : ScriptableObject
 
     public float groundOffset;
     
+    [Header("Starting Moves")]
     public MoveData[] moves;
+
+    [Header("Moves Learned")]
+    public LearnableMove[] learnableMoves;
     public GameObject creaturePrefab;
     public GameObject wildPrefab;
 

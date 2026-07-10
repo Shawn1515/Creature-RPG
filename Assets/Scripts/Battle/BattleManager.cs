@@ -151,7 +151,7 @@ public class BattleManager : MonoBehaviour
             moveButtons[i].onClick.RemoveAllListeners();
 
 
-            if (i < PartyManager.Instance.GetActiveCreature().Moves.Length)
+            if (i < PartyManager.Instance.GetActiveCreature().Moves.Count)
             {
                 MoveData move = PartyManager.Instance.GetActiveCreature().Moves[i];
 
@@ -197,7 +197,7 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("Move Selected!");
         selectedMove = move;
-        enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Length)];
+        enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Count)];
         SetMoveButtonsActive(false);
 
         if(PartyManager.Instance.GetActiveCreature().Speed > enemyCreature.Speed || (PartyManager.Instance.GetActiveCreature().Speed == enemyCreature.Speed && Random.Range(0f, 1.0f) > 0.5f))
@@ -377,7 +377,7 @@ public class BattleManager : MonoBehaviour
 
     void GiveExperience()
     {
-        int xp = enemyCreature.species.experienceReward;
+        int xp = enemyCreature.species.experienceReward * enemyCreature.level;
         if(PartyManager.Instance.GetActiveCreature().GainExperience(xp))
         {
             BattleDialogueUI.Instance.ShowMessage(
@@ -397,7 +397,15 @@ public class BattleManager : MonoBehaviour
     void LevelUpText()
     {
         BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} grew to level {PartyManager.Instance.GetActiveCreature().level}!",
-            PossibleEvolveText);
+            PossibleMoveUnlock);
+    }
+
+    void PossibleMoveUnlock()
+    {
+        if(PartyManager.Instance.GetActiveCreature().NewlyUnlockedMove != null) {
+            BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} can now learn {PartyManager.Instance.GetActiveCreature().NewlyUnlockedMove.moveName}!",
+                PossibleEvolveText);
+        }
     }
 
     void PossibleEvolveText()
@@ -419,7 +427,7 @@ public class BattleManager : MonoBehaviour
     void EnemyFreeAttack()
     {
         enemyFreeTurn = true;
-        enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Length)];
+        enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Count)];
 
         BattleDialogueUI.Instance.ShowMessage($"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!", EnemyAttack);
     }

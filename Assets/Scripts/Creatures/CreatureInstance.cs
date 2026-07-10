@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class CreatureInstance
@@ -19,7 +20,11 @@ public class CreatureInstance
 
     public int Speed;
 
-    public MoveData[] Moves;
+    public List<MoveData> Moves = new List<MoveData>();
+
+    public List<MoveData> UnlockedMoves = new List<MoveData>();
+
+    public MoveData NewlyUnlockedMove {get; private set;}
 
 
     public CreatureInstance(CreatureData data)
@@ -40,7 +45,11 @@ public class CreatureInstance
 
         Speed = species.speed;
 
-        Moves = species.moves;
+        foreach(MoveData move in species.moves)
+        {
+            Moves.Add(move);
+            UnlockedMoves.Add(move);
+        }
 
     }
 
@@ -63,7 +72,19 @@ public class CreatureInstance
 
         Speed = species.speed + (level - 1) * 2;
 
-        Moves = species.moves;
+        foreach(MoveData move in species.moves)
+        {
+            Moves.Add(move);
+            UnlockedMoves.Add(move);
+        }
+
+        foreach(LearnableMove learnable in species.learnableMoves)
+        {
+            if(learnable.level <= level && !UnlockedMoves.Contains(learnable.move))
+            {
+                UnlockedMoves.Add(learnable.move);
+            }
+        }
 
     }
 
@@ -99,6 +120,36 @@ public class CreatureInstance
         Speed += 1;
 
         currentHP += 5;
+
+        MoveData newMove = UnlockMoves();
+        NewlyUnlockedMove = null;
+        if(newMove != null)
+        {
+            NewlyUnlockedMove = newMove;
+        }
+    }
+
+    MoveData UnlockMoves()
+    {
+        foreach (LearnableMove learnable in species.learnableMoves)
+        {
+            if (learnable.level == level && UnlockMove(learnable.move))
+            {
+                return learnable.move;
+            }
+        }
+        return null;
+    }
+
+    public bool UnlockMove(MoveData move)
+    {
+        if (UnlockedMoves.Contains(move))
+        {
+            return false;
+        }
+
+        UnlockedMoves.Add(move);
+        return true;
     }
 
     public void HealFull()
@@ -120,6 +171,5 @@ public class CreatureInstance
         BattleManager.Instance.EndBattle();
         species = species.evolution;
         FollowerManager.Instance.SpawnFollower();
-        Moves = species.moves;
     }
 }

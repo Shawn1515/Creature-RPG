@@ -20,6 +20,11 @@ MonoBehaviour:
   groundOffset: 1.9
   moves:
   - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+  learnableMoves:
+  - move: {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 77251a44560b1cd4aa822696d18b0de6, type: 2}
+    level: 5
   creaturePrefab: {fileID: 3143027034710270513, guid: 226677be437e04943b4e1474d0d4baa0, type: 3}
   wildPrefab: {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
   encounterText:
