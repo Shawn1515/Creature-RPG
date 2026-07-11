@@ -30,6 +30,8 @@ MonoBehaviour:
     level: 5
   - move: {fileID: 11400000, guid: 42da5ca284d7ec648b61db2eb28a923a, type: 2}
     level: 10
+  - move: {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+    level: 0
   creaturePrefab: {fileID: 2147605610853272528, guid: bf68e2b2e40348b4d910a4bded23cbbe, type: 3}
   wildPrefab: {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   encounterText:

@@ -403,8 +403,12 @@ public class BattleManager : MonoBehaviour
     void PossibleMoveUnlock()
     {
         if(PartyManager.Instance.GetActiveCreature().NewlyUnlockedMove != null) {
-            BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} can now learn {PartyManager.Instance.GetActiveCreature().NewlyUnlockedMove.moveName}!",
+            BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} can now learn a new move!",
                 PossibleEvolveText);
+        }
+        else
+        {
+            PossibleEvolveText();
         }
     }
 

@@ -6,7 +6,6 @@ public class PartyManager : MonoBehaviour
     public static PartyManager Instance;
     public List<CreatureInstance> party = new List<CreatureInstance>();
 
-
     private void Awake()
     {
         Instance = this;
@@ -27,14 +26,22 @@ public class PartyManager : MonoBehaviour
         return true;
     }
 
+    public void SwapCreatures(int firstIndex, int secondIndex)
+    {
+        (party[firstIndex], party[secondIndex]) = (party[secondIndex], party[firstIndex]);
+        if(firstIndex == 0 || secondIndex == 0)
+        {
+            FollowerManager.Instance.SpawnFollower();
+        }
+    }
+
     public void SetLeader(int index)
     {
         if(index <= 0 || index >= party.Count)
         {
             return;
         }
-        (party[index], party[0]) = (party[0], party[index]);
-        FollowerManager.Instance.SpawnFollower();
+        SwapCreatures(0, index);
     }
 
     public bool HasUsableCreature()

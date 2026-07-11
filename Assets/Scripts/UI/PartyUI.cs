@@ -11,9 +11,16 @@ public class PartyUI : MonoBehaviour
     private int selectedIndex = -1;
     private bool isBattleSwitch = false;
 
-    [Header("Details Panel")]
-    public GameObject detailsPanel;
+    [Header("Action Panel")]
+    public GameObject actionPanel;
 
+    public Button swapButton;
+    public Button summaryButton;
+    public Button movesetButton;
+    public Button cancelButton;
+
+
+    public GameObject summaryPanel;
     public TextMeshProUGUI creatureNameText;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI hpText;
@@ -22,6 +29,15 @@ public class PartyUI : MonoBehaviour
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI xpText;
     public TextMeshProUGUI movesText;
+    public Button summaryCloseButton;
+
+    public GameObject movesetPanel;
+    public Transform currentMovesContainer;
+    public Transform unlockedMovesContainer;
+    public Button moveButtonPrefab;
+
+    private bool movingCreature = false;
+    private int movingIndex = -1;
 
     public static PartyUI Instance;
 
@@ -44,8 +60,14 @@ public class PartyUI : MonoBehaviour
             });
         }
 
-        makeLeaderButton.onClick.AddListener(MakeLeader);
+        swapButton.onClick.AddListener(StartPartyMove);
         closeButton.onClick.AddListener(CloseParty);
+        summaryButton.onClick.AddListener(OpenSummary);
+        movesetButton.onClick.AddListener(() => {
+            MovesetUI.Instance.Open(PartyManager.Instance.party[selectedIndex]);
+        });
+        cancelButton.onClick.AddListener(CloseActionPanel);
+        summaryCloseButton.onClick.AddListener(CloseSummary);
     }
 
     void Update()
@@ -61,7 +83,8 @@ public class PartyUI : MonoBehaviour
         GameManager.Instance.SetState(GameState.Party);
 
         partyPanel.SetActive(true);
-        detailsPanel.SetActive(false);
+        actionPanel.SetActive(false);
+        summaryPanel.SetActive(false);
 
         makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Make Leader";
         makeLeaderButton.onClick.RemoveAllListeners();
@@ -74,10 +97,16 @@ public class PartyUI : MonoBehaviour
         selectedIndex = -1;
     }
 
+    public void CloseSummary()
+    {
+        summaryPanel.SetActive(false);
+    }
+
     public void CloseParty()
     {
         partyPanel.SetActive(false);
-        detailsPanel.SetActive(false);
+        actionPanel.SetActive(false);
+        summaryPanel.SetActive(false);
 
         if(isBattleSwitch)
         {
@@ -130,9 +159,48 @@ public class PartyUI : MonoBehaviour
         {
             return;
         }
-
+        if(movingCreature)
+        {
+            FinishPartyMove(index);
+            return;
+        }
         selectedIndex = index;
-        DisplayCreature(PartyManager.Instance.party[index]);
+        OpenActionPanel(index);
+    }
+
+    void FinishPartyMove(int newIndex)
+    {
+        PartyManager.Instance.SwapCreatures(movingIndex, newIndex);
+        movingCreature = false;
+        movingIndex = -1;
+        UpdateSlots();
+        selectedIndex = -1;
+    }
+
+    void OpenActionPanel(int index)
+    {
+        actionPanel.SetActive(true);
+        actionPanel.transform.position = slotButtons[index].transform.position + new Vector3(200f, 0f, 0f);
+    }
+
+    void CloseActionPanel()
+    {
+        actionPanel.SetActive(false);
+    }
+
+    void StartPartyMove()
+    {
+        movingCreature = true;
+        movingIndex = selectedIndex;
+        actionPanel.SetActive(false);
+        Debug.Log("Choose where to move the creature");
+    }
+
+    void OpenSummary()
+    {
+        actionPanel.SetActive(false);
+
+        DisplayCreature(PartyManager.Instance.party[selectedIndex]);
     }
 
     void MakeLeader()
@@ -145,14 +213,14 @@ public class PartyUI : MonoBehaviour
         PartyManager.Instance.SetLeader(selectedIndex);
 
         UpdateSlots();
-        detailsPanel.SetActive(false);
+        actionPanel.SetActive(false);
 
         selectedIndex = -1;
     }
 
     void DisplayCreature(CreatureInstance creature)
     {
-        detailsPanel.SetActive(true);
+        summaryPanel.SetActive(true);
         creatureNameText.text = creature.CreatureName;
 
         levelText.text = "Level: " + creature.level;

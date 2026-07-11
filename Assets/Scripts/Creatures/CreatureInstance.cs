@@ -48,7 +48,13 @@ public class CreatureInstance
         foreach(MoveData move in species.moves)
         {
             Moves.Add(move);
-            UnlockedMoves.Add(move);
+        }
+        foreach(LearnableMove learnable in species.learnableMoves)
+        {
+            if(learnable.level <= level && !UnlockedMoves.Contains(learnable.move))
+            {
+                UnlockedMoves.Add(learnable.move);
+            }
         }
 
     }
@@ -75,7 +81,6 @@ public class CreatureInstance
         foreach(MoveData move in species.moves)
         {
             Moves.Add(move);
-            UnlockedMoves.Add(move);
         }
 
         foreach(LearnableMove learnable in species.learnableMoves)
