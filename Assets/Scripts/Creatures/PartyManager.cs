@@ -13,7 +13,14 @@ public class PartyManager : MonoBehaviour
 
     public CreatureInstance GetActiveCreature()
     {
-        return party[0];
+        foreach(CreatureInstance creature in party)
+        {
+            if(creature.currentHP > 0)
+            {
+                return creature;
+            }
+        }
+        return null;
     }
 
     public bool AddCreature(CreatureInstance creature)
@@ -29,7 +36,7 @@ public class PartyManager : MonoBehaviour
     public void SwapCreatures(int firstIndex, int secondIndex)
     {
         (party[firstIndex], party[secondIndex]) = (party[secondIndex], party[firstIndex]);
-        if(firstIndex == 0 || secondIndex == 0)
+        if((firstIndex == 0 || secondIndex == 0) && (firstIndex != secondIndex))
         {
             FollowerManager.Instance.SpawnFollower();
         }

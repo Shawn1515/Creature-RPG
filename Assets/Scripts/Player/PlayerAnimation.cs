@@ -10,11 +10,11 @@ public class PlayerAnimation : MonoBehaviour
     private int run;
     private int walk;
     private int jump;
-    private bool runP;
-    private bool jumpP;
+    private PlayerMovement movement;
 
     void Start() {
         animator = GetComponent<Animator>();
+        movement = GetComponent<PlayerMovement>();
         idle = 0;
         run = 1;
         jump = 2;
@@ -25,22 +25,19 @@ public class PlayerAnimation : MonoBehaviour
         if(GameManager.Instance.CurrentState != GameState.Exploration)
         {
             animator.SetInteger("num", idle);
-            return;
         }
-        runP = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
-        jumpP = Input.GetKey(KeyCode.Space);
-        if(jumpP) {
+        else if(!movement.IsGrounded && movement.VerticalVelocity > 0.1f) {
             animator.SetInteger("num", jump);
-            return;
         }
-        if(runP && Input.GetKey(KeyCode.LeftShift)) {
+        else if(movement.IsRunning) {
             animator.SetInteger("num", run);
-            return;
         }
-        if(runP) {
+        else if(movement.IsMoving) {
             animator.SetInteger("num", walk);
-            return;
         }
-        animator.SetInteger("num", idle);
+        else
+        {
+            animator.SetInteger("num", idle);
+        }
     }
 }

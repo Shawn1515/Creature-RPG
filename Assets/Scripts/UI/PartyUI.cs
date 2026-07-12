@@ -6,7 +6,7 @@ public class PartyUI : MonoBehaviour
 {
     public GameObject partyPanel;
     public Button[] slotButtons;
-    public Button makeLeaderButton;
+    public Button switchButton;
     public Button closeButton;
     private int selectedIndex = -1;
     private bool isBattleSwitch = false;
@@ -68,6 +68,14 @@ public class PartyUI : MonoBehaviour
         });
         cancelButton.onClick.AddListener(CloseActionPanel);
         summaryCloseButton.onClick.AddListener(CloseSummary);
+        switchButton.onClick.AddListener(() =>
+        {
+            if(selectedIndex == -1)
+            {
+                return;
+            }
+            BattleManager.Instance.SwitchCreature(selectedIndex);
+        });
     }
 
     void Update()
@@ -85,11 +93,8 @@ public class PartyUI : MonoBehaviour
         partyPanel.SetActive(true);
         actionPanel.SetActive(false);
         summaryPanel.SetActive(false);
-
-        makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Make Leader";
-        makeLeaderButton.onClick.RemoveAllListeners();
-        makeLeaderButton.onClick.AddListener(MakeLeader);
-        closeButton.interactable = true;
+        closeButton.gameObject.SetActive(true);
+        switchButton.gameObject.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -107,6 +112,9 @@ public class PartyUI : MonoBehaviour
         partyPanel.SetActive(false);
         actionPanel.SetActive(false);
         summaryPanel.SetActive(false);
+        movingCreature = false;
+        movingIndex = -1;
+        selectedIndex = -1;
 
         if(isBattleSwitch)
         {
@@ -121,7 +129,6 @@ public class PartyUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        makeLeaderButton.gameObject.SetActive(true);
         isBattleSwitch = false;
     }
 
@@ -179,8 +186,11 @@ public class PartyUI : MonoBehaviour
 
     void OpenActionPanel(int index)
     {
-        actionPanel.SetActive(true);
-        actionPanel.transform.position = slotButtons[index].transform.position + new Vector3(200f, 0f, 0f);
+        if(!isBattleSwitch)
+        {
+            actionPanel.SetActive(true);
+            actionPanel.transform.position = slotButtons[index].transform.position + new Vector3(200f, 0f, 0f);
+        }
     }
 
     void CloseActionPanel()
@@ -243,17 +253,8 @@ public class PartyUI : MonoBehaviour
     {
         isBattleSwitch = true;
         partyPanel.SetActive(true);
-        closeButton.interactable = !BattleManager.Instance.IsForcedSwitch;
-        makeLeaderButton.GetComponentInChildren<TextMeshProUGUI>().text = "Switch";
-        makeLeaderButton.onClick.RemoveAllListeners();
-        makeLeaderButton.onClick.AddListener(() =>
-        {
-            if(selectedIndex == -1)
-            {
-                return;
-            }
-            BattleManager.Instance.SwitchCreature(selectedIndex);
-        });
+        closeButton.gameObject.SetActive(!BattleManager.Instance.IsForcedSwitch);
+        switchButton.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         UpdateSlots();

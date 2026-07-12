@@ -14,6 +14,12 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
+    private bool isMoving;
+
+    public bool IsGrounded => isGrounded;
+    public bool IsMoving => isMoving;
+    public bool IsRunning => isMoving && Input.GetKey(KeyCode.LeftShift);
+    public float VerticalVelocity => velocity.y;
 
     void Start()
     {
@@ -43,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.magnitude >= 0.1f)
         {
+            isMoving = true;
             float targetAngle =
                 Mathf.Atan2(input.x, input.z) * Mathf.Rad2Deg +
                 cameraTransform.eulerAngles.y;
@@ -61,6 +68,10 @@ public class PlayerMovement : MonoBehaviour
                 );
 
             move = direction.normalized * moveSpeed;
+        }
+        else
+        {
+            isMoving = false;
         }
 
         if (Input.GetButtonDown("Jump") && isGrounded)

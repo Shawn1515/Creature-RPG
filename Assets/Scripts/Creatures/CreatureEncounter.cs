@@ -12,7 +12,7 @@ public class CreatureEncounter : MonoBehaviour
 
     void Start()
     {
-        int level = Random.Range(2, 8);
+        int level = Random.Range(1, 4);
         creature = new CreatureInstance(creatureSpecies, level);
         playerMovement = FindAnyObjectByType<PlayerMovement>();
     }
@@ -45,12 +45,4 @@ public class CreatureEncounter : MonoBehaviour
         }
         transform.rotation = targetRotation;
     }
-
-    /*IEnumerator StartEncounter(Transform player)
-    {
-        yield return StartCoroutine(FacePlayer(player));
-        playerMovement?.SnapToGround();
-        DialogueUI.Instance.SetPendingBattle(creature, transform);
-        DialogueUI.Instance.StartDialogue(creatureSpecies.encounterText);
-    } */
 }

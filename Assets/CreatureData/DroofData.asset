@@ -20,8 +20,14 @@ MonoBehaviour:
   groundOffset: 1.9
   moves:
   - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+  - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
+  - {fileID: 11400000, guid: 21f5c6bcf0cfc6f46a102bb9742da5e6, type: 2}
   learnableMoves:
   - move: {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 21f5c6bcf0cfc6f46a102bb9742da5e6, type: 2}
     level: 0
   - move: {fileID: 11400000, guid: 77251a44560b1cd4aa822696d18b0de6, type: 2}
     level: 5

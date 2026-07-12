@@ -1338,7 +1338,7 @@ GameObject:
   - component: {fileID: 193196409}
   - component: {fileID: 193196408}
   m_Layer: 5
-  m_Name: MakeLeaderButton
+  m_Name: SwitchButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2156,6 +2156,17 @@ MonoBehaviour:
   exploreCamera: {fileID: 991775969}
   battleCamera: {fileID: 1868770387}
   playerTransform: {fileID: 1115667305}
+  playerCreature:
+    species: {fileID: 0}
+    level: 0
+    currentHP: 0
+    experience: 0
+    MaxHP: 0
+    Attack: 0
+    Defense: 0
+    Speed: 0
+    Moves: []
+    UnlockedMoves: []
 --- !u!4 &365758406
 Transform:
   m_ObjectHideFlags: 0
@@ -3041,6 +3052,8 @@ GameObject:
   - component: {fileID: 467187119}
   - component: {fileID: 467187121}
   - component: {fileID: 467187120}
+  - component: {fileID: 467187122}
+  - component: {fileID: 467187123}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3111,6 +3124,40 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &467187122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467187118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494bbb633e8feac4b80bcde10967082b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimation
+--- !u!95 &467187123
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467187118}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
+  m_Controller: {fileID: 9100000, guid: 6deda4f0227a1804492bcad23eba6e96, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &467409438
 GameObject:
   m_ObjectHideFlags: 0
@@ -4695,7 +4742,7 @@ MonoBehaviour:
   - {fileID: 832690218}
   - {fileID: 1302927107}
   - {fileID: 852551473}
-  makeLeaderButton: {fileID: 193196408}
+  switchButton: {fileID: 193196408}
   closeButton: {fileID: 491844491}
   actionPanel: {fileID: 175588715}
   swapButton: {fileID: 467409442}
@@ -6687,40 +6734,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartyManager
   party: []
---- !u!95 &1115667310
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1115667304}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
-  m_Controller: {fileID: 9100000, guid: 6deda4f0227a1804492bcad23eba6e96, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1115667311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1115667304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 494bbb633e8feac4b80bcde10967082b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimation
 --- !u!114 &1115667312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10137,7 +10150,8 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7715626668051313982, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
     m_AddedGameObjects: []
@@ -10151,12 +10165,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1115667306}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1115667311}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1115667310}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d74670f422afe4aabc94278de73c24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1115667312}
@@ -10403,7 +10411,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Make Leader
+  m_text: Switch
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

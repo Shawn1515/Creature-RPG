@@ -25,6 +25,7 @@ public class BattleManager : MonoBehaviour
     public Transform playerTransform;
 
     private CreatureInstance enemyCreature;
+    public CreatureInstance playerCreature;
 
     private Transform enemyTransform;
 
@@ -53,6 +54,8 @@ public class BattleManager : MonoBehaviour
         enemyFreeTurn = false;
         forcedSwitch = false;
         run = false;
+
+        playerCreature = PartyManager.Instance.GetActiveCreature();
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
 
         enemyCreature = creature;
@@ -65,7 +68,7 @@ public class BattleManager : MonoBehaviour
         playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
         enemyUI = enemyTransform.GetComponent<CreatureBattleUI>();
 
-        playerUI.Setup(PartyManager.Instance.GetActiveCreature());
+        playerUI.Setup(playerCreature);
         enemyUI.Setup(enemyCreature);
 
         playerUI.Show();
@@ -119,7 +122,7 @@ public class BattleManager : MonoBehaviour
 
     void UpdateHPUI()
     {
-        StartCoroutine(AnimateHPBar(playerUI.hpSlider, (float)PartyManager.Instance.GetActiveCreature().currentHP / PartyManager.Instance.GetActiveCreature().MaxHP));
+        StartCoroutine(AnimateHPBar(playerUI.hpSlider, (float)playerCreature.currentHP / playerCreature.MaxHP));
         StartCoroutine(AnimateHPBar(enemyUI.hpSlider, (float)enemyCreature.currentHP / enemyCreature.MaxHP));
     }
 
@@ -151,9 +154,9 @@ public class BattleManager : MonoBehaviour
             moveButtons[i].onClick.RemoveAllListeners();
 
 
-            if (i < PartyManager.Instance.GetActiveCreature().Moves.Count)
+            if (i < playerCreature.Moves.Count)
             {
-                MoveData move = PartyManager.Instance.GetActiveCreature().Moves[i];
+                MoveData move = playerCreature.Moves[i];
 
 
                 moveButtons[i].gameObject.SetActive(true);
@@ -178,6 +181,7 @@ public class BattleManager : MonoBehaviour
         runButton.onClick.RemoveAllListeners();
         runButton.onClick.AddListener(() =>
         {
+            SetMoveButtonsActive(false);
             RunAway();
         });
         catchButton.onClick.RemoveAllListeners();
@@ -200,11 +204,11 @@ public class BattleManager : MonoBehaviour
         enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Count)];
         SetMoveButtonsActive(false);
 
-        if(PartyManager.Instance.GetActiveCreature().Speed > enemyCreature.Speed || (PartyManager.Instance.GetActiveCreature().Speed == enemyCreature.Speed && Random.Range(0f, 1.0f) > 0.5f))
+        if(playerCreature.Speed > enemyCreature.Speed || (playerCreature.Speed == enemyCreature.Speed && Random.Range(0f, 1.0f) > 0.5f))
         {
             playerFirst = true;
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {move.moveName}!",
+                $"{playerCreature.CreatureName} used {move.moveName}!",
                 PlayerAttack
             );
         }
@@ -242,6 +246,8 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        playerCreature = creature;
+
         PartyManager.Instance.SetLeader(partyIndex);
 
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
@@ -251,11 +257,12 @@ public class BattleManager : MonoBehaviour
         );
 
         playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
-        playerUI.Setup(PartyManager.Instance.GetActiveCreature());
+        playerUI.Setup(playerCreature);
         playerUI.Show();
 
-        SetupMoveButtons();
         UpdateHPUI();
+        SetupMoveButtons();
+        SetMoveButtonsActive(false);
 
         PartyUI.Instance.CloseParty();
 
@@ -266,6 +273,7 @@ public class BattleManager : MonoBehaviour
                 $"Go {creature.CreatureName}!",
                 () =>
                 {
+                    SetupMoveButtons();
                     SetMoveButtonsActive(true);
                 }
             );
@@ -289,13 +297,13 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("Player Attack!");
         float multiplier = TypeChart.GetMultiplier(selectedMove.moveType, enemyCreature.species.primaryType);
-        if(selectedMove.moveType == PartyManager.Instance.GetActiveCreature().species.primaryType)
+        if(selectedMove.moveType == playerCreature.species.primaryType)
         {
             multiplier *= 1.5f;
         }
         int damage = Mathf.Max(
             1,
-            Mathf.RoundToInt(multiplier * (PartyManager.Instance.GetActiveCreature().Attack +
+            Mathf.RoundToInt(multiplier * (playerCreature.Attack +
             selectedMove.power -
             enemyCreature.Defense))
         );
@@ -378,17 +386,17 @@ public class BattleManager : MonoBehaviour
     void GiveExperience()
     {
         int xp = enemyCreature.species.experienceReward * enemyCreature.level;
-        if(PartyManager.Instance.GetActiveCreature().GainExperience(xp))
+        if(playerCreature.GainExperience(xp))
         {
             BattleDialogueUI.Instance.ShowMessage(
-            $"{PartyManager.Instance.GetActiveCreature().CreatureName} gained {xp} XP!",
+            $"{playerCreature.CreatureName} gained {xp} XP!",
             LevelUpText
         );
         }
         else
         {
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} gained {xp} XP!",
+                $"{playerCreature.CreatureName} gained {xp} XP!",
                 EndBattle
             );
         }
@@ -396,14 +404,14 @@ public class BattleManager : MonoBehaviour
 
     void LevelUpText()
     {
-        BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} grew to level {PartyManager.Instance.GetActiveCreature().level}!",
+        BattleDialogueUI.Instance.ShowMessage($"{playerCreature.CreatureName} grew to level {playerCreature.level}!",
             PossibleMoveUnlock);
     }
 
     void PossibleMoveUnlock()
     {
-        if(PartyManager.Instance.GetActiveCreature().NewlyUnlockedMove != null) {
-            BattleDialogueUI.Instance.ShowMessage($"{PartyManager.Instance.GetActiveCreature().CreatureName} can now learn a new move!",
+        if(playerCreature.NewlyUnlockedMove != null) {
+            BattleDialogueUI.Instance.ShowMessage($"{playerCreature.CreatureName} can now learn a new move!",
                 PossibleEvolveText);
         }
         else
@@ -414,11 +422,11 @@ public class BattleManager : MonoBehaviour
 
     void PossibleEvolveText()
     {
-        if(PartyManager.Instance.GetActiveCreature().CheckEvolution())
+        if(playerCreature.CheckEvolution())
         {
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} evolved into {PartyManager.Instance.GetActiveCreature().species.evolution.creatureName}!",
-                PartyManager.Instance.GetActiveCreature().Evolve
+                $"{playerCreature.CreatureName} evolved into {playerCreature.species.evolution.creatureName}!",
+                playerCreature.Evolve
             );
         }
         else
@@ -439,7 +447,7 @@ public class BattleManager : MonoBehaviour
 
     void EnemyAttack()
     {
-        float multiplier = TypeChart.GetMultiplier(enemyMove.moveType, PartyManager.Instance.GetActiveCreature().species.primaryType);
+        float multiplier = TypeChart.GetMultiplier(enemyMove.moveType, playerCreature.species.primaryType);
         if(enemyMove.moveType == enemyCreature.species.primaryType)
         {
             multiplier *= 1.5f;
@@ -448,13 +456,13 @@ public class BattleManager : MonoBehaviour
             1,
             Mathf.RoundToInt(multiplier * (enemyCreature.Attack +
             enemyMove.power -
-            PartyManager.Instance.GetActiveCreature().Defense
+            playerCreature.Defense
         )));
-        PartyManager.Instance.GetActiveCreature().currentHP -= damage;
+        playerCreature.currentHP -= damage;
 
-        if (PartyManager.Instance.GetActiveCreature().currentHP < 0)
+        if (playerCreature.currentHP <= 0)
         {
-            PartyManager.Instance.GetActiveCreature().currentHP = 0;
+            playerCreature.currentHP = 0;
         }
 
         StartCoroutine(AttackAnimation(enemyTransform, playerCreatureTransform));
@@ -479,11 +487,11 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        if (PartyManager.Instance.GetActiveCreature().currentHP <= 0)
+        if (playerCreature.currentHP <= 0)
         {
             enemyFreeTurn = false;
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} fainted!",
+                $"{playerCreature.CreatureName} fainted!",
                 OnPlayerCreatureFainted
             );
 
@@ -497,7 +505,7 @@ public class BattleManager : MonoBehaviour
         else if (!playerFirst)
         {
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {selectedMove.moveName}!",
+                $"{playerCreature.CreatureName} used {selectedMove.moveName}!",
                 PlayerAttack
             );
         }
@@ -509,11 +517,11 @@ public class BattleManager : MonoBehaviour
 
     void EnemyEffect()
     {
-        if (PartyManager.Instance.GetActiveCreature().currentHP <= 0)
+        if (playerCreature.currentHP <= 0)
         {
             enemyFreeTurn = false;
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} fainted!",
+                $"{playerCreature.CreatureName} fainted!",
                 OnPlayerCreatureFainted
             );
 
@@ -527,7 +535,7 @@ public class BattleManager : MonoBehaviour
         else if (!playerFirst)
         {
             BattleDialogueUI.Instance.ShowMessage(
-                $"{PartyManager.Instance.GetActiveCreature().CreatureName} used {selectedMove.moveName}!",
+                $"{playerCreature.CreatureName} used {selectedMove.moveName}!",
                 PlayerAttack
             );
         }
@@ -552,12 +560,12 @@ public class BattleManager : MonoBehaviour
     {
         foreach (Button button in moveButtons)
         {
-            button.interactable = active;
+            button.gameObject.SetActive(active);
         }
 
-        runButton.interactable = active;
-        catchButton.interactable = active;
-        switchButton.interactable = active;
+        runButton.gameObject.SetActive(active);
+        catchButton.gameObject.SetActive(active);
+        switchButton.gameObject.SetActive(active);
     }
 
     void TryCatch()
@@ -627,7 +635,7 @@ public class BattleManager : MonoBehaviour
         Vector3 playerCreaturePos =
             GetGroundPosition(
                 BattlePositions.Instance.playerCreatureSpot.position,
-                PartyManager.Instance.GetActiveCreature()
+                playerCreature
             );
 
 
