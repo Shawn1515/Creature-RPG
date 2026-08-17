@@ -19,8 +19,10 @@ public class Interactor : MonoBehaviour
     void TryInteract() {
         Ray ray = new Ray(transform.position + Vector3.down * 1.85f, transform.forward);
 
+        Debug.Log("Trying to interact...");
         if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
         {
+            Debug.Log("It hit" + hit.collider.gameObject.name);
             MonoBehaviour[] behaviours = hit.collider.GetComponents<MonoBehaviour>();
             foreach (MonoBehaviour behaviour in behaviours)
             {
@@ -31,5 +33,6 @@ public class Interactor : MonoBehaviour
                 }
             }
         }
+        Debug.Log("It missed");
     }
 }

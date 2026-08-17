@@ -7,6 +7,7 @@ public class BattlePositions : MonoBehaviour
     public Transform battleCenter;
     public Transform playerCreatureSpot;
     public Transform enemySpot;
+    public Transform enemyTrainerSpot;
 
     private void Awake()
     {

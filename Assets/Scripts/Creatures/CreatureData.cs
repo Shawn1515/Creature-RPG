@@ -18,6 +18,7 @@ public class CreatureData : ScriptableObject
     public LearnableMove[] learnableMoves;
     public GameObject creaturePrefab;
     public GameObject wildPrefab;
+    public GameObject battlePrefab;
 
     [TextArea]
     public string[] encounterText;

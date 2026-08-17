@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db328c3176a8ff945bcb882dd5761ea6, type: 3}
+  m_Name: Youngster Tim
+  m_EditorClassIdentifier: Assembly-CSharp::TrainerData
+  trainerName: Youngster Tim
+  introDialogue:
+  - Hey!
+  - I challenge you to a battle!
+  defeatDialogue:
+  - I need more training...
+  creatures:
+  - {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
+  - {fileID: 11400000, guid: 219696e1fbf4e9d48bf8acd07f3701f1, type: 2}
+  - {fileID: 11400000, guid: 02250cf7a042f294fb006700a10e60a3, type: 2}
+  creatureLevels: 030000000400000005000000
+  rewardMoney: 0
+  groundOffset: 2

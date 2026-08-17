@@ -23,10 +23,17 @@ public class DialogueUI : MonoBehaviour
     private CreatureInstance pendingBattleCreature;
     private Transform pendingEnemyTransform;
 
+    private TrainerEncounter pendingTrainer;
+
     public void SetPendingBattle(CreatureInstance creature, Transform enemyTransform)
     {
         pendingBattleCreature = creature;
         pendingEnemyTransform = enemyTransform;
+    }
+
+    public void SetPendingTrainer(TrainerEncounter trainer)
+    {
+        pendingTrainer = trainer;
     }
 
     private void Awake()
@@ -98,14 +105,21 @@ public class DialogueUI : MonoBehaviour
 
     public void HideDialogue()
     {
-        GameManager.Instance.SetState(GameState.Exploration);
         dialoguePanel.SetActive(false);
 
+        if(pendingTrainer != null)
+        {
+            BattleManager.Instance.StartTrainerBattle(pendingTrainer);
+            pendingTrainer = null;
+            return;
+        }
         if (pendingBattleCreature != null)
         {
-            BattleManager.Instance.StartBattle(pendingBattleCreature, pendingEnemyTransform);
+            BattleManager.Instance.StartWildBattle(pendingBattleCreature, pendingEnemyTransform);
             pendingBattleCreature = null;
             pendingEnemyTransform = null;
+            return;
         }
+        GameManager.Instance.SetState(GameState.Exploration);
     }
 }

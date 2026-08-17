@@ -13,6 +13,8 @@ public class MovesetUI : MonoBehaviour
 
     public Button moveButtonPrefab;
 
+    public Button closeButton;
+
     private CreatureInstance creature;
 
     private MoveData selectedUnlockedMove;
@@ -20,6 +22,13 @@ public class MovesetUI : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        closeButton.onClick.AddListener(() => {
+            panel.SetActive(false);
+        });
     }
 
     public void Open(CreatureInstance selectedCreature)

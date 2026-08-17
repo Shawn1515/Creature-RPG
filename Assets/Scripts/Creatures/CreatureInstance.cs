@@ -26,12 +26,16 @@ public class CreatureInstance
 
     public MoveData NewlyUnlockedMove {get; private set;}
 
+    public bool CanEvolve;
+
 
     public CreatureInstance(CreatureData data)
     {
         species = data;
 
         level = 1;
+
+        CanEvolve = CheckEvolution();
 
         currentHP = data.maxHP;
 
@@ -64,6 +68,8 @@ public class CreatureInstance
         species = data;
 
         level = lvl;
+
+        CanEvolve = CheckEvolution();
 
 
         experience = 0;
@@ -118,6 +124,8 @@ public class CreatureInstance
     void LevelUp()
     {
         level++;
+
+        CanEvolve = CheckEvolution();
 
         MaxHP += 5;
         Attack += 2;

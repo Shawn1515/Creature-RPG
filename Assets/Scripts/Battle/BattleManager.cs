@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class BattleManager : MonoBehaviour
 {
@@ -39,12 +40,18 @@ public class BattleManager : MonoBehaviour
     private bool run;
     private bool forcedSwitch;
 
+    private List<CreatureInstance> enemyParty;
+    private int enemyPartyIndex;
+    private bool trainerBattle;
+    private TrainerEncounter currentTrainer;
+    private GameObject currentEnemyCreatureObject;
+
     private void Awake()
     {
         Instance = this;
     }
 
-    public void StartBattle(CreatureInstance creature, Transform enemy)
+    private void StartBattle(CreatureInstance creature, Transform enemy)
     {
         Vector3 forward = exploreCamera.transform.forward;
         forward.y = 0;
@@ -88,6 +95,41 @@ public class BattleManager : MonoBehaviour
         SetMoveButtonsActive(true);
     }
 
+    public void StartWildBattle(CreatureInstance creature, Transform enemy)
+    {
+        trainerBattle = false;
+        currentTrainer = null;
+        enemyParty = null;
+        enemyPartyIndex = 0;
+        StartBattle(creature, enemy);
+    }
+
+    public void StartTrainerBattle(TrainerEncounter trainer)
+    {
+        trainerBattle = true;
+
+        currentTrainer = trainer;
+
+        enemyParty = trainer.GetParty();
+
+        enemyPartyIndex = 0;
+
+        SendOutTrainerCreature();
+    }
+
+    void SendOutTrainerCreature()
+    {
+        if(currentEnemyCreatureObject != null)
+        {
+            Destroy(currentEnemyCreatureObject);
+        }
+
+        enemyCreature = enemyParty[enemyPartyIndex];
+
+        currentEnemyCreatureObject = Instantiate(enemyCreature.WildPrefab, BattlePositions.Instance.enemySpot.position, Quaternion.identity);
+
+        StartBattle(enemyCreature, currentEnemyCreatureObject.transform);
+    }
 
     public void EndBattle()
     {
@@ -103,13 +145,24 @@ public class BattleManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        if(!run)
+
+        if(trainerBattle)
+        {
+            Destroy(currentEnemyCreatureObject);
+        }
+        else if(!run)
         {
             DestroyEnemy();
         }
-        else {
+        else
+        {
             enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
         }
+
+        trainerBattle = false;
+        currentTrainer = null;
+        enemyParty = null;
+        enemyPartyIndex = 0;
     }
 
     void DestroyEnemy()
@@ -215,16 +268,32 @@ public class BattleManager : MonoBehaviour
         else
         {
             playerFirst = false;
+            if(trainerBattle)
+            {
+                BattleDialogueUI.Instance.ShowMessage(
+                $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} used {enemyMove.moveName}!",
+                EnemyAttack
+            );
+            }
+            else{
             BattleDialogueUI.Instance.ShowMessage(
                 $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
                 EnemyAttack
             );
+            }
         }
     }
 
-
     void RunAway()
     {
+        if(trainerBattle)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "You can't do that right now!",
+                EnemyFreeAttack
+            );
+            return;
+        }
         run = true;
         BattleDialogueUI.Instance.ShowMessage(
             "Got away safely!",
@@ -339,43 +408,89 @@ public class BattleManager : MonoBehaviour
 
         if (enemyCreature.currentHP <= 0)
         {
-            BattleDialogueUI.Instance.ShowMessage(
-                $"Wild {enemyCreature.CreatureName} fainted!",
-                GiveExperience
-            );
+            if(trainerBattle)
+            {
+                BattleDialogueUI.Instance.ShowMessage(
+                    $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} fainted!",
+                    GiveExperience
+                );
+            }
+            else {
+                BattleDialogueUI.Instance.ShowMessage(
+                    $"Wild {enemyCreature.CreatureName} fainted!",
+                    GiveExperience
+                );
+            }
 
             return;
         }
 
         if(playerFirst) {
-            BattleDialogueUI.Instance.ShowMessage(
-                $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
-                EnemyAttack
-            );
+            if(trainerBattle)
+            {
+                BattleDialogueUI.Instance.ShowMessage(
+                    $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} used {enemyMove.moveName}!",
+                    EnemyAttack
+                );
+            }
+            else
+            {
+                BattleDialogueUI.Instance.ShowMessage(
+                    $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
+                    EnemyAttack
+                );
+            }
         }
         else
         {
             SetMoveButtonsActive(true);
         }
     }
+    void TrainerWon()
+    {
+        currentTrainer.MarkDefeated();
+
+        BattleDialogueUI.Instance.ShowMessage(
+            currentTrainer.trainer.defeatDialogue[0],
+            EndBattle
+        );
+    }
 
     void PlayerEffect()
     {
         if (enemyCreature.currentHP <= 0)
         {
+            if(trainerBattle)
+            {
+                BattleDialogueUI.Instance.ShowMessage(
+                $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} fainted!",
+                GiveExperience
+            );
+            }
+            else {
             BattleDialogueUI.Instance.ShowMessage(
                 $"Wild {enemyCreature.CreatureName} fainted!",
                 GiveExperience
             );
+            }
 
             return;
         }
 
         if(playerFirst) {
+            if(trainerBattle)
+            {
+                BattleDialogueUI.Instance.ShowMessage(
+                $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} used {enemyMove.moveName}!",
+                EnemyAttack
+            );
+            }
+            else{
             BattleDialogueUI.Instance.ShowMessage(
                 $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
                 EnemyAttack
             );
+            }
         }
         else
         {
@@ -386,20 +501,13 @@ public class BattleManager : MonoBehaviour
     void GiveExperience()
     {
         int xp = enemyCreature.species.experienceReward * enemyCreature.level;
-        if(playerCreature.GainExperience(xp))
-        {
-            BattleDialogueUI.Instance.ShowMessage(
+
+        bool leveledUp = playerCreature.GainExperience(xp);
+
+        BattleDialogueUI.Instance.ShowMessage(
             $"{playerCreature.CreatureName} gained {xp} XP!",
-            LevelUpText
+            ContinueBattle
         );
-        }
-        else
-        {
-            BattleDialogueUI.Instance.ShowMessage(
-                $"{playerCreature.CreatureName} gained {xp} XP!",
-                EndBattle
-            );
-        }
     }
 
     void LevelUpText()
@@ -412,28 +520,34 @@ public class BattleManager : MonoBehaviour
     {
         if(playerCreature.NewlyUnlockedMove != null) {
             BattleDialogueUI.Instance.ShowMessage($"{playerCreature.CreatureName} can now learn a new move!",
-                PossibleEvolveText);
+                ContinueBattle);
         }
         else
         {
-            PossibleEvolveText();
+            ContinueBattle();
         }
     }
 
-    void PossibleEvolveText()
+    void ContinueBattle()
     {
-        if(playerCreature.CheckEvolution())
-        {
-            BattleDialogueUI.Instance.ShowMessage(
-                $"{playerCreature.CreatureName} evolved into {playerCreature.species.evolution.creatureName}!",
-                playerCreature.Evolve
-            );
-        }
-        else
+        if (!trainerBattle)
         {
             EndBattle();
+            return;
         }
 
+        enemyPartyIndex++;
+
+        if(enemyPartyIndex >= enemyParty.Count)
+        {
+            TrainerWon();
+            return;
+        }
+
+        BattleDialogueUI.Instance.ShowMessage(
+            $"{currentTrainer.trainer.trainerName} sent out {enemyParty[enemyPartyIndex].CreatureName}!",
+            SendOutTrainerCreature
+        );
     }
 
     void EnemyFreeAttack()
@@ -441,7 +555,13 @@ public class BattleManager : MonoBehaviour
         enemyFreeTurn = true;
         enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Count)];
 
-        BattleDialogueUI.Instance.ShowMessage($"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!", EnemyAttack);
+        if(trainerBattle)
+        {
+            BattleDialogueUI.Instance.ShowMessage($"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} used {enemyMove.moveName}!", EnemyAttack);
+        }
+        else {
+            BattleDialogueUI.Instance.ShowMessage($"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!", EnemyAttack);
+        }
     }
 
 
@@ -576,7 +696,16 @@ public class BattleManager : MonoBehaviour
         float catchChance = 1f - hpPercent;
         float roll = Random.Range(0f, 1f);
 
-        if (roll < catchChance)
+        if(trainerBattle)
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                "You feel terrible about trying to steal "
+                + currentTrainer.trainer.trainerName + "\'s " + 
+                enemyCreature.CreatureName + ".",
+                EnemyFreeAttack
+            );
+        }
+        else if (roll < catchChance)
         {
             BattleDialogueUI.Instance.ShowMessage(
                 "Gotcha! " +
@@ -623,6 +752,20 @@ public class BattleManager : MonoBehaviour
         return position;
     }
 
+    Vector3 GetGroundPosition(Vector3 position, TrainerEncounter trainer)
+    {
+        if (Physics.Raycast(
+            position + Vector3.up * 50f,
+            Vector3.down,
+            out RaycastHit hit,
+            200f, LayerMask.GetMask("Ground")))
+        {
+            return hit.point + Vector3.up * trainer.trainer.groundOffset;
+        }
+        Debug.LogWarning("Ground raycast missed at " + position);
+        return position;
+    }
+
     void PositionBattleParticipants()
     {
         Vector3 forward = exploreCamera.transform.forward;
@@ -656,6 +799,15 @@ public class BattleManager : MonoBehaviour
             playerTransform,
             playerCreatureTransform
         );
+
+        if(trainerBattle)
+        {
+            currentTrainer.trainerTransform.position = GetGroundPosition(
+                BattlePositions.Instance.enemyTrainerSpot.position, currentTrainer
+            );
+            FaceHorizontally(currentTrainer.trainerTransform,
+            enemyTransform);
+        }
     }
 
     void FaceHorizontally(

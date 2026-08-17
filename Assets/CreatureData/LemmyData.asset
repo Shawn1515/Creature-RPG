@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06072ef578fa5184fbb2797d3f993289, type: 3}
+  m_Name: LemmyData
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureData
+  creatureName: Lemmy
+  maxHP: 50
+  attack: 10
+  defense: 1
+  speed: 5
+  groundOffset: 0.07
+  moves:
+  - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
+  - {fileID: 11400000, guid: 6725c1676f4d6dc42a415bef4e428cea, type: 2}
+  - {fileID: 11400000, guid: 77251a44560b1cd4aa822696d18b0de6, type: 2}
+  learnableMoves:
+  - move: {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 6725c1676f4d6dc42a415bef4e428cea, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 77251a44560b1cd4aa822696d18b0de6, type: 2}
+    level: 0
+  creaturePrefab: {fileID: 850570303259129398, guid: 5b135625f423eb94c8137118260ac445, type: 3}
+  wildPrefab: {fileID: 3019830695226435472, guid: af6a9a5861d613142b37920e7bbda10d, type: 3}
+  battlePrefab: {fileID: 0}
+  encounterText:
+  - A wild Lemmy appeared!
+  - It wants to beat you up!
+  experienceReward: 80
+  evolution: {fileID: 0}
+  evolutionLevel: 0
+  primaryType: 1

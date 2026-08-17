@@ -38,6 +38,7 @@ public class PartyUI : MonoBehaviour
 
     private bool movingCreature = false;
     private int movingIndex = -1;
+    private bool closePressed = false;
 
     public static PartyUI Instance;
 
@@ -61,7 +62,11 @@ public class PartyUI : MonoBehaviour
         }
 
         swapButton.onClick.AddListener(StartPartyMove);
-        closeButton.onClick.AddListener(CloseParty);
+        closeButton.onClick.AddListener(() => {
+            closePressed = true;
+            CloseParty();
+            closePressed = false;
+        });
         summaryButton.onClick.AddListener(OpenSummary);
         movesetButton.onClick.AddListener(() => {
             MovesetUI.Instance.Open(PartyManager.Instance.party[selectedIndex]);
@@ -116,10 +121,16 @@ public class PartyUI : MonoBehaviour
         movingIndex = -1;
         selectedIndex = -1;
 
-        if(isBattleSwitch)
+        if(isBattleSwitch && closePressed)
+        {
+            BattleManager.Instance.SetMoveButtonsActive(true);
+            GameManager.Instance.SetState(GameState.Battle);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if(isBattleSwitch)
         {
             GameManager.Instance.SetState(GameState.Battle);
-            BattleManager.Instance.SetMoveButtonsActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
