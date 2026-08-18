@@ -20,12 +20,12 @@ MonoBehaviour:
   groundOffset: 1.2
   moves:
   - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
-  - {fileID: 11400000, guid: 21f5c6bcf0cfc6f46a102bb9742da5e6, type: 2}
+  - {fileID: 11400000, guid: 865a36ab9f27f5944beecb461a58bad7, type: 2}
   - {fileID: 11400000, guid: 42da5ca284d7ec648b61db2eb28a923a, type: 2}
   learnableMoves:
   - move: {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
     level: 0
-  - move: {fileID: 11400000, guid: 21f5c6bcf0cfc6f46a102bb9742da5e6, type: 2}
+  - move: {fileID: 11400000, guid: 865a36ab9f27f5944beecb461a58bad7, type: 2}
     level: 0
   - move: {fileID: 11400000, guid: 6725c1676f4d6dc42a415bef4e428cea, type: 2}
     level: 5
@@ -37,6 +37,7 @@ MonoBehaviour:
     level: 10
   creaturePrefab: {fileID: 2147605610853272528, guid: bf68e2b2e40348b4d910a4bded23cbbe, type: 3}
   wildPrefab: {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
+  battlePrefab: {fileID: 0}
   encounterText:
   - A wild Krabare appeared!
   - It wants to beat you up!

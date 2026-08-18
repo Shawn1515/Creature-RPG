@@ -365,7 +365,16 @@ public class BattleManager : MonoBehaviour
     void PlayerAttack()
     {
         Debug.Log("Player Attack!");
+        int mult = 0;
         float multiplier = TypeChart.GetMultiplier(selectedMove.moveType, enemyCreature.species.primaryType);
+        if(multiplier > 1)
+        {
+            mult = 1;
+        }
+        if(multiplier < 1)
+        {
+            mult = -1;
+        }
         if(selectedMove.moveType == playerCreature.species.primaryType)
         {
             multiplier *= 1.5f;
@@ -388,7 +397,7 @@ public class BattleManager : MonoBehaviour
 
         UpdateHPUI();
 
-        if(multiplier > 1f)
+        if(mult == 1)
         {
             BattleDialogueUI.Instance.ShowMessage(
                 "It's super effective!",
@@ -397,7 +406,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        if(multiplier < 1f)
+        if(mult == -1)
         {
             BattleDialogueUI.Instance.ShowMessage(
                 "It's not very effective...",
@@ -504,10 +513,19 @@ public class BattleManager : MonoBehaviour
 
         bool leveledUp = playerCreature.GainExperience(xp);
 
-        BattleDialogueUI.Instance.ShowMessage(
-            $"{playerCreature.CreatureName} gained {xp} XP!",
-            ContinueBattle
-        );
+        if(leveledUp) {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{playerCreature.CreatureName} gained {xp} XP!",
+                LevelUpText
+            );
+        }
+        else
+        {
+            BattleDialogueUI.Instance.ShowMessage(
+                $"{playerCreature.CreatureName} gained {xp} XP!",
+                ContinueBattle
+            );
+        }
     }
 
     void LevelUpText()
@@ -567,7 +585,16 @@ public class BattleManager : MonoBehaviour
 
     void EnemyAttack()
     {
+        int mult = 0;
         float multiplier = TypeChart.GetMultiplier(enemyMove.moveType, playerCreature.species.primaryType);
+        if(multiplier > 1)
+        {
+            mult = 1;
+        }
+        if(multiplier < 1)
+        {
+            mult = -1;
+        }
         if(enemyMove.moveType == enemyCreature.species.primaryType)
         {
             multiplier *= 1.5f;
@@ -589,7 +616,7 @@ public class BattleManager : MonoBehaviour
 
         UpdateHPUI();
 
-        if(multiplier > 1f)
+        if(mult == 1)
         {
             BattleDialogueUI.Instance.ShowMessage(
                 "It's super effective!",
@@ -598,7 +625,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        if(multiplier < 1f)
+        if(mult == -1)
         {
             BattleDialogueUI.Instance.ShowMessage(
                 "It's not very effective...",
