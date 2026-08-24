@@ -1,11 +1,15 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using System;
 
 public class DialogueUI : MonoBehaviour
 {
     public GameObject dialoguePanel;
     public TextMeshProUGUI dialogueText;
+
+    public GameObject namePanel;
+    public TextMeshProUGUI nameText;
 
     public float typingSpeed = 0.03f;
 
@@ -25,6 +29,8 @@ public class DialogueUI : MonoBehaviour
 
     private TrainerEncounter pendingTrainer;
 
+    private Action onFinished;
+
     public void SetPendingBattle(CreatureInstance creature, Transform enemyTransform)
     {
         pendingBattleCreature = creature;
@@ -41,13 +47,23 @@ public class DialogueUI : MonoBehaviour
         Instance = this;
     }
 
-    public void StartDialogue(string[] dialogueLines)
+    public void SetOnFinished(Action finishedAction)
+    {
+        onFinished = finishedAction;
+    }
+
+    public void StartDialogue(string[] dialogueLines, string speakerName)
     {
         GameManager.Instance.SetState(GameState.Dialogue);
         currentDialogue = dialogueLines;
         dialogueIndex = 0;
 
         dialoguePanel.SetActive(true);
+        if(speakerName != "")
+        {
+            namePanel.SetActive(true);
+            nameText.text = speakerName;
+        }
 
         ShowCurrentLine();
     }
@@ -106,6 +122,7 @@ public class DialogueUI : MonoBehaviour
     public void HideDialogue()
     {
         dialoguePanel.SetActive(false);
+        namePanel.SetActive(false);
 
         if(pendingTrainer != null)
         {
@@ -120,6 +137,13 @@ public class DialogueUI : MonoBehaviour
             pendingEnemyTransform = null;
             return;
         }
+
+        Action action = onFinished;
+
+        onFinished = null;
+
+        action?.Invoke();
+
         GameManager.Instance.SetState(GameState.Exploration);
     }
 }

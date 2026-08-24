@@ -4,9 +4,10 @@ public class NPCInteractable : MonoBehaviour, IInteractable
 {
     [TextArea]
     public string[] dialogueLines;
+    public string NPCName;
     public void Interact() {
         FacePlayer();
-        DialogueUI.Instance.StartDialogue(dialogueLines);
+        DialogueUI.Instance.StartDialogue(dialogueLines, NPCName);
     }
 
     void FacePlayer() {

@@ -14,7 +14,7 @@ public class HealStation : MonoBehaviour, IInteractable
     public void Interact()
     {
         FacePlayer();
-        DialogueUI.Instance.StartDialogue(healDialogue);
+        DialogueUI.Instance.StartDialogue(healDialogue, "Jim");
         HealPlayer();
     }
 

@@ -23,6 +23,9 @@ public class BattleManager : MonoBehaviour
     public CinemachineCamera exploreCamera;
     public CinemachineCamera battleCamera;
 
+    public GameObject namePanel;
+    public TextMeshProUGUI nameText;
+
     public Transform playerTransform;
 
     private CreatureInstance enemyCreature;
@@ -149,6 +152,7 @@ public class BattleManager : MonoBehaviour
         if(trainerBattle)
         {
             Destroy(currentEnemyCreatureObject);
+            namePanel.SetActive(false);
         }
         else if(!run)
         {
@@ -459,9 +463,10 @@ public class BattleManager : MonoBehaviour
     {
         currentTrainer.MarkDefeated();
 
-        BattleDialogueUI.Instance.ShowMessage(
-            currentTrainer.trainer.defeatDialogue[0],
-            EndBattle
+        DialogueUI.Instance.SetOnFinished(EndBattle);
+
+        DialogueUI.Instance.StartDialogue(
+            currentTrainer.trainer.defeatDialogue, currentTrainer.trainer.trainerName
         );
     }
 

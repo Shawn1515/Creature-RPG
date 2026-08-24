@@ -25,7 +25,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
         if(defeated)
         {
             DialogueUI.Instance.StartDialogue(
-                trainer.defeatDialogue
+                trainer.defeatDialogue, trainer.trainerName
             );
             return;
         }
@@ -33,7 +33,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
         DialogueUI.Instance.SetPendingTrainer(this);
 
         DialogueUI.Instance.StartDialogue(
-            trainer.introDialogue
+            trainer.introDialogue, trainer.trainerName
         );
     }
 

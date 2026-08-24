@@ -21,7 +21,7 @@ public class CreatureEncounter : MonoBehaviour
         if (other.CompareTag("Player")) {
             playerMovement?.SnapToGround();
             DialogueUI.Instance.SetPendingBattle(creature, transform);
-            DialogueUI.Instance.StartDialogue(creatureSpecies.encounterText);
+            DialogueUI.Instance.StartDialogue(creatureSpecies.encounterText, "");
             StartCoroutine(FacePlayer(other.transform));
         }
     }
