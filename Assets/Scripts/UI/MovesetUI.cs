@@ -28,6 +28,7 @@ public class MovesetUI : MonoBehaviour
     {
         closeButton.onClick.AddListener(() => {
             panel.SetActive(false);
+            PartyUI.Instance.partyPanel.SetActive(true);
         });
     }
 
@@ -35,6 +36,8 @@ public class MovesetUI : MonoBehaviour
     {
         creature = selectedCreature;
         panel.SetActive(true);
+        PartyUI.Instance.actionPanel.SetActive(false);
+        PartyUI.Instance.partyPanel.SetActive(false);
         Refresh();
     }
 

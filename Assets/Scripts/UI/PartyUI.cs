@@ -110,6 +110,7 @@ public class PartyUI : MonoBehaviour
     public void CloseSummary()
     {
         summaryPanel.SetActive(false);
+        partyPanel.SetActive(true);
     }
 
     public void CloseParty()
@@ -220,6 +221,7 @@ public class PartyUI : MonoBehaviour
     void OpenSummary()
     {
         actionPanel.SetActive(false);
+        partyPanel.SetActive(false);
 
         DisplayCreature(PartyManager.Instance.party[selectedIndex]);
     }
