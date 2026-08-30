@@ -740,7 +740,10 @@ public class BattleManager : MonoBehaviour
                 EnemyFreeAttack
             );
         }
-        playerCatch.StartCatch(enemyTransform, roll < catchChance);
+        else
+        {
+            playerCatch.StartCatch(enemyTransform, roll < catchChance);
+        }
     }
 
     public IEnumerator CatchAfterAnimation(bool caught)
@@ -757,7 +760,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.05f);
             enemyTransform.gameObject.SetActive(true);
             PlayerCatch.Instance.DestroyHat();
             BattleDialogueUI.Instance.ShowMessage(
@@ -772,6 +775,7 @@ public class BattleManager : MonoBehaviour
     {
         if(PartyManager.Instance.AddCreature(enemyCreature))
         {
+            PlayerCatch.Instance.DestroyHat();
             DestroyEnemy();
             EndBattle();
         }
