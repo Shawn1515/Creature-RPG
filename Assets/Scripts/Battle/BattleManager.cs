@@ -31,6 +31,8 @@ public class BattleManager : MonoBehaviour
     private CreatureInstance enemyCreature;
     public CreatureInstance playerCreature;
 
+    public GameObject playerObject;
+
     private Transform enemyTransform;
 
     private MoveData selectedMove;
@@ -573,7 +575,7 @@ public class BattleManager : MonoBehaviour
         );
     }
 
-    void EnemyFreeAttack()
+    public void EnemyFreeAttack()
     {
         enemyFreeTurn = true;
         enemyMove = enemyCreature.Moves[Random.Range(0, enemyCreature.Moves.Count)];
@@ -727,18 +729,25 @@ public class BattleManager : MonoBehaviour
         float hpPercent = (float)enemyCreature.currentHP / enemyCreature.MaxHP;
         float catchChance = 1f - hpPercent;
         float roll = Random.Range(0f, 1f);
+        PlayerCatch playerCatch = playerObject.GetComponent<PlayerCatch>();
 
         if(trainerBattle)
         {
             BattleDialogueUI.Instance.ShowMessage(
-                "You feel terrible about trying to steal "
+                "You feel terrible by the thought of stealing "
                 + currentTrainer.trainer.trainerName + "\'s " + 
                 enemyCreature.CreatureName + ".",
                 EnemyFreeAttack
             );
         }
-        else if (roll < catchChance)
+        playerCatch.StartCatch(enemyTransform, roll < catchChance);
+    }
+
+    public IEnumerator CatchAfterAnimation(bool caught)
+    {
+        if (caught)
         {
+            yield return new WaitForSeconds(1f);
             BattleDialogueUI.Instance.ShowMessage(
                 "Gotcha! " +
                 enemyCreature.CreatureName +
@@ -748,6 +757,9 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            yield return new WaitForSeconds(1f);
+            enemyTransform.gameObject.SetActive(true);
+            PlayerCatch.Instance.DestroyHat();
             BattleDialogueUI.Instance.ShowMessage(
                 enemyCreature.CreatureName +
                 " broke free!",
@@ -756,7 +768,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    void CatchSuccess()
+    public void CatchSuccess()
     {
         if(PartyManager.Instance.AddCreature(enemyCreature))
         {
