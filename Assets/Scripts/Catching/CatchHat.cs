@@ -3,8 +3,9 @@ using System.Collections;
 
 public class CatchHat : MonoBehaviour
 {
-    public ParticleSystem spinParticles;
     public GameObject catchSuccessParticlesPrefab;
+    public GameObject breakoutParticlesPrefab;
+
     public float flightDuration = 0.75f;
     public float rotationSpeed = 720f;
     public float maxScaleMultiplier = 4f;
@@ -24,8 +25,6 @@ public class CatchHat : MonoBehaviour
 
     public void StartThrow(Transform newTarget, bool willCatch)
     {
-        spinParticles.Play();
-
         target = newTarget;
 
         caught = willCatch;
@@ -87,7 +86,6 @@ public class CatchHat : MonoBehaviour
 
     IEnumerator ReachCreature()
     {
-        spinParticles.Stop();
         target = null;
         yield return StartCoroutine(ShrinkHat());
         yield return StartCoroutine(ShakeHat());
@@ -123,6 +121,7 @@ public class CatchHat : MonoBehaviour
 
     IEnumerator BreakHat()
     {
+        PlayBreakoutParticles();
         Vector3 startScale = transform.localScale;
         float elapsed = 0f;
 
@@ -206,6 +205,15 @@ public class CatchHat : MonoBehaviour
     {
         Instantiate(
             catchSuccessParticlesPrefab,
+            transform.position,
+            Quaternion.identity
+        );
+    }
+
+    void PlayBreakoutParticles()
+    {
+        Instantiate(
+            breakoutParticlesPrefab,
             transform.position,
             Quaternion.identity
         );

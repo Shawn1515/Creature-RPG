@@ -21,7 +21,7 @@ MonoBehaviour:
   moves:
   - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
   - {fileID: 11400000, guid: 865a36ab9f27f5944beecb461a58bad7, type: 2}
-  - {fileID: 11400000, guid: 42da5ca284d7ec648b61db2eb28a923a, type: 2}
+  - {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}
   learnableMoves:
   - move: {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
     level: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
     level: 0
   - move: {fileID: 11400000, guid: 6725c1676f4d6dc42a415bef4e428cea, type: 2}
     level: 5
-  - move: {fileID: 11400000, guid: 42da5ca284d7ec648b61db2eb28a923a, type: 2}
+  - move: {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}
     level: 0
   - move: {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
     level: 0

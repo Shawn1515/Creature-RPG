@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06072ef578fa5184fbb2797d3f993289, type: 3}
+  m_Name: UnibladeData
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureData
+  creatureName: Uniblade
+  maxHP: 25
+  attack: 15
+  defense: 4
+  speed: 15
+  groundOffset: 0.1
+  moves:
+  - {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}
+  - {fileID: 11400000, guid: 77251a44560b1cd4aa822696d18b0de6, type: 2}
+  - {fileID: 11400000, guid: 7cdcdb362ca972c43a9fec7a14ed29dd, type: 2}
+  learnableMoves:
+  - move: {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 77251a44560b1cd4aa822696d18b0de6, type: 2}
+    level: 0
+  - move: {fileID: 11400000, guid: 7cdcdb362ca972c43a9fec7a14ed29dd, type: 2}
+    level: 0
+  creaturePrefab: {fileID: 500175275520376202, guid: 742f480439b03f74db7671451fe9b2cc, type: 3}
+  wildPrefab: {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
+  battlePrefab: {fileID: 0}
+  encounterText:
+  - A wild Uniblade appeared!
+  - It wants to beat you up!
+  experienceReward: 200
+  evolution: {fileID: 0}
+  evolutionLevel: 0
+  primaryType: 4

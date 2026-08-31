@@ -225,6 +225,7 @@ MonoBehaviour:
   - {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 3019830695226435472, guid: af6a9a5861d613142b37920e7bbda10d, type: 3}
+  - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
 --- !u!1001 &20460276
 PrefabInstance:
@@ -3543,6 +3544,7 @@ MonoBehaviour:
   - {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 3019830695226435472, guid: af6a9a5861d613142b37920e7bbda10d, type: 3}
+  - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
 --- !u!1001 &206859554
 PrefabInstance:
@@ -12543,6 +12545,7 @@ MonoBehaviour:
   - {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 3019830695226435472, guid: af6a9a5861d613142b37920e7bbda10d, type: 3}
+  - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
 --- !u!1 &788770048 stripped
 GameObject:
@@ -15923,6 +15926,7 @@ MonoBehaviour:
   - {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 3019830695226435472, guid: af6a9a5861d613142b37920e7bbda10d, type: 3}
+  - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
 --- !u!4 &1019831848 stripped
 Transform:
@@ -21671,7 +21675,7 @@ GameObject:
   - component: {fileID: 1509012473}
   - component: {fileID: 1509012472}
   m_Layer: 6
-  m_Name: Starter Ground
+  m_Name: Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21724,7 +21728,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b96ba91b5bbae1343bf6f55630f41bfb, type: 2}
+  - {fileID: 2100000, guid: 5fb645670b741194c9e143c8c08286b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29917,6 +29921,7 @@ MonoBehaviour:
   - {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 3019830695226435472, guid: af6a9a5861d613142b37920e7bbda10d, type: 3}
+  - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
 --- !u!1 &2045019607
 GameObject:
