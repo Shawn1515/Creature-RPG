@@ -23,7 +23,7 @@ public class CameraOrbit : MonoBehaviour
 
         cameraPivot.Rotate(Vector3.up * mouseX);
         verticalRotation -= mouseY;
-        verticalRotation = Mathf.Clamp(verticalRotation, -20f, 45f);
+        verticalRotation = Mathf.Clamp(verticalRotation, 0f, 45f);
 
         transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
     }

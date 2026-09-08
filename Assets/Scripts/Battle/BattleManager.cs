@@ -704,10 +704,27 @@ public class BattleManager : MonoBehaviour
         if(!PartyManager.Instance.HasUsableCreature())
         {
             EndBattle();
+            GameManager.Instance.SetState(GameState.Dialogue);
+            ScreenFade.Instance.FadeToBlack(2f, BlackoutComplete);
             return;
         }
         forcedSwitch = true;
         PartyUI.Instance.OpenForBattle();
+    }
+
+    void BlackoutComplete()
+    {
+        PartyManager.Instance.HealParty();
+        
+        string[] message =
+        {
+            "You blacked out!",
+            "Be careful out there."
+        };
+        DialogueUI.Instance.StartDialogue(message, "");
+
+        ScreenFade.Instance.FadeFromBlack(2f);
+
     }
 
     public void SetMoveButtonsActive(bool active)
