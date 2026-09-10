@@ -30,6 +30,19 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
             return;
         }
 
+        if(trainer.trainerType == TrainerType.Champion)
+        {
+            if(!BadgeManager.Instance.HasAllBadges())
+            {
+                string[] message = {
+                    "You aren't ready to challenge me yet.",
+                    "Come back when you have all three badges."
+                };
+                DialogueUI.Instance.StartDialogue(message, "???");
+                return;
+            }
+        }
+
         DialogueUI.Instance.SetPendingTrainer(this);
 
         DialogueUI.Instance.StartDialogue(

@@ -1,8 +1,20 @@
 using UnityEngine;
 
+public enum TrainerType
+    {
+        Normal,
+        GymLeader,
+        Champion
+    }
+
 [CreateAssetMenu(fileName = "TrainerData", menuName = "Trainer/Trainer Data")]
 public class TrainerData : ScriptableObject
 {
+
+    public TrainerType trainerType;
+
+    public int badgeNumber;
+
     public string trainerName;
 
     [TextArea]
