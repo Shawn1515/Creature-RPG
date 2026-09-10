@@ -7,16 +7,24 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
 
     public Transform trainerTransform;
 
+    private Vector3 originalPosition;
+
     private List<CreatureInstance> party = new List<CreatureInstance>();
 
     private bool defeated;
 
     void Start()
     {
+        originalPosition = trainerTransform.position;
         for(int i = 0; i < trainer.creatures.Length; i++)
         {
             party.Add(new CreatureInstance(trainer.creatures[i], trainer.creatureLevels[i]));
         }
+    }
+
+    public void ResetTrainerPosition()
+    {
+        trainerTransform.position = originalPosition;
     }
 
     public void Interact()
@@ -41,6 +49,11 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
                 DialogueUI.Instance.StartDialogue(message, "???");
                 return;
             }
+        }
+
+        for(int i = 0; i < party.Count; i++)
+        {
+            party[i].currentHP = party[i].MaxHP;
         }
 
         DialogueUI.Instance.SetPendingTrainer(this);

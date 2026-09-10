@@ -68,8 +68,14 @@ public class ScreenFade : MonoBehaviour
         }
         else
         {
+            PartyManager.Instance.HealParty();
+            BattleManager.Instance.TrainerPositionReset();
+            Destroy(FollowerManager.Instance.currentFollower);
+            FollowerManager.Instance.currentFollower = null;
+            GameManager.Instance.SetState(GameState.Dialogue);
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             player.transform.position = Vector3.zero;
+            FollowerManager.Instance.SpawnFollower();
             yield return new WaitForSeconds(1f);
         }
 

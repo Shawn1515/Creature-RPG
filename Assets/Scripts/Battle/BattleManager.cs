@@ -45,6 +45,8 @@ public class BattleManager : MonoBehaviour
     private bool run;
     private bool forcedSwitch;
 
+    private TrainerEncounter lastTrainer;
+
     private List<CreatureInstance> enemyParty;
     private int enemyPartyIndex;
     private bool trainerBattle;
@@ -708,6 +710,7 @@ public class BattleManager : MonoBehaviour
     {
         if(!PartyManager.Instance.HasUsableCreature())
         {
+            lastTrainer = currentTrainer;
             EndBattle();
             GameManager.Instance.SetState(GameState.Dialogue);
             ScreenFade.Instance.FadeToBlack(2f, BlackoutComplete);
@@ -717,10 +720,16 @@ public class BattleManager : MonoBehaviour
         PartyUI.Instance.OpenForBattle();
     }
 
-    void BlackoutComplete()
+    public void TrainerPositionReset()
     {
-        PartyManager.Instance.HealParty();
-        
+        if(lastTrainer != null)
+        {
+            lastTrainer.ResetTrainerPosition();
+        }
+    }
+
+    public void BlackoutComplete()
+    {
         string[] message =
         {
             "You blacked out!",
@@ -905,6 +914,10 @@ public class BattleManager : MonoBehaviour
         float timer = 0f;
         while (timer < 0.2f)
         {
+            if(attacker == null)
+            {
+                yield break;
+            }
             timer += Time.deltaTime;
             attacker.position = Vector3.Lerp(
                 startPosition,
@@ -918,6 +931,10 @@ public class BattleManager : MonoBehaviour
         timer = 0f;
         while (timer < 0.2f)
         {
+            if(attacker == null)
+            {
+                yield break;
+            }
             timer += Time.deltaTime;
 
             attacker.position = Vector3.Lerp(
@@ -928,7 +945,10 @@ public class BattleManager : MonoBehaviour
 
             yield return null;
         }
-        attacker.position = startPosition;
+        if(attacker != null)
+        {
+            attacker.position = startPosition;
+        }
     }
 
     public bool IsForcedSwitch => forcedSwitch;

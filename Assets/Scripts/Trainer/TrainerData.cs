@@ -30,4 +30,6 @@ public class TrainerData : ScriptableObject
     public int rewardMoney;
 
     public float groundOffset;
+
+    public Vector3 position;
 }

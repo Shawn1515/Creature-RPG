@@ -26,3 +26,4 @@ MonoBehaviour:
   creatureLevels: 64000000
   rewardMoney: 100000
   groundOffset: 0
+  position: {x: 21.62, y: 0, z: -11.47}
