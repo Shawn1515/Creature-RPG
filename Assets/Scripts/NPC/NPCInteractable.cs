@@ -1,13 +1,36 @@
 using UnityEngine;
-
+using UnityEngine.Events;
 public class NPCInteractable : MonoBehaviour, IInteractable
 {
     [TextArea]
     public string[] dialogueLines;
     public string NPCName;
+
+    [TextArea]
+    public string[] repeatDialogue;
+
+    public UnityEvent action;
+
+    private bool didAction = false;
     public void Interact() {
         FacePlayer();
-        DialogueUI.Instance.StartDialogue(dialogueLines, NPCName);
+        if(!didAction && action.GetPersistentEventCount() > 0)
+        {
+            didAction = true;
+            DialogueUI.Instance.SetOnFinished(() => action?.Invoke());
+            DialogueUI.Instance.StartDialogue(dialogueLines, NPCName);
+        }
+        else
+        {
+            if(repeatDialogue.Length != 0)
+            {
+                DialogueUI.Instance.StartDialogue(repeatDialogue, NPCName);
+            }
+            else
+            {
+                DialogueUI.Instance.StartDialogue(dialogueLines, NPCName);
+            }
+        }
     }
 
     void FacePlayer() {

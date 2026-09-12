@@ -757,6 +757,12 @@ public class BattleManager : MonoBehaviour
     {
         SetMoveButtonsActive(false);
 
+        if(!HatManager.Instance.UseHat())
+        {
+            BattleDialogueUI.Instance.ShowMessage("Uh oh! You are out of hats!", EnemyFreeAttack);
+            return;
+        }
+
         float hpPercent = (float)enemyCreature.currentHP / enemyCreature.MaxHP;
         float catchChance = 1f - hpPercent;
         float roll = Random.Range(0f, 1f);

@@ -6,6 +6,6 @@ public class DeathPlane : MonoBehaviour
     {
         if (!other.CompareTag("Player"))
             return;
-        ScreenFade.Instance.FadeToBlack(2f, BattleManager.Instance.BlackoutComplete);
+        ScreenFade.Instance.FadeToBlack(.5f, BattleManager.Instance.BlackoutComplete);
     }
 }
