@@ -9,12 +9,9 @@ public class ShopUI : MonoBehaviour
     public GameObject shopPanel;
 
     public TextMeshProUGUI moneyText;
-    public TextMeshProUGUI hatCountText;
 
     public Button buyButton;
     public Button closeButton;
-
-    public int hatsPerPurchase = 5;
     public int hatPrice = 50;
 
     private void Awake()
@@ -34,14 +31,13 @@ public class ShopUI : MonoBehaviour
 
         UpdateUI();
 
-        GameManager.Instance.CurrentState = GameState.Dialogue;
+        GameManager.Instance.SetState(GameState.Party);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     void UpdateUI()
     {
-        moneyText.text = "$" + MoneyManager.Instance.money;
-        hatCountText.text = "Hats: " + HatManager.Instance.hatCount;
-
         buyButton.interactable =
             MoneyManager.Instance.CanAfford(hatPrice);
     }
@@ -51,7 +47,7 @@ public class ShopUI : MonoBehaviour
         if (!MoneyManager.Instance.SpendMoney(hatPrice))
             return;
 
-        HatManager.Instance.AddHats(hatsPerPurchase);
+        HatManager.Instance.AddHats(1);
 
         UpdateUI();
     }
@@ -60,6 +56,8 @@ public class ShopUI : MonoBehaviour
     {
         shopPanel.SetActive(false);
 
-        GameManager.Instance.CurrentState = GameState.Exploration;
+        GameManager.Instance.SetState(GameState.Exploration);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
