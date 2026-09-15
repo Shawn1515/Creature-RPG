@@ -22,6 +22,5 @@ MonoBehaviour:
   creatures:
   - {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
   creatureLevels: 01000000
-  rewardMoney: 0
+  rewardMoney: 250
   groundOffset: 2
-  position: {x: 76, y: 0, z: -56}

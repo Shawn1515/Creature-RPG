@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db328c3176a8ff945bcb882dd5761ea6, type: 3}
   m_Name: Youngster Tim
   m_EditorClassIdentifier: Assembly-CSharp::TrainerData
+  trainerType: 0
+  badgeNumber: 0
   trainerName: Youngster Tim
   introDialogue:
   - Hey!
@@ -23,5 +25,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 219696e1fbf4e9d48bf8acd07f3701f1, type: 2}
   - {fileID: 11400000, guid: 02250cf7a042f294fb006700a10e60a3, type: 2}
   creatureLevels: 030000000400000005000000
-  rewardMoney: 0
+  rewardMoney: 50
   groundOffset: 2

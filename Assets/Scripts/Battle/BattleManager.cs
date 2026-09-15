@@ -156,6 +156,7 @@ public class BattleManager : MonoBehaviour
         if(trainerBattle)
         {
             Destroy(currentEnemyCreatureObject);
+            MoneyManager.Instance.AddMoney(currentTrainer.trainer.rewardMoney);
             namePanel.SetActive(false);
         }
         else if(!run)
@@ -474,8 +475,12 @@ public class BattleManager : MonoBehaviour
 
         DialogueUI.Instance.SetOnFinished(EndBattle);
 
+        List<string> list = new List<string>(currentTrainer.trainer.defeatDialogue);
+        list.Add("Take " + currentTrainer.trainer.rewardMoney + " coins for your hard work.");
+        string[] defeatDialogue = list.ToArray();
+
         DialogueUI.Instance.StartDialogue(
-            currentTrainer.trainer.defeatDialogue, currentTrainer.trainer.trainerName
+            defeatDialogue, currentTrainer.trainer.trainerName
         );
     }
 
