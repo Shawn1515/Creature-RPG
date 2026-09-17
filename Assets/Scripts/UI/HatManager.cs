@@ -35,7 +35,7 @@ public class HatManager : MonoBehaviour
         }
 
         hatCount--;
-        hatCountText.text = "x" + hatCount;
+        hatCountText.text = hatCount.ToString();
 
         return true;
     }
@@ -43,6 +43,6 @@ public class HatManager : MonoBehaviour
     public void AddHats(int amount)
     {
         hatCount += amount;
-        hatCountText.text = "x" + hatCount;
+        hatCountText.text = hatCount.ToString();
     }
 }

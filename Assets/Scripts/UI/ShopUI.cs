@@ -29,27 +29,24 @@ public class ShopUI : MonoBehaviour
     {
         shopPanel.SetActive(true);
 
-        UpdateUI();
-
         GameManager.Instance.SetState(GameState.Party);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    void UpdateUI()
-    {
-        buyButton.interactable =
-            MoneyManager.Instance.CanAfford(hatPrice);
-    }
-
     void BuyHats()
     {
         if (!MoneyManager.Instance.SpendMoney(hatPrice))
-            return;
-
-        HatManager.Instance.AddHats(1);
-
-        UpdateUI();
+        {
+            string[] dialogue = {"You can't do that!"};
+            DialogueUI.Instance.DialogueWithin(dialogue, "");
+        }
+        else
+        {
+            HatManager.Instance.AddHats(1);
+            string[] dialogue = {"You bought a hat!"};
+            DialogueUI.Instance.DialogueWithin(dialogue, "");
+        }
     }
 
     void CloseShop()

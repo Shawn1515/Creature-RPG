@@ -476,7 +476,7 @@ public class BattleManager : MonoBehaviour
         DialogueUI.Instance.SetOnFinished(EndBattle);
 
         List<string> list = new List<string>(currentTrainer.trainer.defeatDialogue);
-        list.Add("Take " + currentTrainer.trainer.rewardMoney + " coins for your hard work.");
+        list.Add("Take " + currentTrainer.trainer.rewardMoney + " coins as your reward.");
         string[] defeatDialogue = list.ToArray();
 
         DialogueUI.Instance.StartDialogue(

@@ -6,7 +6,7 @@ public class MoneyManager : MonoBehaviour
     public static MoneyManager Instance;
     public TextMeshProUGUI moneyText;
 
-    public int money = 1000;
+    public int money = 0;
 
     private void Awake()
     {
@@ -32,13 +32,13 @@ public class MoneyManager : MonoBehaviour
             return false;
 
         money -= amount;
-        moneyText.text = "x" + money;
+        moneyText.text = money.ToString();
         return true;
     }
 
     public void AddMoney(int amount)
     {
         money += amount;
-        moneyText.text = "x" + money;
+        moneyText.text = money.ToString();
     }
 }

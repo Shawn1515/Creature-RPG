@@ -27,6 +27,8 @@ public class DialogueUI : MonoBehaviour
     private CreatureInstance pendingBattleCreature;
     private Transform pendingEnemyTransform;
 
+    private bool within;
+
     private TrainerEncounter pendingTrainer;
 
     private Action onFinished;
@@ -44,12 +46,29 @@ public class DialogueUI : MonoBehaviour
 
     private void Awake()
     {
+        within = false;
         Instance = this;
     }
 
     public void SetOnFinished(Action finishedAction)
     {
         onFinished = finishedAction;
+    }
+
+    public void DialogueWithin(string[] dialogueLines, string speakerName)
+    {
+        within = true;
+        currentDialogue = dialogueLines;
+        dialogueIndex = 0;
+
+        dialoguePanel.SetActive(true);
+        if(speakerName != "")
+        {
+            namePanel.SetActive(true);
+            nameText.text = speakerName;
+        }
+
+        ShowCurrentLine();
     }
 
     public void StartDialogue(string[] dialogueLines, string speakerName)
@@ -144,6 +163,10 @@ public class DialogueUI : MonoBehaviour
 
         action?.Invoke();
 
-        GameManager.Instance.SetState(GameState.Exploration);
+        if(!within)
+        {
+            GameManager.Instance.SetState(GameState.Exploration);
+        }
+        within = false;
     }
 }
