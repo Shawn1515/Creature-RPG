@@ -54,6 +54,7 @@ public class ShopUI : MonoBehaviour
         shopPanel.SetActive(false);
 
         GameManager.Instance.SetState(GameState.Exploration);
+        DialogueUI.Instance.HideDialogue();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
