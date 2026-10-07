@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Charade
   m_EditorClassIdentifier: Assembly-CSharp::MoveData
   moveName: Charade
-  moveType: 0
+  moveType: 5
   power: 8

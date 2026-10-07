@@ -33,10 +33,11 @@ MonoBehaviour:
     level: 5
   creaturePrefab: {fileID: 3143027034710270513, guid: 226677be437e04943b4e1474d0d4baa0, type: 3}
   wildPrefab: {fileID: 5628462847669832479, guid: 26211bcb23358654f8ca91611bd1b5b6, type: 3}
+  battlePrefab: {fileID: 0}
   encounterText:
   - A wild Droof appeared!
   - It wants to beat you up!
   experienceReward: 50
   evolution: {fileID: 0}
   evolutionLevel: 0
-  primaryType: 5
+  primaryType: 4

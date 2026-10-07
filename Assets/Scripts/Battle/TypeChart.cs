@@ -28,6 +28,30 @@ public static class TypeChart
             defense == CreatureType.Grass)
             return 0.5f;
 
+        if (attack == CreatureType.Electric &&
+            defense == CreatureType.Steel)
+            return 2f;
+
+        if (attack == CreatureType.Steel &&
+            defense == CreatureType.Electric)
+            return 0.5f;
+
+        if (attack == CreatureType.Steel &&
+            defense == CreatureType.Ice)
+            return 2f;
+
+        if (attack == CreatureType.Ice &&
+            defense == CreatureType.Steel)
+            return 0.5f;
+
+        if (attack == CreatureType.Ice &&
+            defense == CreatureType.Electric)
+            return 2f;
+
+        if (attack == CreatureType.Electric &&
+            defense == CreatureType.Ice)
+            return 0.5f;
+
         return 1f;
     }
 }

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Water Glide
   m_EditorClassIdentifier: Assembly-CSharp::MoveData
   moveName: Water Glide
-  moveType: 2
+  moveType: 1
   power: 8

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Electro Boom
   m_EditorClassIdentifier: Assembly-CSharp::MoveData
   moveName: Electro Boom
-  moveType: 4
+  moveType: 3
   power: 12
