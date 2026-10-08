@@ -60,6 +60,7 @@ public class BattleManager : MonoBehaviour
 
     private void StartBattle(CreatureInstance creature, Transform enemy)
     {
+        MusicManager.Instance.StartBattleMusic();
         Vector3 forward = exploreCamera.transform.forward;
         forward.y = 0;
         forward.Normalize();
@@ -140,6 +141,7 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
+        MusicManager.Instance.StartOverworldMusic();
         playerUI.Hide();
         enemyUI.Hide();
 

@@ -51,6 +51,12 @@ public static class TypeChart
         if (attack == CreatureType.Electric &&
             defense == CreatureType.Ice)
             return 0.5f;
+        
+        if(attack == CreatureType.Dragon && defense == CreatureType.Flying)
+            return 2f;
+        
+        if(attack == CreatureType.Flying && defense == CreatureType.Dragon)
+            return 2f;
 
         return 1f;
     }

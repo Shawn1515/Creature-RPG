@@ -5,5 +5,7 @@ public enum CreatureType
     Grass,
     Electric,
     Ice,
-    Steel
+    Steel,
+    Dragon,
+    Flying
 }
