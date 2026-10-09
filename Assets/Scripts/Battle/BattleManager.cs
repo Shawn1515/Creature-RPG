@@ -9,7 +9,6 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
 
-
     [Header("Battle Buttons")]
     public Button[] moveButtons;
     public Button runButton;
@@ -60,6 +59,7 @@ public class BattleManager : MonoBehaviour
 
     private void StartBattle(CreatureInstance creature, Transform enemy)
     {
+        StartCoroutine(Point.Instance.PointAnimation());
         MusicManager.Instance.StartBattleMusic();
         Vector3 forward = exploreCamera.transform.forward;
         forward.y = 0;
@@ -100,6 +100,12 @@ public class BattleManager : MonoBehaviour
 
         UpdateHPUI();
         SetupMoveButtons();
+        SetMoveButtonsActive(false);
+        StartCoroutine(ActivateButtons());
+    }
+
+    IEnumerator ActivateButtons() {
+        yield return new WaitForSeconds(3);
         SetMoveButtonsActive(true);
     }
 

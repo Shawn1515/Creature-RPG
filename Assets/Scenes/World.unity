@@ -22858,6 +22858,7 @@ GameObject:
   - component: {fileID: 467187122}
   - component: {fileID: 467187123}
   - component: {fileID: 467187124}
+  - component: {fileID: 467187125}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -22978,6 +22979,20 @@ MonoBehaviour:
   hatSpawnPoint: {fileID: 654011411}
   catchHatPrefab: {fileID: 6242654187315919232, guid: da8185c652be5e74396bf37e4a268892, type: 3}
   playerTransform: {fileID: 1115667305}
+--- !u!114 &467187125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467187118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec7a6c4bb3c9e6341989bf4a69142022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Point
+  playerTransform: {fileID: 1115667305}
+  animator: {fileID: 467187123}
 --- !u!1 &467409438
 GameObject:
   m_ObjectHideFlags: 0

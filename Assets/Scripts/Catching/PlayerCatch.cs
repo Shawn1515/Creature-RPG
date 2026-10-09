@@ -20,7 +20,8 @@ public class PlayerCatch : MonoBehaviour
 
     public void StartCatch(Transform enemyTarget, bool willCatch)
     {
-        StartCoroutine(RotateToTarget(Quaternion.Euler(0f, -90f, 0f) * playerTransform.rotation));        target = enemyTarget;
+        StartCoroutine(RotateToTarget(Quaternion.Euler(0f, -90f, 0f) * playerTransform.rotation));
+        target = enemyTarget;
         animator.SetTrigger("Catch");
         if(currentHat != null)
         {
