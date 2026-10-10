@@ -758,7 +758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FollowerCreature
   player: {fileID: 0}
   followDistance: 6
-  moveSpeed: 5
+  moveSpeed: 4
   rotationSpeed: 10
   gravity: -25
 --- !u!114 &6088357309545136335

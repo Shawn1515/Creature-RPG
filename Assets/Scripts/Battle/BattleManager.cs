@@ -115,7 +115,10 @@ public class BattleManager : MonoBehaviour
         currentTrainer = null;
         enemyParty = null;
         enemyPartyIndex = 0;
-        StartBattle(creature, enemy);
+        ScreenFade.Instance.BattleTransition(() =>
+        {
+            StartBattle(creature, enemy);
+        });
     }
 
     public void StartTrainerBattle(TrainerEncounter trainer)
@@ -142,7 +145,10 @@ public class BattleManager : MonoBehaviour
 
         currentEnemyCreatureObject = Instantiate(enemyCreature.WildPrefab, BattlePositions.Instance.enemySpot.position, Quaternion.identity);
 
-        StartBattle(enemyCreature, currentEnemyCreatureObject.transform);
+        ScreenFade.Instance.BattleTransition(() =>
+        {
+            StartBattle(enemyCreature, currentEnemyCreatureObject.transform);
+        });
     }
 
     public void EndBattle()
@@ -292,10 +298,10 @@ public class BattleManager : MonoBehaviour
             );
             }
             else{
-            BattleDialogueUI.Instance.ShowMessage(
-                $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
-                EnemyAttack
-            );
+                BattleDialogueUI.Instance.ShowMessage(
+                    $"Wild {enemyCreature.CreatureName} used {enemyMove.moveName}!",
+                    EnemyAttack
+                );
             }
         }
     }

@@ -35,10 +35,16 @@ public class MusicManager : MonoBehaviour
         overworldSource.Play();
     }
 
+  
     public void StartBattleMusic()
     {
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
+
+        battleSource.Stop();
+        battleSource.time = 0f;
+        battleSource.volume = 0f;
+        battleSource.Play();
 
         fadeCoroutine = StartCoroutine(Crossfade(
             overworldSource,
@@ -51,6 +57,8 @@ public class MusicManager : MonoBehaviour
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
 
+        overworldSource.UnPause();
+
         fadeCoroutine = StartCoroutine(Crossfade(
             battleSource,
             overworldSource
@@ -61,11 +69,6 @@ public class MusicManager : MonoBehaviour
         AudioSource fadeOut,
         AudioSource fadeIn)
     {
-        if (!fadeIn.isPlaying)
-        {
-            fadeIn.Play();
-        }
-
         float startOutVolume = fadeOut.volume;
         float startInVolume = fadeIn.volume;
 
@@ -74,27 +77,19 @@ public class MusicManager : MonoBehaviour
         while (time < fadeDuration)
         {
             time += Time.deltaTime;
-
-            float t = time / fadeDuration;
+            float t = Mathf.Clamp01(time / fadeDuration);
 
             fadeOut.volume = Mathf.Lerp(
-                startOutVolume,
-                0f,
-                t
-            );
+                startOutVolume, 0f, t);
 
             fadeIn.volume = Mathf.Lerp(
-                startInVolume,
-                1f,
-                t
-            );
+                startInVolume, 1f, t);
 
             yield return null;
         }
 
         fadeOut.volume = 0f;
-        fadeOut.Stop();
-
         fadeIn.volume = 1f;
+        fadeOut.Pause();
     }
 }
