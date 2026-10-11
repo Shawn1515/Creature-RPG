@@ -1,14 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class CatchHat : MonoBehaviour
 {
     public GameObject catchSuccessParticlesPrefab;
     public GameObject breakoutParticlesPrefab;
 
-    public float flightDuration = 0.75f;
     public float rotationSpeed = 720f;
-    public float maxScaleMultiplier = 4f;
 
     public float shrinkDuration = 0.4f;
 
@@ -20,8 +19,15 @@ public class CatchHat : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 originalScale;
     private float timer;
+    private float arcHeight;
+    private float maxScaleMultiplier;
+
+    private float flightDuration;
 
     private bool caught;
+
+    private bool isTrainerSendOut;
+    private System.Action onSendOutComplete;
 
     public void StartThrow(Transform newTarget, bool willCatch)
     {
@@ -32,6 +38,25 @@ public class CatchHat : MonoBehaviour
         startPosition = transform.position;
 
         timer = 0f;
+
+        arcHeight = 2f;
+
+        flightDuration = 1.5f;
+
+        maxScaleMultiplier = 25;
+    }
+
+    public void StartSendOut(Transform newTarget, System.Action onComplete)
+    {
+        target = newTarget;
+        caught = true;
+        isTrainerSendOut = true;
+        onSendOutComplete = onComplete;
+        startPosition = transform.position;
+        timer = 0f;
+        arcHeight = 1f;
+        flightDuration = 0.75f;
+        maxScaleMultiplier = 10;
     }
 
     void Awake()
@@ -74,7 +99,6 @@ public class CatchHat : MonoBehaviour
             rotationSpeed * Time.deltaTime
         );
 
-        float arcHeight = 2f;
         position.y += Mathf.Sin(progress * Mathf.PI) * arcHeight;
         transform.position = position;
 
@@ -87,6 +111,14 @@ public class CatchHat : MonoBehaviour
     IEnumerator ReachCreature()
     {
         target = null;
+
+        if (isTrainerSendOut)
+        {
+            PlayBreakoutParticles();
+            onSendOutComplete?.Invoke();
+            yield break;
+        }
+
         yield return StartCoroutine(ShrinkHat());
         yield return StartCoroutine(ShakeHat());
         if(!caught)

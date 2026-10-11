@@ -32,6 +32,8 @@ public class BattleManager : MonoBehaviour
 
     public GameObject playerObject;
 
+    private Interactor interactor;
+
     private Transform enemyTransform;
 
     private MoveData selectedMove;
@@ -44,6 +46,8 @@ public class BattleManager : MonoBehaviour
     private bool run;
     private bool forcedSwitch;
 
+    private bool isSendingOutTrainerCreature;
+
     private TrainerEncounter lastTrainer;
 
     private List<CreatureInstance> enemyParty;
@@ -55,11 +59,12 @@ public class BattleManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        interactor = playerObject.transform.Find("player").GetComponent<Interactor>();
     }
 
     private void StartBattle(CreatureInstance creature, Transform enemy)
     {
-        StartCoroutine(Point.Instance.PointAnimation());
+        StartCoroutine(Point.Instance.PointAnimation(trainerBattle));
         MusicManager.Instance.StartBattleMusic();
         Vector3 forward = exploreCamera.transform.forward;
         forward.y = 0;
@@ -91,6 +96,8 @@ public class BattleManager : MonoBehaviour
 
         PositionBattleParticipants();
 
+        interactor.UnlockInteraction();
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
@@ -105,7 +112,14 @@ public class BattleManager : MonoBehaviour
     }
 
     IEnumerator ActivateButtons() {
-        yield return new WaitForSeconds(3);
+        if(trainerBattle)
+        {
+            yield return new WaitForSeconds(5.5f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+        }
         SetMoveButtonsActive(true);
     }
 
@@ -136,20 +150,44 @@ public class BattleManager : MonoBehaviour
 
     void SendOutTrainerCreature()
     {
-        if(currentEnemyCreatureObject != null)
+        if (currentEnemyCreatureObject != null)
         {
             Destroy(currentEnemyCreatureObject);
         }
 
         enemyCreature = enemyParty[enemyPartyIndex];
 
-        currentEnemyCreatureObject = Instantiate(enemyCreature.WildPrefab, BattlePositions.Instance.enemySpot.position, Quaternion.identity);
+        currentEnemyCreatureObject = Instantiate(
+            enemyCreature.WildPrefab,
+            BattlePositions.Instance.enemySpot.position,
+            Quaternion.identity
+        );
+        currentEnemyCreatureObject.SetActive(false);
 
         ScreenFade.Instance.BattleTransition(() =>
         {
             StartBattle(enemyCreature, currentEnemyCreatureObject.transform);
+
+            TrainerSendOut trainerSendOut = currentTrainer.GetComponent<TrainerSendOut>();
+
+            if (trainerSendOut != null)
+            {
+                StartCoroutine(trainerSendOut.StartSendOut(
+                    currentEnemyCreatureObject.transform,
+                    () =>
+                    {
+                        if (currentEnemyCreatureObject != null)
+                            currentEnemyCreatureObject.SetActive(true);
+                    }
+                ));
+            }
+            else
+            {
+                currentEnemyCreatureObject.SetActive(true);
+            }
         });
     }
+
 
     public void EndBattle()
     {

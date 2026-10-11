@@ -3,12 +3,16 @@ using UnityEngine;
 public class Interactor : MonoBehaviour
 {
     public float interactRange = 2f;
+    private bool interactionLocked;
     void Update()
     {
         if (DialogueUI.Instance.IsOpen) {
             if (Input.GetKeyDown(KeyCode.E)) {
                 DialogueUI.Instance.NextLine();
             }
+            return;
+        }
+        if (interactionLocked) {
             return;
         }
         if(Input.GetKeyDown(KeyCode.E)) {
@@ -30,5 +34,15 @@ public class Interactor : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void LockInteraction()
+    {
+        interactionLocked = true;
+    }
+
+    public void UnlockInteraction()
+    {
+        interactionLocked = false;
     }
 }

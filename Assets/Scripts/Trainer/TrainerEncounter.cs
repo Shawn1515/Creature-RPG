@@ -13,8 +13,11 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
 
     private bool defeated;
 
+    private Interactor interactor;
+
     void Start()
     {
+        interactor = GameObject.FindWithTag("Player").transform.Find("player").GetComponent<Interactor>();
         originalPosition = trainerTransform.position;
         for(int i = 0; i < trainer.creatures.Length; i++)
         {
@@ -29,6 +32,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        interactor.LockInteraction();
         FacePlayer();
         if(defeated)
         {
