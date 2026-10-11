@@ -74,15 +74,18 @@ public class CreatureInstance
 
         experience = 0;
 
-        MaxHP = species.maxHP + (level - 1) * 2;
-
+        MaxHP = species.maxHP;
+        Attack = species.attack;
+        Defense = species.defense;
+        Speed = species.speed;
+        for(int i = 1; i < level; i++)
+        {
+            MaxHP = Mathf.CeilToInt(MaxHP * 1.1f);
+            Attack = Mathf.CeilToInt(Attack * 1.1f);
+            Defense = Mathf.CeilToInt(Defense * 1.1f);
+            Speed = Mathf.CeilToInt(Speed * 1.1f);
+        }
         currentHP = MaxHP;
-
-        Attack = species.attack + (level - 1);
-
-        Defense = species.defense + (level - 1);
-
-        Speed = species.speed + (level - 1) * 2;
 
         foreach(MoveData move in species.moves)
         {
@@ -127,12 +130,13 @@ public class CreatureInstance
 
         CanEvolve = CheckEvolution();
 
-        MaxHP += 5;
-        Attack += 2;
-        Defense += 2;
-        Speed += 1;
+        int prevMaxHP = MaxHP;
+        MaxHP = Mathf.CeilToInt(MaxHP * 1.1f);
+        Attack = Mathf.CeilToInt(Attack * 1.1f);
+        Defense = Mathf.CeilToInt(Defense * 1.1f);
+        Speed = Mathf.CeilToInt(Speed * 1.1f);
 
-        currentHP += 5;
+        currentHP += MaxHP - prevMaxHP;
 
         MoveData newMove = UnlockMoves();
         NewlyUnlockedMove = null;
