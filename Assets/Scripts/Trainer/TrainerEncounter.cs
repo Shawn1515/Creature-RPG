@@ -37,7 +37,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
         if(defeated)
         {
             DialogueUI.Instance.StartDialogue(
-                trainer.defeatDialogue, trainer.trainerName
+                trainer.defeatDialogue, trainer.trainerName, false
             );
             return;
         }
@@ -50,7 +50,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
                     "You aren't ready to challenge me yet.",
                     "Come back when you have all three badges."
                 };
-                DialogueUI.Instance.StartDialogue(message, "???");
+                DialogueUI.Instance.StartDialogue(message, "???", false);
                 return;
             }
         }
@@ -63,7 +63,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
         DialogueUI.Instance.SetPendingTrainer(this);
 
         DialogueUI.Instance.StartDialogue(
-            trainer.introDialogue, trainer.trainerName
+            trainer.introDialogue, trainer.trainerName, false
         );
     }
 

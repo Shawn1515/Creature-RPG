@@ -18,17 +18,17 @@ public class NPCInteractable : MonoBehaviour, IInteractable
         {
             didAction = true;
             DialogueUI.Instance.SetOnFinished(() => action?.Invoke());
-            DialogueUI.Instance.StartDialogue(dialogueLines, NPCName);
+            DialogueUI.Instance.StartDialogue(dialogueLines, NPCName, false);
         }
         else
         {
             if(repeatDialogue.Length != 0)
             {
-                DialogueUI.Instance.StartDialogue(repeatDialogue, NPCName);
+                DialogueUI.Instance.StartDialogue(repeatDialogue, NPCName, false);
             }
             else
             {
-                DialogueUI.Instance.StartDialogue(dialogueLines, NPCName);
+                DialogueUI.Instance.StartDialogue(dialogueLines, NPCName, false);
             }
         }
     }

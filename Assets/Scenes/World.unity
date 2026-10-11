@@ -22859,6 +22859,7 @@ GameObject:
   - component: {fileID: 467187123}
   - component: {fileID: 467187124}
   - component: {fileID: 467187125}
+  - component: {fileID: 467187126}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -22992,6 +22993,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Point
   playerTransform: {fileID: 1115667305}
+  animator: {fileID: 467187123}
+--- !u!114 &467187126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467187118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd7f3af832e8fe34bb8331291419928d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Celebrate
   animator: {fileID: 467187123}
 --- !u!1 &467409438
 GameObject:

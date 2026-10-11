@@ -193,7 +193,10 @@ public class BattleManager : MonoBehaviour
     {
         MusicManager.Instance.StartOverworldMusic();
         playerUI.Hide();
-        enemyUI.Hide();
+        if(enemyUI.battleCanvas != null)
+        {
+            enemyUI.Hide();
+        }
 
         battleCamera.Priority = 10;
         exploreCamera.Priority = 20;
@@ -227,9 +230,12 @@ public class BattleManager : MonoBehaviour
 
     void DestroyEnemy()
     {
-        CreatureEncounter encounter = enemyTransform.GetComponent<CreatureEncounter>();
-        encounter?.spawnPoint.CreatureDefeated();
-        Destroy(enemyTransform.gameObject);
+        if(enemyTransform != null)
+        {
+            CreatureEncounter encounter = enemyTransform.GetComponent<CreatureEncounter>();
+            encounter?.spawnPoint.CreatureDefeated();
+            Destroy(enemyTransform.gameObject);
+        }
     }
 
 
@@ -524,7 +530,7 @@ public class BattleManager : MonoBehaviour
             BadgeManager.Instance.GiveBadge(currentTrainer.trainer.badgeNumber);
         }
 
-        DialogueUI.Instance.SetOnFinished(EndBattle);
+        DialogueUI.Instance.SetOnFinished(Celebrate.Instance.CelebrateAnimation);
 
         List<string> list = new List<string>(currentTrainer.trainer.defeatDialogue);
         list.Add("Take " + currentTrainer.trainer.rewardMoney + " coins as your reward.");
@@ -532,7 +538,7 @@ public class BattleManager : MonoBehaviour
         MoneyManager.Instance.AddMoney(currentTrainer.trainer.rewardMoney);
 
         DialogueUI.Instance.StartDialogue(
-            defeatDialogue, currentTrainer.trainer.trainerName
+            defeatDialogue, currentTrainer.trainer.trainerName, true
         );
     }
 
@@ -621,7 +627,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!trainerBattle)
         {
-            EndBattle();
+            Celebrate.Instance.CelebrateAnimation();
             return;
         }
 
@@ -792,7 +798,7 @@ public class BattleManager : MonoBehaviour
             "You blacked out!",
             "Be careful out there."
         };
-        DialogueUI.Instance.StartDialogue(message, "");
+        DialogueUI.Instance.StartDialogue(message, "", false);
 
         ScreenFade.Instance.FadeFromBlack(2f);
 
@@ -871,7 +877,7 @@ public class BattleManager : MonoBehaviour
         {
             PlayerCatch.Instance.DestroyHat();
             DestroyEnemy();
-            EndBattle();
+            Celebrate.Instance.CelebrateAnimation();
         }
         else
         {
@@ -972,7 +978,8 @@ public class BattleManager : MonoBehaviour
     {
         Vector3 startPosition = attacker.position;
         Vector3 direction =(target.position - attacker.position).normalized;
-        Vector3 attackPosition = target.position - direction * 8f;
+        Vector3 attackPosition = target.position - direction * 6f;
+        attackPosition.y = startPosition.y;
 
         float timer = 0f;
         while (timer < 0.2f)
@@ -987,7 +994,6 @@ public class BattleManager : MonoBehaviour
                 attackPosition,
                 timer / 0.2f
             );
-
             yield return null;
         }
 

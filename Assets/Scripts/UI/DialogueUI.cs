@@ -28,6 +28,7 @@ public class DialogueUI : MonoBehaviour
     private Transform pendingEnemyTransform;
 
     private bool within;
+    private bool trainerWinner;
 
     private TrainerEncounter pendingTrainer;
 
@@ -47,6 +48,7 @@ public class DialogueUI : MonoBehaviour
     private void Awake()
     {
         within = false;
+        trainerWinner = false;
         Instance = this;
     }
 
@@ -71,9 +73,13 @@ public class DialogueUI : MonoBehaviour
         ShowCurrentLine();
     }
 
-    public void StartDialogue(string[] dialogueLines, string speakerName)
+    public void StartDialogue(string[] dialogueLines, string speakerName, bool trainerWin)
     {
-        GameManager.Instance.SetState(GameState.Dialogue);
+        trainerWinner = trainerWin;
+        if(!trainerWinner)
+        {
+            GameManager.Instance.SetState(GameState.Dialogue);
+        }
         currentDialogue = dialogueLines;
         dialogueIndex = 0;
 
@@ -163,7 +169,7 @@ public class DialogueUI : MonoBehaviour
 
         action?.Invoke();
 
-        if(!within)
+        if(!within && !trainerWinner)
         {
             GameManager.Instance.SetState(GameState.Exploration);
         }
