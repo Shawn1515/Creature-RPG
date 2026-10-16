@@ -47,6 +47,7 @@ public class BattleManager : MonoBehaviour
     private bool forcedSwitch;
     private bool first;
     private bool firstTrainer;
+    private bool playerLost;
 
     private bool isSendingOutTrainerCreature;
 
@@ -281,7 +282,14 @@ public class BattleManager : MonoBehaviour
         battleCamera.Priority = 10;
         exploreCamera.Priority = 20;
 
-        GameManager.Instance.SetState(GameState.Exploration);
+        if(playerLost)
+        {
+            playerLost = false;
+        }
+        else
+        {
+            GameManager.Instance.SetState(GameState.Exploration);
+        }
 
         battlePanel.SetActive(false);
 
@@ -570,7 +578,7 @@ public class BattleManager : MonoBehaviour
                     () =>
                     {
                         GiveExperience();
-                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                        StartCoroutine(FaintedAnimation(enemyTransform, false));
                     }
                 );
             }
@@ -580,7 +588,7 @@ public class BattleManager : MonoBehaviour
                     () =>
                     {
                         GiveExperience();
-                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                        StartCoroutine(FaintedAnimation(enemyTransform, false));
                     }
                 );
             }
@@ -641,7 +649,7 @@ public class BattleManager : MonoBehaviour
                 () =>
                     {
                         GiveExperience();
-                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                        StartCoroutine(FaintedAnimation(enemyTransform, false));
                     }
             );
             }
@@ -651,7 +659,7 @@ public class BattleManager : MonoBehaviour
                 () =>
                     {
                         GiveExperience();
-                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                        StartCoroutine(FaintedAnimation(enemyTransform, false));
                     }
             );
             }
@@ -879,6 +887,7 @@ public class BattleManager : MonoBehaviour
     {
         if(!PartyManager.Instance.HasUsableCreature())
         {
+            playerLost = true;
             lastTrainer = currentTrainer;
             StartCoroutine(DelayEndBattle());
             GameManager.Instance.SetState(GameState.Dialogue);
