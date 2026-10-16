@@ -45,6 +45,8 @@ public class BattleManager : MonoBehaviour
     private bool enemyFreeTurn;
     private bool run;
     private bool forcedSwitch;
+    private bool first;
+    private bool firstTrainer;
 
     private bool isSendingOutTrainerCreature;
 
@@ -64,7 +66,18 @@ public class BattleManager : MonoBehaviour
 
     private void StartBattle(CreatureInstance creature, Transform enemy)
     {
-        StartCoroutine(Point.Instance.PointAnimation(trainerBattle));
+        if(firstTrainer)
+        {
+            StartCoroutine(Point.Instance.PointAnimation(3f));
+        }
+        else if(trainerBattle)
+        {
+            StartCoroutine(Point.Instance.PointAnimation(2f));
+        }
+        else
+        {
+            StartCoroutine(Point.Instance.PointAnimation(0.5f));
+        }
         MusicManager.Instance.StartBattleMusic();
         Vector3 forward = exploreCamera.transform.forward;
         forward.y = 0;
@@ -112,9 +125,14 @@ public class BattleManager : MonoBehaviour
     }
 
     IEnumerator ActivateButtons() {
-        if(trainerBattle)
+        if(firstTrainer)
         {
+            firstTrainer = false;
             yield return new WaitForSeconds(5.5f);
+        }
+        else if(trainerBattle)
+        {
+            yield return new WaitForSeconds(4.5f);
         }
         else
         {
@@ -139,6 +157,10 @@ public class BattleManager : MonoBehaviour
     {
         trainerBattle = true;
 
+        first = true;
+
+        firstTrainer = true;
+
         currentTrainer = trainer;
 
         enemyParty = trainer.GetParty();
@@ -148,13 +170,39 @@ public class BattleManager : MonoBehaviour
         SendOutTrainerCreature();
     }
 
+    IEnumerator FaintedAnimation(Transform enemy, bool playerFainted)
+    {
+        Vector3 startPosition = enemy.position;
+        Vector3 target = enemy.position + new Vector3(0, -5, 0);
+        Vector3 direction =(target - enemy.position).normalized;
+        Vector3 attackPosition = target - direction;
+
+        float timer = 0f;
+        while (timer < 0.2f)
+        {
+            if(enemy == null)
+            {
+                yield break;
+            }
+            timer += Time.deltaTime;
+            enemy.position = Vector3.Lerp(
+                startPosition,
+                attackPosition,
+                timer / 0.2f
+            );
+            yield return null;
+        }
+        if(playerFainted) {
+            OnPlayerCreatureFainted();
+        }
+        else
+        {
+            Destroy(enemy.gameObject);
+        }
+    }
+
     void SendOutTrainerCreature()
     {
-        if (currentEnemyCreatureObject != null)
-        {
-            Destroy(currentEnemyCreatureObject);
-        }
-
         enemyCreature = enemyParty[enemyPartyIndex];
 
         currentEnemyCreatureObject = Instantiate(
@@ -164,7 +212,34 @@ public class BattleManager : MonoBehaviour
         );
         currentEnemyCreatureObject.SetActive(false);
 
-        ScreenFade.Instance.BattleTransition(() =>
+        if(first)
+        {
+            first = false;
+            ScreenFade.Instance.BattleTransition(() =>
+            {
+                StartBattle(enemyCreature, currentEnemyCreatureObject.transform);
+
+                TrainerSendOut trainerSendOut = currentTrainer.GetComponent<TrainerSendOut>();
+
+                if (trainerSendOut != null)
+                {
+                    StartCoroutine(trainerSendOut.StartSendOut(
+                        currentEnemyCreatureObject.transform,
+                        () =>
+                        {
+                            if (currentEnemyCreatureObject != null)
+                                currentEnemyCreatureObject.SetActive(true);
+                        },
+                        1f
+                    ));
+                }
+                else
+                {
+                    currentEnemyCreatureObject.SetActive(true);
+                }
+            });
+        }
+        else
         {
             StartBattle(enemyCreature, currentEnemyCreatureObject.transform);
 
@@ -176,23 +251,28 @@ public class BattleManager : MonoBehaviour
                     currentEnemyCreatureObject.transform,
                     () =>
                     {
-                        if (currentEnemyCreatureObject != null)
+                        if (currentEnemyCreatureObject != null) {
                             currentEnemyCreatureObject.SetActive(true);
-                    }
+                        }
+                    },
+                    0f
                 ));
             }
             else
             {
                 currentEnemyCreatureObject.SetActive(true);
             }
-        });
+        }
     }
 
 
     public void EndBattle()
     {
         MusicManager.Instance.StartOverworldMusic();
-        playerUI.Hide();
+        if(playerUI.battleCanvas != null)
+        {
+            playerUI.Hide();
+        }
         if(enemyUI.battleCanvas != null)
         {
             enemyUI.Hide();
@@ -487,13 +567,21 @@ public class BattleManager : MonoBehaviour
             {
                 BattleDialogueUI.Instance.ShowMessage(
                     $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} fainted!",
-                    GiveExperience
+                    () =>
+                    {
+                        GiveExperience();
+                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                    }
                 );
             }
             else {
                 BattleDialogueUI.Instance.ShowMessage(
                     $"Wild {enemyCreature.CreatureName} fainted!",
-                    GiveExperience
+                    () =>
+                    {
+                        GiveExperience();
+                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                    }
                 );
             }
 
@@ -550,13 +638,21 @@ public class BattleManager : MonoBehaviour
             {
                 BattleDialogueUI.Instance.ShowMessage(
                 $"{currentTrainer.trainer.trainerName}'s {enemyCreature.CreatureName} fainted!",
-                GiveExperience
+                () =>
+                    {
+                        GiveExperience();
+                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                    }
             );
             }
             else {
             BattleDialogueUI.Instance.ShowMessage(
                 $"Wild {enemyCreature.CreatureName} fainted!",
-                GiveExperience
+                () =>
+                    {
+                        GiveExperience();
+                        StartCoroutine(FaintedAnimation(currentEnemyCreatureObject.transform, false));
+                    }
             );
             }
 
@@ -608,7 +704,11 @@ public class BattleManager : MonoBehaviour
     void LevelUpText()
     {
         BattleDialogueUI.Instance.ShowMessage($"{playerCreature.CreatureName} grew to level {playerCreature.level}!",
-            PossibleMoveUnlock);
+            () => 
+                {
+                    PossibleMoveUnlock();
+                    playerUI.Setup(playerCreature);
+                });
     }
 
     void PossibleMoveUnlock()
@@ -716,7 +816,10 @@ public class BattleManager : MonoBehaviour
             enemyFreeTurn = false;
             BattleDialogueUI.Instance.ShowMessage(
                 $"{playerCreature.CreatureName} fainted!",
-                OnPlayerCreatureFainted
+                () =>
+                    {
+                        StartCoroutine(FaintedAnimation(playerCreatureTransform, true));
+                    }
             );
 
             return;
@@ -746,7 +849,10 @@ public class BattleManager : MonoBehaviour
             enemyFreeTurn = false;
             BattleDialogueUI.Instance.ShowMessage(
                 $"{playerCreature.CreatureName} fainted!",
-                OnPlayerCreatureFainted
+                () =>
+                    {
+                        StartCoroutine(FaintedAnimation(playerCreatureTransform, true));
+                    }
             );
 
             return;
@@ -769,18 +875,24 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    void OnPlayerCreatureFainted()
+    public void OnPlayerCreatureFainted()
     {
         if(!PartyManager.Instance.HasUsableCreature())
         {
             lastTrainer = currentTrainer;
-            EndBattle();
+            StartCoroutine(DelayEndBattle());
             GameManager.Instance.SetState(GameState.Dialogue);
             ScreenFade.Instance.FadeToBlack(2f, BlackoutComplete);
             return;
         }
         forcedSwitch = true;
         PartyUI.Instance.OpenForBattle();
+    }
+
+    IEnumerator DelayEndBattle()
+    {
+        yield return new WaitForSeconds(2);
+        EndBattle();
     }
 
     public void TrainerPositionReset()

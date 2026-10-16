@@ -11,9 +11,9 @@ public class TrainerSendOut : MonoBehaviour
     private Transform target;
     private System.Action onCreatureRevealed;
 
-    public IEnumerator StartSendOut(Transform creatureTarget, System.Action onReveal)
+    public IEnumerator StartSendOut(Transform creatureTarget, System.Action onReveal, float delay)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(delay);
         StartCoroutine(RotateToTarget(Quaternion.Euler(0f, -90f, 0f) * gameObject.transform.rotation));
         if (currentHat != null)
             yield break;

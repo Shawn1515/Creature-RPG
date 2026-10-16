@@ -13,16 +13,9 @@ public class Point : MonoBehaviour
         Instance = this;
     }
 
-    public IEnumerator PointAnimation(bool trainer)
+    public IEnumerator PointAnimation(float delay)
     {
-        if(trainer)
-        {
-            yield return new WaitForSeconds(3f);
-        }
-        else
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
+        yield return new WaitForSeconds(delay);
         animator.SetTrigger("Point");
     }
 
