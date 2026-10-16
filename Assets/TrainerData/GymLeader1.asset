@@ -21,6 +21,7 @@ MonoBehaviour:
   - I am the Gym Leader :(
   creatures:
   - {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
-  creatureLevels: 01000000
+  - {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
+  creatureLevels: 0100000001000000
   rewardMoney: 250
   groundOffset: 2

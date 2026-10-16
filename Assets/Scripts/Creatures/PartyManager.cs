@@ -69,5 +69,6 @@ public class PartyManager : MonoBehaviour
         {
             creature.HealFull();
         }
+        FollowerManager.Instance.SpawnFollower();
     }
 }

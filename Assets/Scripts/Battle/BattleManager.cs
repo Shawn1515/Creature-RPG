@@ -474,6 +474,7 @@ public class BattleManager : MonoBehaviour
         PartyManager.Instance.SetLeader(partyIndex);
 
         playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
+        playerCreatureTransform.gameObject.SetActive(false);
         FaceHorizontally(
             playerCreatureTransform,
             enemyTransform
@@ -489,25 +490,46 @@ public class BattleManager : MonoBehaviour
 
         PartyUI.Instance.CloseParty();
 
-        if (forcedSwitch)
+        System.Action continueBattle = () =>
         {
-            forcedSwitch = false;
-            BattleDialogueUI.Instance.ShowMessage(
-                $"Go {creature.CreatureName}!",
-                () =>
+            if (forcedSwitch)
+            {
+                forcedSwitch = false;
+                SetupMoveButtons();
+                SetMoveButtonsActive(true);
+            }
+            else
+            {
+                EnemyFreeAttack();
+            }
+        };
+
+        BattleDialogueUI.Instance.ShowMessage(
+            $"Go {creature.CreatureName}!",
+            () =>
+            {
+                TrainerSendOut trainerSendOut = playerObject.GetComponent<TrainerSendOut>();
+                if (trainerSendOut != null)
                 {
-                    SetupMoveButtons();
-                    SetMoveButtonsActive(true);
+                    StartCoroutine(trainerSendOut.StartSendOut(
+                        playerCreatureTransform,
+                        () =>
+                        {
+                            if (playerCreatureTransform != null)
+                            {
+                                playerCreatureTransform.gameObject.SetActive(true);
+                            }
+                            continueBattle();
+                        },
+                        0f
+                    ));
                 }
-            );
-        }
-        else
-        {
-            BattleDialogueUI.Instance.ShowMessage(
-                $"Go {creature.CreatureName}!",
-                EnemyFreeAttack
-            );
-        }
+                else
+                {
+                    continueBattle();
+                }
+            }
+        );
     }
 
     void OpenSwitchMenu()

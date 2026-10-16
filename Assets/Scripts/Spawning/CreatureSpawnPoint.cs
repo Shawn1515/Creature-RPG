@@ -22,7 +22,10 @@ public class CreatureSpawnPoint : MonoBehaviour
 
         if(GameManager.Instance.CurrentState != GameState.Exploration)
         {
-            CreatureDefeated();
+            Invoke(
+                nameof(SpawnCreature),
+                respawnTime
+            );
             return;
         }
 

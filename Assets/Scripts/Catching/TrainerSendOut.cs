@@ -6,6 +6,7 @@ public class TrainerSendOut : MonoBehaviour
     public Animator animator;
     public Transform hatSpawnPoint;
     public GameObject catchHatPrefab;
+    public Transform rotatedTransform;
 
     private GameObject currentHat;
     private Transform target;
@@ -14,7 +15,7 @@ public class TrainerSendOut : MonoBehaviour
     public IEnumerator StartSendOut(Transform creatureTarget, System.Action onReveal, float delay)
     {
         yield return new WaitForSeconds(delay);
-        StartCoroutine(RotateToTarget(Quaternion.Euler(0f, -90f, 0f) * gameObject.transform.rotation));
+        StartCoroutine(RotateToTarget(Quaternion.Euler(0f, -90f, 0f) * rotatedTransform.rotation));
         if (currentHat != null)
             yield break;
 
@@ -30,7 +31,7 @@ public class TrainerSendOut : MonoBehaviour
 
         animator.SetTrigger("Throw");
     }
-    public void ThrowHat()
+    public void SendHat()
     {
         if (currentHat == null || target == null)
             return;
@@ -58,23 +59,23 @@ public class TrainerSendOut : MonoBehaviour
         onCreatureRevealed = null;
     }
 
-    public void DoneThrowing()
+    public void DoneSending()
     {
-        StartCoroutine(RotateToTarget(Quaternion.Euler(0f, 90f, 0f) * gameObject.transform.rotation));
+        StartCoroutine(RotateToTarget(Quaternion.Euler(0f, 90f, 0f) * rotatedTransform.rotation));
     }
 
     IEnumerator RotateToTarget(Quaternion targetRotation)
     {
-        while (Quaternion.Angle(gameObject.transform.rotation, targetRotation) > 1f)
+        while (Quaternion.Angle(rotatedTransform.rotation, targetRotation) > 1f)
         {
-            gameObject.transform.rotation = Quaternion.Slerp(
-                gameObject.transform.rotation,
+            rotatedTransform.rotation = Quaternion.Slerp(
+                rotatedTransform.rotation,
                 targetRotation,
                 6f * Time.deltaTime
             );
         
             yield return null;
         }
-        gameObject.transform.rotation = targetRotation;
+        rotatedTransform.rotation = targetRotation;
     }
 }
