@@ -1024,7 +1024,28 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            //party is full message
+            PlayerCatch.Instance.DestroyHat();
+            CatchDecisionUI.Instance.Show(
+                enemyCreature,
+                (replaceIndex) =>
+                {
+                    if(replaceIndex >= 0)
+                    {
+                        PartyManager.Instance.RemoveCreatureAt(replaceIndex);
+                        PartyManager.Instance.AddCreature(enemyCreature);
+                        if(replaceIndex == PartyManager.Instance.ActiveCreatureIndex())
+                        {
+                            ScreenFade.Instance.BattleTransition(() =>
+                            {
+                                FollowerManager.Instance.currentFollower = null;
+                                FollowerManager.Instance.SpawnFollower();
+                            });
+                        }
+                        Celebrate.Instance.CelebrateAnimation();
+                    }
+                    DestroyEnemy();
+                }
+            );
         }
     }
 

@@ -23,6 +23,18 @@ public class PartyManager : MonoBehaviour
         return null;
     }
 
+    public int ActiveCreatureIndex()
+    {
+        for(int i = 0; i < party.Count; i++)
+        {
+            if(party[i].currentHP > 0)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public bool AddCreature(CreatureInstance creature)
     {
         if(party.Count >= 6)
@@ -31,6 +43,15 @@ public class PartyManager : MonoBehaviour
         }
         party.Add(creature);
         return true;
+    }
+
+    public void RemoveCreatureAt(int index)
+    {
+        if(index < 0 || index >= party.Count)
+        {
+            return;
+        }
+        party.RemoveAt(index);
     }
 
     public void SwapCreatures(int firstIndex, int secondIndex)
