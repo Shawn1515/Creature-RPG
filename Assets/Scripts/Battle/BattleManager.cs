@@ -1031,13 +1031,11 @@ public class BattleManager : MonoBehaviour
                 {
                     if(replaceIndex >= 0)
                     {
-                        PartyManager.Instance.RemoveCreatureAt(replaceIndex);
-                        PartyManager.Instance.AddCreature(enemyCreature);
+                        PartyManager.Instance.SetCreature(enemyCreature, replaceIndex);
                         if(replaceIndex == PartyManager.Instance.ActiveCreatureIndex())
                         {
                             ScreenFade.Instance.BattleTransition(() =>
                             {
-                                FollowerManager.Instance.currentFollower = null;
                                 FollowerManager.Instance.SpawnFollower();
                             });
                         }

@@ -59,6 +59,7 @@ public class PartyUI : MonoBehaviour
             {
                 SelectSlot(index);
             });
+            slotButtons[i].interactable = false;
         }
 
         swapButton.onClick.AddListener(StartPartyMove);
@@ -95,6 +96,7 @@ public class PartyUI : MonoBehaviour
     {
         GameManager.Instance.SetState(GameState.Party);
 
+        UpdateSlots();
         partyPanel.SetActive(true);
         actionPanel.SetActive(false);
         summaryPanel.SetActive(false);
@@ -103,7 +105,6 @@ public class PartyUI : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        UpdateSlots();
         selectedIndex = -1;
     }
 
@@ -146,29 +147,26 @@ public class PartyUI : MonoBehaviour
 
     void UpdateSlots()
     {
-        for (int i = 0; i < slotButtons.Length; i++)
+        for(int i = 0; i < PartyManager.Instance.party.Count; i++)
+        {
+            slotButtons[i].interactable = true;
+        }
+        for (int i = 0; i < PartyManager.Instance.party.Count; i++)
         {
             TextMeshProUGUI text =
                 slotButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            
+            CreatureInstance creature =
+                PartyManager.Instance.party[i];
 
-            if (i < PartyManager.Instance.party.Count)
-            {
-                CreatureInstance creature =
-                    PartyManager.Instance.party[i];
-
-                text.text =
-                    creature.species.creatureName +
-                    "\nLv " +
-                    creature.level +
-                    "\nHP " +
-                    creature.currentHP +
-                    "/" +
-                    creature.MaxHP;
-            }
-            else
-            {
-                text.text = "Empty";
-            }
+            text.text =
+                creature.species.creatureName +
+                "\nLv " +
+                creature.level +
+                "\nHP " +
+                creature.currentHP +
+                "/" +
+                creature.MaxHP;
         }
     }
 
@@ -201,7 +199,7 @@ public class PartyUI : MonoBehaviour
         if(!isBattleSwitch)
         {
             actionPanel.SetActive(true);
-            actionPanel.transform.position = slotButtons[index].transform.position + new Vector3(200f, 0f, 0f);
+            actionPanel.transform.position = slotButtons[index].transform.position + new Vector3(120f, 0f, 0f);
         }
     }
 
@@ -265,11 +263,11 @@ public class PartyUI : MonoBehaviour
     public void OpenForBattle()
     {
         isBattleSwitch = true;
+        UpdateSlots();
         partyPanel.SetActive(true);
         closeButton.gameObject.SetActive(!BattleManager.Instance.IsForcedSwitch);
         switchButton.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        UpdateSlots();
     }
 }

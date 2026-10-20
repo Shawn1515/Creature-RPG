@@ -45,13 +45,13 @@ public class PartyManager : MonoBehaviour
         return true;
     }
 
-    public void RemoveCreatureAt(int index)
+    public void SetCreature(CreatureInstance creature, int index)
     {
         if(index < 0 || index >= party.Count)
         {
             return;
         }
-        party.RemoveAt(index);
+        party[index] = creature;
     }
 
     public void SwapCreatures(int firstIndex, int secondIndex)

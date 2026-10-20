@@ -25,7 +25,7 @@ public class CatchDecisionUI : MonoBehaviour
     {
         onChoice = callback;
 
-        messageText.text = $"Your party is full! What would you like to do with {caughtCreature.CreatureName}?";
+        messageText.text = $"Your party is full! Choose a creature to release and make room for {caughtCreature.CreatureName}, or release them instead";
 
         foreach (Transform child in creatureButtonsContainer)
         {
@@ -45,7 +45,7 @@ public class CatchDecisionUI : MonoBehaviour
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             if (buttonText != null)
             {
-                buttonText.text = creature.CreatureName;
+                buttonText.text = creature.CreatureName + "\nLv " + creature.level;
             }
 
             button.onClick.AddListener(() =>
@@ -55,6 +55,8 @@ public class CatchDecisionUI : MonoBehaviour
         }
 
         releaseButton.onClick.RemoveAllListeners();
+        TMP_Text releaseButtonText = releaseButton.GetComponentInChildren<TMP_Text>();
+        releaseButtonText.text = $"Release {caughtCreature.CreatureName}";
         releaseButton.onClick.AddListener(() =>
         {
             Choose(-1);
