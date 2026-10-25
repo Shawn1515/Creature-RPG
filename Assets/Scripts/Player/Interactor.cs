@@ -3,6 +3,7 @@ using UnityEngine;
 public class Interactor : MonoBehaviour
 {
     public float interactRange = 2f;
+    public GameObject player;
     private bool interactionLocked;
     void Update()
     {
@@ -15,7 +16,7 @@ public class Interactor : MonoBehaviour
         if (interactionLocked) {
             return;
         }
-        if(Input.GetKeyDown(KeyCode.E)) {
+        if(Input.GetKeyDown(KeyCode.E) && player.GetComponent<CharacterController>().isGrounded) {
             TryInteract();
         }
     }

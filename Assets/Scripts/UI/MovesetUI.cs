@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MovesetUI : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class MovesetUI : MonoBehaviour
     public Button moveButtonPrefab;
 
     public Button closeButton;
+
+    public ScrollRect availableMovesScroll;
 
     private CreatureInstance creature;
 
@@ -32,14 +35,49 @@ public class MovesetUI : MonoBehaviour
         });
     }
 
+    
     public void Open(CreatureInstance selectedCreature)
     {
-        creature = selectedCreature;
-        panel.SetActive(true);
         PartyUI.Instance.actionPanel.SetActive(false);
-        PartyUI.Instance.partyPanel.SetActive(false);
+
+        creature = selectedCreature;
         Refresh();
+
+        StartCoroutine(OpenAfterLayoutUpdate());
     }
+
+    private IEnumerator OpenAfterLayoutUpdate()
+    {
+        CanvasGroup group = panel.GetComponent<CanvasGroup>();
+
+        if (group != null)
+        {
+            group.alpha = 0f;
+            group.interactable = false;
+            group.blocksRaycasts = false;
+        }
+
+        PartyUI.Instance.partyPanel.SetActive(false);
+
+        panel.SetActive(true);
+
+        yield return null;
+
+        Canvas.ForceUpdateCanvases();
+
+        availableMovesScroll.StopMovement();
+        availableMovesScroll.verticalNormalizedPosition = 1f;
+
+        Canvas.ForceUpdateCanvases();
+
+        if (group != null)
+        {
+            group.alpha = 1f;
+            group.interactable = true;
+            group.blocksRaycasts = true;
+        }
+    }
+
 
     void Refresh()
     {

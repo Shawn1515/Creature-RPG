@@ -32,8 +32,6 @@ public class PartyUI : MonoBehaviour
     public Button summaryCloseButton;
 
     public GameObject movesetPanel;
-    public Transform currentMovesContainer;
-    public Transform unlockedMovesContainer;
     public Button moveButtonPrefab;
 
     private bool movingCreature = false;
