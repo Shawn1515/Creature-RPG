@@ -59,7 +59,14 @@ public class PartyManager : MonoBehaviour
         (party[firstIndex], party[secondIndex]) = (party[secondIndex], party[firstIndex]);
         if((firstIndex == 0 || secondIndex == 0) && (firstIndex != secondIndex))
         {
-            FollowerManager.Instance.SpawnFollower();
+            if(GameManager.Instance.GetState() == GameState.Party)
+            {
+                ScreenFade.Instance.BattleTransition(FollowerManager.Instance.SpawnFollower);
+            }
+            else
+            {
+                FollowerManager.Instance.SpawnFollower();
+            }
         }
     }
 

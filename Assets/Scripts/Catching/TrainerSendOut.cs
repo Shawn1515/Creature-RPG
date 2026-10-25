@@ -17,7 +17,9 @@ public class TrainerSendOut : MonoBehaviour
         yield return new WaitForSeconds(delay);
         StartCoroutine(RotateToTarget(Quaternion.Euler(0f, -90f, 0f) * rotatedTransform.rotation));
         if (currentHat != null)
+        {
             yield break;
+        }
 
         target = creatureTarget;
         onCreatureRevealed = onReveal;

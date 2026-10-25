@@ -17,7 +17,7 @@ MonoBehaviour:
   attack: 5
   defense: 3
   speed: 3
-  groundOffset: 1.9
+  groundOffset: 0.96
   moves:
   - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
   - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}

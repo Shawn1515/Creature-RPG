@@ -4,6 +4,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -173,6 +174,14 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator FaintedAnimation(Transform enemy, bool playerFainted)
     {
+        if(playerFainted)
+        {
+            NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.enabled = false;
+            }
+        }
         Vector3 startPosition = enemy.position;
         Vector3 target = enemy.position + new Vector3(0, -5, 0);
         Vector3 direction =(target - enemy.position).normalized;
@@ -471,65 +480,67 @@ public class BattleManager : MonoBehaviour
 
         playerCreature = creature;
 
-        PartyManager.Instance.SetLeader(partyIndex);
-
-        playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
-        playerCreatureTransform.gameObject.SetActive(false);
-        FaceHorizontally(
-            playerCreatureTransform,
-            enemyTransform
-        );
-
-        playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
-        playerUI.Setup(playerCreature);
-        playerUI.Show();
-
-        UpdateHPUI();
-        SetupMoveButtons();
-        SetMoveButtonsActive(false);
-
-        PartyUI.Instance.CloseParty();
-
-        System.Action continueBattle = () =>
+        ScreenFade.Instance.BattleTransition(() =>
         {
-            if (forcedSwitch)
-            {
-                forcedSwitch = false;
-                SetupMoveButtons();
-                SetMoveButtonsActive(true);
-            }
-            else
-            {
-                EnemyFreeAttack();
-            }
-        };
+            PartyManager.Instance.SetLeader(partyIndex);
+            playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
+            playerCreatureTransform.gameObject.SetActive(false);
+            FaceHorizontally(
+                playerCreatureTransform,
+                enemyTransform
+            );
 
-        BattleDialogueUI.Instance.ShowMessage(
-            $"Go {creature.CreatureName}!",
-            () =>
+            playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
+            playerUI.Setup(playerCreature);
+            playerUI.Show();
+
+            UpdateHPUI();
+            SetupMoveButtons();
+            SetMoveButtonsActive(false);
+
+            PartyUI.Instance.CloseParty();
+
+            System.Action continueBattle = () =>
             {
-                TrainerSendOut trainerSendOut = playerObject.GetComponent<TrainerSendOut>();
-                if (trainerSendOut != null)
+                if (forcedSwitch)
                 {
-                    StartCoroutine(trainerSendOut.StartSendOut(
-                        playerCreatureTransform,
-                        () =>
-                        {
-                            if (playerCreatureTransform != null)
-                            {
-                                playerCreatureTransform.gameObject.SetActive(true);
-                            }
-                            continueBattle();
-                        },
-                        0f
-                    ));
+                    forcedSwitch = false;
+                    SetupMoveButtons();
+                    SetMoveButtonsActive(true);
                 }
                 else
                 {
-                    continueBattle();
+                    EnemyFreeAttack();
                 }
-            }
-        );
+            };
+
+            BattleDialogueUI.Instance.ShowMessage(
+                $"Go {creature.CreatureName}!",
+                () =>
+                {
+                    TrainerSendOut trainerSendOut = playerObject.GetComponent<TrainerSendOut>();
+                    if (trainerSendOut != null)
+                    {
+                        StartCoroutine(trainerSendOut.StartSendOut(
+                            playerCreatureTransform,
+                            () =>
+                            {
+                                if (playerCreatureTransform != null)
+                                {
+                                    playerCreatureTransform.gameObject.SetActive(true);
+                                }
+                                continueBattle();
+                            },
+                            0f
+                        ));
+                    }
+                    else
+                    {
+                        continueBattle();
+                    }
+                }
+            );
+        });
     }
 
     void OpenSwitchMenu()
@@ -913,7 +924,16 @@ public class BattleManager : MonoBehaviour
             lastTrainer = currentTrainer;
             StartCoroutine(DelayEndBattle());
             GameManager.Instance.SetState(GameState.Dialogue);
-            ScreenFade.Instance.FadeToBlack(2f, BlackoutComplete);
+            ScreenFade.Instance.FadeToBlack(2f, () => {
+                BlackoutComplete();
+                NavMeshAgent agent = null;
+                if(playerCreatureTransform != null)
+                    agent = playerCreatureTransform.GetComponent<NavMeshAgent>();
+                if (agent != null)
+                {
+                    agent.enabled = false;
+                }
+            });
             return;
         }
         forcedSwitch = true;
@@ -1018,7 +1038,10 @@ public class BattleManager : MonoBehaviour
     {
         if(PartyManager.Instance.AddCreature(enemyCreature))
         {
-            PlayerCatch.Instance.DestroyHat();
+            ScreenFade.Instance.BattleTransition(() =>
+            {
+                PlayerCatch.Instance.DestroyHat();
+            });
             DestroyEnemy();
             Celebrate.Instance.CelebrateAnimation();
         }

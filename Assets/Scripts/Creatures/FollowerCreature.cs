@@ -1,6 +1,9 @@
+
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class FollowerCreature : MonoBehaviour
 {
     public Transform player;
@@ -8,83 +11,123 @@ public class FollowerCreature : MonoBehaviour
     [Header("Follow")]
     public float followDistance = 3f;
     public float moveSpeed = 4f;
-    public float rotationSpeed = 10f;
+    public float rotationSpeed = 360f;
 
-    [Header("Gravity")]
-    public float gravity = -20f;
+    [Header("Teleport")]
+    public float teleportAfterBlockedSeconds = 5f;
+    public float teleportDistance = 15f;
+    public float teleportSearchRadius = 3f;
 
+    [Header("Navigation")]
+    public float destinationUpdateInterval = 0.2f;
+
+    private NavMeshAgent agent;
     private CharacterController controller;
 
-    private float verticalVelocity;
+    private float blockedTimer;
+    private float destinationTimer;
 
+    
     private void Awake()
     {
+        agent = GetComponent<NavMeshAgent>();
         controller = GetComponent<CharacterController>();
+
+        controller.enabled = false;
+
+        agent.speed = moveSpeed;
+        agent.angularSpeed = rotationSpeed;
+        agent.stoppingDistance = followDistance;
+        agent.acceleration = 8f;
+        agent.autoBraking = true;
     }
+
 
     private void Update()
     {
-        if(GameManager.Instance.CurrentState == GameState.Exploration)
+        if (GameManager.Instance.CurrentState != GameState.Exploration)
         {
-            FollowPlayer();
-            ApplyGravity();
+            if (agent.isOnNavMesh)
+                agent.ResetPath();
+
+            blockedTimer = 0f;
+            return;
+        }
+
+        if (player == null || !agent.isOnNavMesh)
+            return;
+
+        float distance = Vector3.Distance(
+            transform.position,
+            player.position
+        );
+
+        if (distance <= followDistance)
+        {
+            agent.ResetPath();
+            blockedTimer = 0f;
+            return;
+        }
+
+        destinationTimer += Time.deltaTime;
+
+        if (destinationTimer >= destinationUpdateInterval)
+        {
+            agent.SetDestination(player.position);
+            destinationTimer = 0f;
+        }
+
+        if (!agent.pathPending &&
+            (!agent.hasPath ||
+             agent.pathStatus != NavMeshPathStatus.PathComplete))
+        {
+            blockedTimer += Time.deltaTime;
+        }
+        else
+        {
+            blockedTimer = 0f;
+        }
+
+        if (blockedTimer >= teleportAfterBlockedSeconds ||
+            distance >= teleportDistance)
+        {
+            TryTeleportNearPlayer();
         }
     }
 
-    void FollowPlayer()
+    private void TryTeleportNearPlayer()
     {
-        Vector3 playerPosition = player.position;
+        Vector3 targetPosition =
+            player.position - player.forward * followDistance;
 
-        Vector3 horizontalOffset =
-            new Vector3(
-                playerPosition.x - transform.position.x,
-                0,
-                playerPosition.z - transform.position.z
-            );
-
-        float distance = horizontalOffset.magnitude;
-
-        Vector3 movement = Vector3.zero;
-
-        if (distance > followDistance)
+        if (NavMesh.SamplePosition(
+            targetPosition,
+            out NavMeshHit hit,
+            teleportSearchRadius,
+            agent.areaMask))
         {
-            Vector3 direction = horizontalOffset.normalized;
-
-            movement =
-                direction *
-                moveSpeed;
-
-            Quaternion targetRotation =
-                Quaternion.LookRotation(direction);
-
-            transform.rotation =
-                Quaternion.Slerp(
-                    transform.rotation,
-                    targetRotation,
-                    rotationSpeed * Time.deltaTime
-                );
+            TeleportTo(hit.position);
+            return;
         }
 
-        controller.Move(
-            movement * Time.deltaTime
-        );
+        if (NavMesh.SamplePosition(
+            player.position,
+            out hit,
+            teleportSearchRadius,
+            agent.areaMask))
+        {
+            TeleportTo(hit.position);
+        }
     }
 
-    void ApplyGravity()
+    private void TeleportTo(Vector3 position)
     {
-        if (controller.isGrounded &&
-            verticalVelocity < 0)
+        agent.ResetPath();
+
+        if (agent.Warp(position))
         {
-            verticalVelocity = -2f;
+            blockedTimer = 0f;
+            destinationTimer = destinationUpdateInterval;
         }
-
-        verticalVelocity +=
-            gravity * Time.deltaTime;
-
-        controller.Move(
-            Vector3.up *
-            verticalVelocity *
-            Time.deltaTime
-        );
     }
 }

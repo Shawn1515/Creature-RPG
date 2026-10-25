@@ -880,6 +880,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2657324772270251982}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3343872433020796259}
   m_SourcePrefab: {fileID: 100100000, guid: aff0c149f6a7fa64391a091bca3d0225, type: 3}
 --- !u!4 &1622988289834996074 stripped
 Transform:
@@ -951,9 +954,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FollowerCreature
   player: {fileID: 0}
   followDistance: 6
-  moveSpeed: 4
-  rotationSpeed: 10
-  gravity: -25
+  moveSpeed: 6
+  rotationSpeed: 360
+  teleportAfterBlockedSeconds: 5
+  teleportDistance: 20
+  teleportSearchRadius: 3
+  destinationUpdateInterval: 0.2
 --- !u!114 &2657324772270251982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -969,3 +975,25 @@ MonoBehaviour:
   battleCanvas: {fileID: 8306604016264116671}
   nameText: {fileID: 1126662736901862410}
   hpSlider: {fileID: 1351088144737433429}
+--- !u!195 &3343872433020796259
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147605610853272528}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 6
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

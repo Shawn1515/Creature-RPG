@@ -78,7 +78,7 @@ public class ScreenFade : MonoBehaviour
             FollowerManager.Instance.currentFollower = null;
             GameManager.Instance.SetState(GameState.Dialogue);
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            player.transform.position = Vector3.zero;
+            player.transform.position = LastSafePosition.Instance.GetLastSafePosition();
             FollowerManager.Instance.SpawnFollower();
             yield return new WaitForSeconds(1f);
         }
