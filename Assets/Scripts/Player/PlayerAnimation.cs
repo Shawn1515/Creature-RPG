@@ -22,6 +22,14 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     void Update() {
+        if(GameManager.Instance.GetState() == GameState.Party)
+        {
+            animator.speed = 0f;
+        }
+        else
+        {
+            animator.speed = 1f;
+        }
         if(GameManager.Instance.CurrentState != GameState.Exploration)
         {
             animator.SetInteger("num", idle);
