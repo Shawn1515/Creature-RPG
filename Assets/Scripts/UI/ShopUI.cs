@@ -29,7 +29,7 @@ public class ShopUI : MonoBehaviour
     {
         shopPanel.SetActive(true);
 
-        GameManager.Instance.SetState(GameState.Party);
+        GameManager.Instance.SetState(GameState.BattleParty);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
