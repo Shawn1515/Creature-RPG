@@ -20,8 +20,8 @@ MonoBehaviour:
   defeatDialogue:
   - I am the Gym Leader :(
   creatures:
-  - {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
-  - {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
+  - {fileID: 11400000, guid: 219696e1fbf4e9d48bf8acd07f3701f1, type: 2}
+  - {fileID: 11400000, guid: 219696e1fbf4e9d48bf8acd07f3701f1, type: 2}
   creatureLevels: 0100000001000000
   rewardMoney: 250
   groundOffset: 2

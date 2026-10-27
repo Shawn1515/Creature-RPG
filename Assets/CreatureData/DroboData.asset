@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DroboData
   m_EditorClassIdentifier: Assembly-CSharp::CreatureData
   creatureName: Drobo
-  maxHP: 10
-  attack: 2
-  defense: 1
-  speed: 1
-  groundOffset: 0.96
+  maxHP: 8
+  attack: 7
+  defense: 6
+  speed: 7
+  groundOffset: 0.75
   moves:
   - {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}
   - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}
@@ -30,8 +30,7 @@ MonoBehaviour:
   - move: {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}
     level: 0
   creaturePrefab: {fileID: 1692183100285972404, guid: cfc1a89cf5d94614db2657929a3ea072, type: 3}
-  wildPrefab: {fileID: 0}
-  battlePrefab: {fileID: 0}
+  wildPrefab: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
   encounterText:
   - A wild Droof appeared!
   - It wants to beat you up!

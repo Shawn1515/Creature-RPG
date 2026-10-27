@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: UnibladeData
   m_EditorClassIdentifier: Assembly-CSharp::CreatureData
   creatureName: Uniblade
-  maxHP: 25
-  attack: 15
+  maxHP: 6
+  attack: 12
   defense: 4
-  speed: 15
+  speed: 12
   groundOffset: 0.2
   moves:
   - {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}
@@ -31,7 +31,6 @@ MonoBehaviour:
     level: 0
   creaturePrefab: {fileID: 500175275520376202, guid: 742f480439b03f74db7671451fe9b2cc, type: 3}
   wildPrefab: {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
-  battlePrefab: {fileID: 0}
   encounterText:
   - A wild Uniblade appeared!
   - It wants to beat you up!

@@ -756,7 +756,30 @@ public class BattleManager : MonoBehaviour
     {
         if(playerCreature.NewlyUnlockedMove != null) {
             BattleDialogueUI.Instance.ShowMessage($"{playerCreature.CreatureName} can now learn a new move!",
-                ContinueBattle);
+                PossibleEvolution);
+        }
+        else
+        {
+            PossibleEvolution();
+        }
+    }
+
+    void PossibleEvolution()
+    {
+        if(playerCreature.CheckEvolution()) {
+            BattleDialogueUI.Instance.ShowMessage($"{playerCreature.CreatureName} is evolving into {playerCreature.species.evolution.creatureName}!", () =>
+            {
+                ScreenFade.Instance.BattleTransition(() =>
+                {
+                    playerCreature.Evolve();
+                    playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
+                    playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
+                    playerUI.Setup(playerCreature);
+                    playerUI.Show();
+                    FaceHorizontally(playerCreatureTransform, BattlePositions.Instance.enemySpot);
+                    ContinueBattle();
+                });
+            });
         }
         else
         {
