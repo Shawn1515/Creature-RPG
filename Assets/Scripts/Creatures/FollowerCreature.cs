@@ -26,13 +26,14 @@ public class FollowerCreature : MonoBehaviour
 
     private float blockedTimer;
     private float destinationTimer;
+    private Animator animator;
 
     
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponent<CharacterController>();
-
+        animator = GetComponentInChildren<Animator>();
         controller.enabled = false;
 
         agent.speed = moveSpeed;
@@ -45,6 +46,7 @@ public class FollowerCreature : MonoBehaviour
 
     private void Update()
     {
+        UpdateAnimation();
         if (GameManager.Instance.CurrentState != GameState.Exploration)
         {
             if (agent.isOnNavMesh)
@@ -93,6 +95,21 @@ public class FollowerCreature : MonoBehaviour
         {
             TryTeleportNearPlayer();
         }
+    }
+
+    private void UpdateAnimation()
+    {
+        if (animator == null)
+            return;
+
+        bool isMoving =
+            GameManager.Instance.CurrentState == GameState.Exploration &&
+            player != null &&
+            agent.isOnNavMesh &&
+            !agent.pathPending &&
+            agent.velocity.sqrMagnitude > 0.01f;
+
+        animator.SetBool("IsMoving", isMoving);
     }
 
     private void TryTeleportNearPlayer()
