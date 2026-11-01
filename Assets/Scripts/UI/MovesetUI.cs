@@ -39,6 +39,7 @@ public class MovesetUI : MonoBehaviour
     public void Open(CreatureInstance selectedCreature)
     {
         PartyUI.Instance.actionPanel.SetActive(false);
+        PartyUI.Instance.partyPanel.SetActive(false);
 
         creature = selectedCreature;
         Refresh();
@@ -56,8 +57,6 @@ public class MovesetUI : MonoBehaviour
             group.interactable = false;
             group.blocksRaycasts = false;
         }
-
-        PartyUI.Instance.partyPanel.SetActive(false);
 
         panel.SetActive(true);
 

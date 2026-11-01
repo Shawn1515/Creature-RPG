@@ -1758,6 +1758,13 @@ MonoBehaviour:
   rotationSpeed: 5
   wanderRadius: 5
   waitTime: 2
+  animator: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  groundCheckHeight: 2
+  groundCheckDistance: 5
+  species: {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
 --- !u!135 &9044455322345259586
 SphereCollider:
   m_ObjectHideFlags: 0

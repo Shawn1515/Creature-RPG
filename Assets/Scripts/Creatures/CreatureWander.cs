@@ -14,6 +14,12 @@ public class CreatureWander : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator animator;
 
+    [Header("Grounding")]
+    public LayerMask groundLayer;
+    public float groundCheckHeight = 2f;
+    public float groundCheckDistance = 5f;
+    public CreatureData species;
+
     private Vector3 spawnPosition;
     private Vector3 targetPosition;
     private float waitTimer;
@@ -56,6 +62,23 @@ public class CreatureWander : MonoBehaviour
         MoveToTarget();
     }
 
+    void ApplyGrounding()
+    {
+        Vector3 rayOrigin = transform.position + Vector3.up * groundCheckHeight;
+
+        if (Physics.Raycast(
+            rayOrigin,
+            Vector3.down,
+            out RaycastHit hit,
+            groundCheckDistance,
+            groundLayer))
+        {
+            Vector3 position = transform.position;
+            position.y = hit.point.y + species.groundOffset;
+            transform.position = position;
+        }
+    }
+
     void MoveToTarget()
     {
         Vector3 direction = targetPosition - transform.position;
@@ -79,6 +102,7 @@ public class CreatureWander : MonoBehaviour
         transform.position += direction.normalized * moveSpeed * Time.deltaTime;
 
         UpdateAnimation(true);
+        ApplyGrounding();
         Debug.DrawLine(transform.position, targetPosition, Color.red);
     }
 

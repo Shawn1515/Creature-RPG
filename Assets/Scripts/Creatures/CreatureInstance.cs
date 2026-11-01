@@ -186,7 +186,7 @@ public class CreatureInstance
     public void Evolve()
     {
         species = species.evolution;
-        currentHP = species.maxHP - (MaxHP - currentHP);
+        int temp = MaxHP - currentHP;
         MaxHP = species.maxHP;
         Attack = species.attack;
         Defense = species.defense;
@@ -198,6 +198,7 @@ public class CreatureInstance
             Defense = Mathf.CeilToInt(Defense * 1.1f);
             Speed = Mathf.CeilToInt(Speed * 1.1f);
         }
+        currentHP = MaxHP - temp;
         FollowerManager.Instance.SpawnFollower();
     }
 }

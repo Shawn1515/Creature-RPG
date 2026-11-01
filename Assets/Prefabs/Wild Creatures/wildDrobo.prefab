@@ -796,6 +796,12 @@ MonoBehaviour:
   wanderRadius: 5
   waitTime: 2
   animator: {fileID: 9007466168635161704}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  groundCheckHeight: 2
+  groundCheckDistance: 5
+  species: {fileID: 11400000, guid: c840ce3073fb1c340869f51907abc5dc, type: 2}
 --- !u!135 &-8711514424633327706
 SphereCollider:
   m_ObjectHideFlags: 0
