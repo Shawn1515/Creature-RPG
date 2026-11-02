@@ -25,6 +25,11 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
         }
     }
 
+    public bool Defeated()
+    {
+        return defeated;
+    }
+
     public void ResetTrainerPosition()
     {
         trainerTransform.position = originalPosition;
@@ -36,6 +41,7 @@ public class TrainerEncounter : MonoBehaviour, IInteractable
         FacePlayer();
         if(defeated)
         {
+            interactor.UnlockInteraction();
             DialogueUI.Instance.StartDialogue(
                 trainer.defeatDialogue, trainer.trainerName, false
             );
