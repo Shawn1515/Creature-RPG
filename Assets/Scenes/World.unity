@@ -6609,7 +6609,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.6, z: -5}
+  m_LocalPosition: {x: 165, y: -2.286117, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6921,6 +6921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrainerEncounter
   trainer: {fileID: 11400000, guid: 7ac63e5e12c11924994032b68b3c0ac0, type: 2}
   trainerTransform: {fileID: 331218320}
+  resetDistance: 100
 --- !u!4 &331218320
 Transform:
   m_ObjectHideFlags: 0
@@ -7618,8 +7619,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 480fc5b0023d5de498bd77d51a00f6d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainerEncounter
-  trainer: {fileID: 11400000, guid: fe797a2801986c940be9bcf557f520cf, type: 2}
+  trainer: {fileID: 11400000, guid: 99a3c8ddb87515f4b81a641814e0f8bf, type: 2}
   trainerTransform: {fileID: 362217505}
+  resetDistance: 100
 --- !u!4 &362217505
 Transform:
   m_ObjectHideFlags: 0
@@ -10814,7 +10816,6 @@ GameObject:
   - component: {fileID: 467187125}
   - component: {fileID: 467187126}
   - component: {fileID: 467187127}
-  - component: {fileID: 467187128}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -10831,7 +10832,7 @@ Transform:
   m_GameObject: {fileID: 467187118}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 165, y: -1.686117, z: -13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10978,24 +10979,6 @@ MonoBehaviour:
   hatSpawnPoint: {fileID: 654011411}
   catchHatPrefab: {fileID: 6242654187315919232, guid: da8185c652be5e74396bf37e4a268892, type: 3}
   rotatedTransform: {fileID: 1115667305}
---- !u!114 &467187128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467187118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97442e2ac4e989149b7158e73e08e716, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LastSafePosition
-  groundCheckDistance: 1.6
-  groundCheckHeight: 0.3
-  groundCheckDepth: 1.5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &467409438
 GameObject:
   m_ObjectHideFlags: 0
@@ -18595,6 +18578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrainerEncounter
   trainer: {fileID: 11400000, guid: a429f74a5b6466b4eb7d8f9d0d7e492c, type: 2}
   trainerTransform: {fileID: 840452603}
+  resetDistance: 100
 --- !u!4 &840452603
 Transform:
   m_ObjectHideFlags: 0
@@ -22012,7 +21996,7 @@ Transform:
   m_GameObject: {fileID: 991775968}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.6, z: -5}
+  m_LocalPosition: {x: 165, y: -2.286117, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24103,6 +24087,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrainerEncounter
   trainer: {fileID: 11400000, guid: fe797a2801986c940be9bcf557f520cf, type: 2}
   trainerTransform: {fileID: 1077553971}
+  resetDistance: 100
 --- !u!4 &1077553971
 Transform:
   m_ObjectHideFlags: 0
@@ -25245,6 +25230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrainerEncounter
   trainer: {fileID: 11400000, guid: c38b262498303a94ca9fc3b19f2b2e8b, type: 2}
   trainerTransform: {fileID: 1141222944}
+  resetDistance: 100
 --- !u!4 &1141222944
 Transform:
   m_ObjectHideFlags: 0
@@ -39422,7 +39408,7 @@ Transform:
   m_GameObject: {fileID: 1868770386}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6, y: 2.5, z: -18}
+  m_LocalPosition: {x: 171, y: 0.81388295, z: -31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

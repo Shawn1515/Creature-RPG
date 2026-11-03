@@ -10,11 +10,6 @@ public enum TrainerType
 [CreateAssetMenu(fileName = "TrainerData", menuName = "Trainer/Trainer Data")]
 public class TrainerData : ScriptableObject
 {
-
-    public TrainerType trainerType;
-
-    public int badgeNumber;
-
     public string trainerName;
 
     [TextArea]
@@ -22,6 +17,11 @@ public class TrainerData : ScriptableObject
 
     [TextArea]
     public string[] defeatDialogue;
+
+    [Header("Random Party")]
+    public CreatureData[] possibleCreatures;
+    public int minPartySize = 2;
+    public int maxPartySize = 4;
 
     public CreatureData[] creatures;
 

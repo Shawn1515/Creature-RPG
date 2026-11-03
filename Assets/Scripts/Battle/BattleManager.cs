@@ -654,11 +654,6 @@ public class BattleManager : MonoBehaviour
     {
         currentTrainer.MarkDefeated();
 
-        if(currentTrainer.trainer.trainerType == TrainerType.GymLeader)
-        {
-            BadgeManager.Instance.GiveBadge(currentTrainer.trainer.badgeNumber);
-        }
-
         DialogueUI.Instance.SetOnFinished(Celebrate.Instance.CelebrateAnimation);
 
         List<string> list = new List<string>(currentTrainer.trainer.defeatDialogue);
