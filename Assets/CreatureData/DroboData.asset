@@ -34,7 +34,7 @@ MonoBehaviour:
   encounterText:
   - A wild Droof appeared!
   - It wants to beat you up!
-  experienceReward: 20
+  experienceReward: 99999
   evolution: {fileID: 11400000, guid: 591f0cdc40b420f47982dff178a7edcf, type: 2}
   evolutionLevel: 2
   primaryType: 6

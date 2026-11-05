@@ -342,6 +342,8 @@ MonoBehaviour:
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
+  requiresBossDefeat: 0
+  unlockedCreaturePrefab: {fileID: 0}
 --- !u!1001 &20460276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2124,6 +2126,55 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 34754677}
   m_SourcePrefab: {fileID: 100100000, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
+--- !u!1 &99553282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 99553283}
+  - component: {fileID: 99553284}
+  m_Layer: 0
+  m_Name: Spawn3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &99553283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99553282}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -69.59221, y: -0.05976832, z: 31.23407}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 153398027}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &99553284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99553282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5ca72fb9c9aa9498d5b7b9ad9e1fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureSpawnPoint
+  possibleCreatures:
+  - {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+  respawnTime: 30
+  requiresBossDefeat: 1
+  unlockedCreaturePrefab: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
 --- !u!1001 &101325881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3239,6 +3290,42 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
+--- !u!1 &153398026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 153398027}
+  m_Layer: 0
+  m_Name: Boss1Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &153398027
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153398026}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -128.5, y: 18.6, z: 276.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 486457324}
+  - {fileID: 568162352}
+  - {fileID: 99553283}
+  - {fileID: 272426867}
+  - {fileID: 594795956}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &157329051 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: b6dcbfcfe5d81404aa58692b541f8e21, type: 3}
@@ -4640,6 +4727,8 @@ MonoBehaviour:
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
+  requiresBossDefeat: 0
+  unlockedCreaturePrefab: {fileID: 0}
 --- !u!1001 &206859554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5941,6 +6030,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
   m_PrefabInstance: {fileID: 500216264}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &272426866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 272426867}
+  - component: {fileID: 272426868}
+  m_Layer: 0
+  m_Name: Spawn4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &272426867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272426866}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 43.4, y: -0.05976832, z: 58.11322}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 153398027}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &272426868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272426866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5ca72fb9c9aa9498d5b7b9ad9e1fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureSpawnPoint
+  possibleCreatures:
+  - {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+  respawnTime: 30
+  requiresBossDefeat: 1
+  unlockedCreaturePrefab: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
 --- !u!1 &278295425 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
@@ -11223,6 +11361,55 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 20.897905, y: 1.9978998, z: 2.376751}
   m_Center: {x: -9.449995, y: -1.671458e-10, z: -0.18941985}
+--- !u!1 &486457323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 486457324}
+  - component: {fileID: 486457325}
+  m_Layer: 0
+  m_Name: Spawn1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &486457324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486457323}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -39.5, y: -0.05976832, z: 66.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 153398027}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &486457325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486457323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5ca72fb9c9aa9498d5b7b9ad9e1fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureSpawnPoint
+  possibleCreatures:
+  - {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+  respawnTime: 30
+  requiresBossDefeat: 1
+  unlockedCreaturePrefab: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
 --- !u!1 &491844489
 GameObject:
   m_ObjectHideFlags: 0
@@ -12993,6 +13180,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 567215750}
   m_CullTransparentMesh: 1
+--- !u!1 &568162351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 568162352}
+  - component: {fileID: 568162353}
+  m_Layer: 0
+  m_Name: Spawn2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &568162352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568162351}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.3, y: -0.05976832, z: 14.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 153398027}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &568162353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568162351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5ca72fb9c9aa9498d5b7b9ad9e1fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureSpawnPoint
+  possibleCreatures:
+  - {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+  respawnTime: 30
+  requiresBossDefeat: 1
+  unlockedCreaturePrefab: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
 --- !u!1 &570077484
 GameObject:
   m_ObjectHideFlags: 0
@@ -13338,6 +13574,55 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6255687079079774844, guid: 7b8be926158857f43861137cae0fc431, type: 3}
+--- !u!1 &594795954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 594795956}
+  - component: {fileID: 594795955}
+  m_Layer: 0
+  m_Name: Spawn5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &594795955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594795954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5ca72fb9c9aa9498d5b7b9ad9e1fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureSpawnPoint
+  possibleCreatures:
+  - {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+  respawnTime: 30
+  requiresBossDefeat: 1
+  unlockedCreaturePrefab: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+--- !u!4 &594795956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594795954}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 110.3, y: -0.05976832, z: 31.23407}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 153398027}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &595063104 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8513859187771203891, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
@@ -15189,6 +15474,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684497166}
   m_CullTransparentMesh: 1
+--- !u!1 &685874942 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+  m_PrefabInstance: {fileID: 1910276948}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &685874943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685874942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74024f137842e0144b590388242ad960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossEncounter
+  creatureSpecies: {fileID: 11400000, guid: c840ce3073fb1c340869f51907abc5dc, type: 2}
+  bossLevel: 20
+  statMultiplier: 2
+  encounterDialogue:
+  - BOSS BATTLE DROBO!
+  unlockedCreature: {fileID: 11400000, guid: c840ce3073fb1c340869f51907abc5dc, type: 2}
+  areaSpawnPoints:
+  - {fileID: 486457325}
+  - {fileID: 568162353}
+  - {fileID: 99553284}
+  - {fileID: 272426868}
+  - {fileID: 594795955}
 --- !u!1 &692535690
 GameObject:
   m_ObjectHideFlags: 0
@@ -16994,6 +17308,8 @@ MonoBehaviour:
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
+  requiresBossDefeat: 0
+  unlockedCreaturePrefab: {fileID: 0}
 --- !u!1 &788770048 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5568371526223589888, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
@@ -22420,6 +22736,8 @@ MonoBehaviour:
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
+  requiresBossDefeat: 0
+  unlockedCreaturePrefab: {fileID: 0}
 --- !u!4 &1019831848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d0f8d245e86d584eab271d69f0258f7, type: 3}
@@ -40362,6 +40680,67 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 20.897905, y: 1.9978998, z: 2.376751}
   m_Center: {x: -9.449995, y: -1.671458e-10, z: -0.18941985}
+--- !u!1001 &1910276948
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -146.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 44.887
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 268.51602
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7057106169650035699, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      propertyPath: m_Name
+      value: bossDrobo
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -1027311067172323638, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7684319672074068297, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 685874943}
+  m_SourcePrefab: {fileID: 100100000, guid: 795f0fcd23efc51409786ed1ea0dba51, type: 3}
 --- !u!1001 &1921246319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43817,6 +44196,8 @@ MonoBehaviour:
   - {fileID: 1349560627048606337, guid: 0460e7b2607bec945b2b03edb9e73b73, type: 3}
   - {fileID: 1490045078194645433, guid: ead2ca45c0c317f4b815a5a9e9cd8103, type: 3}
   respawnTime: 30
+  requiresBossDefeat: 0
+  unlockedCreaturePrefab: {fileID: 0}
 --- !u!1 &2044986396 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: b6dcbfcfe5d81404aa58692b541f8e21, type: 3}
@@ -46199,6 +46580,7 @@ SceneRoots:
   - {fileID: 770652865}
   - {fileID: 446362225}
   - {fileID: 1728788414}
+  - {fileID: 153398027}
   - {fileID: 1141222944}
   - {fileID: 1077553971}
   - {fileID: 362217505}
@@ -46217,3 +46599,4 @@ SceneRoots:
   - {fileID: 1607638669}
   - {fileID: 748327113}
   - {fileID: 1991501886}
+  - {fileID: 1910276948}

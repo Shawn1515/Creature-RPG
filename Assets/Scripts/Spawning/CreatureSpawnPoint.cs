@@ -1,15 +1,29 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CreatureSpawnPoint : MonoBehaviour
 {
     public GameObject[] possibleCreatures;
     public float respawnTime = 30f;
 
+    [Header("Boss Area")]
+    public bool requiresBossDefeat;
+    public GameObject unlockedCreaturePrefab;
+
+    private bool areaUnlocked;
+
     private GameObject currentCreature;
+
+    private List<GameObject> availableCreatures = new List<GameObject>();
 
     private void Start()
     {
+        if (!requiresBossDefeat)
+        {
+            availableCreatures.AddRange(possibleCreatures);
+            areaUnlocked = true;
+        }
         StartCoroutine(SpawnLoop());
     }
 
@@ -50,6 +64,11 @@ public class CreatureSpawnPoint : MonoBehaviour
 
     public void SpawnCreature()
     {
+        if (!areaUnlocked)
+        {
+            return;
+        }
+
         if (currentCreature != null)
         {
             return;
@@ -60,7 +79,7 @@ public class CreatureSpawnPoint : MonoBehaviour
             return;
         }
 
-        if (possibleCreatures == null || possibleCreatures.Length == 0)
+        if (availableCreatures.Count == 0)
         {
             Debug.LogWarning($"{name}: No possible creatures assigned.");
             return;
@@ -79,10 +98,9 @@ public class CreatureSpawnPoint : MonoBehaviour
             return;
         }
 
-        int index = Random.Range(0, possibleCreatures.Length);
-
-        GameObject prefab = possibleCreatures[index];
-
+        int index = Random.Range(0, availableCreatures.Count);
+        GameObject prefab = availableCreatures[index];
+        
         if (prefab == null)
         {
             Debug.LogWarning($"{name}: Selected creature prefab is missing.");
@@ -114,6 +132,37 @@ public class CreatureSpawnPoint : MonoBehaviour
         encounter.spawnPoint = this;
 
         Debug.Log($"{name}: Spawned {currentCreature.name}.");
+    }
+
+    public void UnlockCreature(GameObject creaturePrefab)
+    {
+        if (creaturePrefab == null)
+            return;
+
+        if (!availableCreatures.Contains(creaturePrefab))
+        {
+            availableCreatures.Add(creaturePrefab);
+            Debug.Log($"{name}: Unlocked {creaturePrefab.name}!");
+        }
+    }
+
+    public void UnlockArea()
+    {
+        if (areaUnlocked)
+            return;
+
+        areaUnlocked = true;
+        availableCreatures.Clear();
+
+        if (unlockedCreaturePrefab == null)
+        {
+            Debug.LogError(name + ": Unlocked creature prefab is NULL!");
+            return;
+        }
+
+        availableCreatures.Add(unlockedCreaturePrefab);
+
+        Debug.Log(name + ": AREA UNLOCKED! Available creature: " + unlockedCreaturePrefab.name);
     }
 
     public void CreatureDefeated()

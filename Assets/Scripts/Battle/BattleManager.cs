@@ -59,6 +59,7 @@ public class BattleManager : MonoBehaviour
     private bool trainerBattle;
     private TrainerEncounter currentTrainer;
     private GameObject currentEnemyCreatureObject;
+    private BossEncounter currentBoss;
 
     private void Awake()
     {
@@ -149,6 +150,7 @@ public class BattleManager : MonoBehaviour
         currentTrainer = null;
         enemyParty = null;
         enemyPartyIndex = 0;
+        currentBoss = enemy.GetComponent<BossEncounter>();
         ScreenFade.Instance.BattleTransition(() =>
         {
             StartBattle(creature, enemy);
@@ -207,6 +209,11 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            BossEncounter boss = enemy.GetComponent<BossEncounter>();
+            if (boss != null)
+            {
+                boss.DefeatBoss();
+            }
             Destroy(enemy.gameObject);
         }
     }
@@ -278,6 +285,7 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
+        bool playerWon = !playerLost && !run;
         MusicManager.Instance.StartOverworldMusic();
         if(playerUI.battleCanvas != null)
         {
@@ -310,11 +318,11 @@ public class BattleManager : MonoBehaviour
             Destroy(currentEnemyCreatureObject);
             namePanel.SetActive(false);
         }
-        else if(!run)
+        else if(playerWon)
         {
             DestroyEnemy();
         }
-        else
+        else if(run)
         {
             enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
         }
@@ -327,12 +335,13 @@ public class BattleManager : MonoBehaviour
 
     void DestroyEnemy()
     {
-        if(enemyTransform != null)
+        if (enemyTransform == null)
         {
-            CreatureEncounter encounter = enemyTransform.GetComponent<CreatureEncounter>();
-            encounter?.spawnPoint.CreatureDefeated();
-            Destroy(enemyTransform.gameObject);
+            return;
         }
+        CreatureEncounter encounter = enemyTransform.GetComponent<CreatureEncounter>();
+        encounter?.spawnPoint?.CreatureDefeated();
+        Destroy(enemyTransform.gameObject);
     }
 
 
