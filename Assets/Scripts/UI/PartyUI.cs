@@ -247,7 +247,15 @@ public class PartyUI : MonoBehaviour
         attackText.text = "Attack: " + creature.Attack;
         defenseText.text = "Defense: " + creature.Defense;
         speedText.text = "Speed: " + creature.Speed;
-        xpText.text = "XP: " + creature.experience + "/" + creature.ExperienceNeeded();
+        if(creature.level >= 50)
+        {
+            xpText.text = "Level maxed out";
+        }
+        else
+        {
+            xpText.text = "XP: " + creature.experience + "/" + creature.ExperienceNeeded();
+        }
+        
         string moveString = "Moves:\n";
 
         foreach (MoveData move in creature.Moves)

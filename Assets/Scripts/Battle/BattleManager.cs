@@ -286,15 +286,15 @@ public class BattleManager : MonoBehaviour
     public void EndBattle()
     {
         bool playerWon = !playerLost && !run;
+        bool playerWasDefeated = playerLost;
+
         MusicManager.Instance.StartOverworldMusic();
+
         if(playerUI.battleCanvas != null)
-        {
             playerUI.Hide();
-        }
+
         if(enemyUI.battleCanvas != null)
-        {
             enemyUI.Hide();
-        }
 
         battleCamera.Priority = 10;
         exploreCamera.Priority = 20;
@@ -318,15 +318,23 @@ public class BattleManager : MonoBehaviour
             Destroy(currentEnemyCreatureObject);
             namePanel.SetActive(false);
         }
-        else if(playerWon)
+        else if(enemyTransform != null)
         {
-            DestroyEnemy();
-        }
-        else if(run)
-        {
-            enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
-        }
+            BossEncounter boss = enemyTransform.GetComponent<BossEncounter>();
 
+            if(playerWon)
+            {
+                DestroyEnemy();
+            }
+            else if(playerWasDefeated && boss == null)
+            {
+                DestroyEnemy();
+            }
+            else if(run || playerWasDefeated)
+            {
+                enemyTransform.GetComponent<CreatureWander>()?.StartMoving();
+            }
+        }
         trainerBattle = false;
         currentTrainer = null;
         enemyParty = null;

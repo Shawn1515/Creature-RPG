@@ -118,8 +118,15 @@ public class CreatureInstance
         while(experience >= ExperienceNeeded())
         {
             experience -= ExperienceNeeded();
-            up = true;
-            LevelUp();
+            if(level >= 50)
+            {
+                experience = 0;
+            }
+            else
+            {
+                up = true;
+                LevelUp();
+            }
         }
         return up;
     }
