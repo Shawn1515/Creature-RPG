@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Grog
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   displayName: Grog
-  description: Heals 40 damage. Minimal side effects.
+  description: Heals 20 damage. Minimal side effects.
   icon: {fileID: 21300000, guid: dbaa50961e3cd37468021eb65d631c9f, type: 3}
   category: 0
   stackable: 1
   maxStack: 99
+  effect: 0
+  effectAmount: 20

@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -9,15 +10,29 @@ public class InventoryUI : MonoBehaviour
     public ItemSlotUI[] itemSlots;
     public TMP_Text itemDescription;
     public Button closeButton;
+    public Button useButton;
 
     private Inventory inventory;
+    private ItemData selectedItem;
+    private ItemData itemBeingUsed;
+
+    public static InventoryUI Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
         inventory = FindAnyObjectByType<Inventory>();
+
         inventoryPanel.SetActive(false);
 
         closeButton.onClick.AddListener(CloseInventory);
+        useButton.onClick.AddListener(UseSelectedItem);
+
+        useButton.interactable = false;
     }
 
     private void Update()
@@ -29,9 +44,10 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void OpenInventory()
+    public void OpenInventory()
     {
         RefreshInventory();
+
         inventoryPanel.SetActive(true);
         GameManager.Instance.SetState(GameState.Party);
 
@@ -45,6 +61,10 @@ public class InventoryUI : MonoBehaviour
             return;
 
         itemDescription.text = "Select an item to see its description.";
+
+        selectedItem = null;
+        useButton.interactable = false;
+        useButton.GetComponentInChildren<TMP_Text>().text = "";
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
@@ -67,12 +87,119 @@ public class InventoryUI : MonoBehaviour
 
     private void SelectItem(ItemData item)
     {
+        selectedItem = item;
+
         itemDescription.text = item.displayName + "\n" + item.description;
+
+        useButton.interactable =
+            item.category == ItemCategory.Consumable;
+
+        if (useButton.interactable)
+        {
+            useButton.GetComponentInChildren<TMP_Text>().text = "Use";
+        }
+        else
+        {
+            useButton.GetComponentInChildren<TMP_Text>().text = "";
+        }
+    }
+
+    private void UseSelectedItem()
+    {
+        if (selectedItem == null)
+            return;
+
+        if (selectedItem.category != ItemCategory.Consumable)
+            return;
+
+        itemBeingUsed = selectedItem;
+
+        inventoryPanel.SetActive(false);
+
+        PartyUI.Instance.BeginItemTargetSelection(ApplyItem);
+    }
+
+    private void ApplyItem(CreatureInstance creature)
+    {
+        if (creature == null)
+        {
+            itemBeingUsed = null;
+            return;
+        }
+
+        if (itemBeingUsed == null)
+        {
+            Debug.LogError("No item was selected for use!");
+            return;
+        }
+
+        bool itemUsed = false;
+
+        switch (itemBeingUsed.effect)
+        {
+            case ItemEffect.HealHP:
+
+                if (creature.currentHP > 0 &&
+                    creature.currentHP < creature.MaxHP)
+                {
+                    creature.currentHP = Mathf.Min(
+                        creature.currentHP + itemBeingUsed.effectAmount,
+                        creature.MaxHP
+                    );
+
+                    itemUsed = true;
+                }
+
+                break;
+
+            case ItemEffect.Revive:
+
+                if (creature.currentHP <= 0)
+                {
+                    int restoredHP = Mathf.CeilToInt(
+                        creature.MaxHP * 0.5f
+                    );
+
+                    creature.currentHP = Mathf.Clamp(
+                        restoredHP,
+                        1,
+                        creature.MaxHP
+                    );
+
+                    itemUsed = true;
+                }
+
+                break;
+        }
+
+        if (itemUsed)
+        {
+            inventory.RemoveItem(itemBeingUsed);
+
+            Debug.Log(creature.CreatureName + " used " +
+                      itemBeingUsed.displayName + "!");
+
+            itemBeingUsed = null;
+
+            RefreshInventory();
+            PartyUI.Instance.RefreshPartySlots();
+        }
+        else
+        {
+            itemDescription.text =
+                "That item cannot be used on " + creature.CreatureName + ".";
+
+            itemBeingUsed = null;
+        }
     }
 
     public void CloseInventory()
     {
         inventoryPanel.SetActive(false);
+
+        selectedItem = null;
+        itemBeingUsed = null;
+
         GameManager.Instance.SetState(GameState.Exploration);
 
         Cursor.lockState = CursorLockMode.Locked;

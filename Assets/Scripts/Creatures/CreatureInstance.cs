@@ -27,6 +27,7 @@ public class CreatureInstance
     public MoveData NewlyUnlockedMove {get; private set;}
 
     public bool CanEvolve;
+    private int statTotal;
 
 
     public CreatureInstance(CreatureData data)
@@ -37,17 +38,19 @@ public class CreatureInstance
 
         CanEvolve = CheckEvolution();
 
-        currentHP = data.maxHP;
-
         experience = 0;
 
-        MaxHP = species.maxHP;
+        statTotal = species.total;
 
-        Attack = species.attack;
+        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
 
-        Defense = species.defense;
+        currentHP = MaxHP;
 
-        Speed = species.speed;
+        Attack = Mathf.CeilToInt(species.attack * statTotal);
+
+        Defense = Mathf.CeilToInt(species.defense * statTotal);
+
+        Speed = Mathf.CeilToInt(species.speed * statTotal);
 
         foreach(MoveData move in species.moves)
         {
@@ -71,20 +74,16 @@ public class CreatureInstance
 
         CanEvolve = CheckEvolution();
 
+        statTotal = species.total + (level - 1) * 5;
+
 
         experience = 0;
 
-        MaxHP = species.maxHP;
-        Attack = species.attack;
-        Defense = species.defense;
-        Speed = species.speed;
-        for(int i = 1; i < level; i++)
-        {
-            MaxHP = Mathf.CeilToInt(MaxHP * 1.1f);
-            Attack = Mathf.CeilToInt(Attack * 1.1f);
-            Defense = Mathf.CeilToInt(Defense * 1.1f);
-            Speed = Mathf.CeilToInt(Speed * 1.1f);
-        }
+        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
+        Attack = Mathf.CeilToInt(species.attack * statTotal);
+        Defense = Mathf.CeilToInt(species.defense * statTotal);
+        Speed = Mathf.CeilToInt(species.speed * statTotal);
+        
         currentHP = MaxHP;
 
         foreach(MoveData move in species.moves)
@@ -138,10 +137,11 @@ public class CreatureInstance
         CanEvolve = CheckEvolution();
 
         int prevMaxHP = MaxHP;
-        MaxHP = Mathf.CeilToInt(MaxHP * 1.1f);
-        Attack = Mathf.CeilToInt(Attack * 1.1f);
-        Defense = Mathf.CeilToInt(Defense * 1.1f);
-        Speed = Mathf.CeilToInt(Speed * 1.1f);
+        statTotal += 5;
+        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
+        Attack = Mathf.CeilToInt(species.attack * statTotal);
+        Defense = Mathf.CeilToInt(species.defense * statTotal);
+        Speed = Mathf.CeilToInt(species.speed * statTotal);
 
         currentHP += MaxHP - prevMaxHP;
 
@@ -194,17 +194,11 @@ public class CreatureInstance
     {
         species = species.evolution;
         int temp = MaxHP - currentHP;
-        MaxHP = species.maxHP;
-        Attack = species.attack;
-        Defense = species.defense;
-        Speed = species.speed;
-        for(int i = 1; i < level; i++)
-        {
-            MaxHP = Mathf.CeilToInt(MaxHP * 1.1f);
-            Attack = Mathf.CeilToInt(Attack * 1.1f);
-            Defense = Mathf.CeilToInt(Defense * 1.1f);
-            Speed = Mathf.CeilToInt(Speed * 1.1f);
-        }
+        statTotal = species.total + (level - 1) * 5;
+        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
+        Attack = Mathf.CeilToInt(species.attack * statTotal);
+        Defense = Mathf.CeilToInt(species.defense * statTotal);
+        Speed = Mathf.CeilToInt(species.speed * statTotal);
         currentHP = MaxHP - temp;
         FollowerManager.Instance.SpawnFollower();
     }

@@ -8,6 +8,12 @@ public enum ItemCategory
     Held
 }
 
+public enum ItemEffect
+{
+    HealHP,
+    Revive
+}
+
 [CreateAssetMenu(fileName = "NewItem", menuName = "Game/Item")]
 public class ItemData : ScriptableObject
 {
@@ -21,4 +27,8 @@ public class ItemData : ScriptableObject
     public ItemCategory category;
     public bool stackable = true;
     public int maxStack = 99;
+
+    [Header("Consumable Effect")]
+    public ItemEffect effect;
+    public int effectAmount = 20;
 }

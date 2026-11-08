@@ -585,9 +585,7 @@ public class BattleManager : MonoBehaviour
         }
         int damage = Mathf.Max(
             1,
-            Mathf.RoundToInt(multiplier * (playerCreature.Attack +
-            selectedMove.power -
-            enemyCreature.Defense))
+            Mathf.RoundToInt(multiplier * (0.5f * selectedMove.power* playerCreature.Attack / enemyCreature.Defense))
         );
 
         enemyCreature.currentHP -= damage;
@@ -854,10 +852,7 @@ public class BattleManager : MonoBehaviour
         }
         int damage = Mathf.Max(
             1,
-            Mathf.RoundToInt(multiplier * (enemyCreature.Attack +
-            enemyMove.power -
-            playerCreature.Defense
-        )));
+            Mathf.RoundToInt(multiplier * (0.5f * enemyMove.power * enemyCreature.Attack / playerCreature.Defense)));
         playerCreature.currentHP -= damage;
 
         if (playerCreature.currentHP <= 0)

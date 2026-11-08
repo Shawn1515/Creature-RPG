@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: DroofData
   m_EditorClassIdentifier: Assembly-CSharp::CreatureData
   creatureName: Droof
-  maxHP: 15
-  attack: 15
-  defense: 15
-  speed: 15
+  maxHP: 0.25
+  attack: 0.25
+  defense: 0.25
+  speed: 0.25
+  total: 20
   groundOffset: 1.96
   moves:
   - {fileID: 11400000, guid: a895c268c72dd4047b5382b6cfda7121, type: 2}

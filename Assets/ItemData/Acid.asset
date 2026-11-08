@@ -18,3 +18,5 @@ MonoBehaviour:
   category: 0
   stackable: 1
   maxStack: 99
+  effect: 1
+  effectAmount: 20

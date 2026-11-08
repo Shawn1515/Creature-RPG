@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: KrabareData
   m_EditorClassIdentifier: Assembly-CSharp::CreatureData
   creatureName: Krabare
-  maxHP: 4
-  attack: 3
-  defense: 3
-  speed: 3
+  maxHP: 0.2
+  attack: 0.3
+  defense: 0.3
+  speed: 0.2
+  total: 15
   groundOffset: 1.1
   moves:
   - {fileID: 11400000, guid: 1357961a2f5f8174cb0a73742a28d590, type: 2}

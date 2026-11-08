@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoveData
   moveName: Icicle Scratch
   moveType: 4
-  power: 5
+  power: 2

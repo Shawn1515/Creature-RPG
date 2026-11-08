@@ -4,10 +4,11 @@ using UnityEngine;
 public class CreatureData : ScriptableObject
 {
     public string creatureName;
-    public int maxHP;
-    public int attack;
-    public int defense;
-    public int speed;
+    public float maxHP;
+    public float attack;
+    public float defense;
+    public float speed;
+    public int total;
 
     public float groundOffset;
     

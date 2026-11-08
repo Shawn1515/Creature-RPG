@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: UnibladeData
   m_EditorClassIdentifier: Assembly-CSharp::CreatureData
   creatureName: Uniblade
-  maxHP: 6
-  attack: 12
-  defense: 4
-  speed: 12
+  maxHP: 0.2
+  attack: 0.3
+  defense: 0.2
+  speed: 0.3
+  total: 20
   groundOffset: 0.2
   moves:
   - {fileID: 11400000, guid: 68917f6a7753227419daed6902837e63, type: 2}

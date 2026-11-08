@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PartyUI : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class PartyUI : MonoBehaviour
     private bool movingCreature = false;
     private int movingIndex = -1;
     private bool closePressed = false;
+    private bool selectingItemTarget = false;
+    private Action<CreatureInstance> itemTargetCallback;
 
     public static PartyUI Instance;
 
@@ -90,6 +93,26 @@ public class PartyUI : MonoBehaviour
         }
     }
 
+    public void BeginItemTargetSelection(Action<CreatureInstance> callback)
+    {
+        selectingItemTarget = true;
+        itemTargetCallback = callback;
+
+        UpdateSlots();
+
+        partyPanel.SetActive(true);
+        actionPanel.SetActive(false);
+        summaryPanel.SetActive(false);
+
+        closeButton.gameObject.SetActive(true);
+        switchButton.gameObject.SetActive(false);
+
+        selectedIndex = -1;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     void OpenParty()
     {
         GameManager.Instance.SetState(GameState.Party);
@@ -114,6 +137,19 @@ public class PartyUI : MonoBehaviour
 
     public void CloseParty()
     {
+        if (selectingItemTarget)
+        {
+            selectingItemTarget = false;
+            partyPanel.SetActive(false);
+            actionPanel.SetActive(false);
+            InventoryUI.Instance.OpenInventory();
+
+            Action<CreatureInstance> callback = itemTargetCallback;
+            itemTargetCallback = null;
+
+            callback?.Invoke(null);
+            return;
+        }
         partyPanel.SetActive(false);
         actionPanel.SetActive(false);
         summaryPanel.SetActive(false);
@@ -141,6 +177,11 @@ public class PartyUI : MonoBehaviour
             Cursor.visible = false;
         }
         isBattleSwitch = false;
+    }
+
+    public void RefreshPartySlots()
+    {
+        UpdateSlots();
     }
 
     void UpdateSlots()
@@ -171,14 +212,29 @@ public class PartyUI : MonoBehaviour
     void SelectSlot(int index)
     {
         if (index >= PartyManager.Instance.party.Count)
+            return;
+
+        if (selectingItemTarget)
         {
+            CreatureInstance creature = PartyManager.Instance.party[index];
+
+            selectingItemTarget = false;
+            partyPanel.SetActive(false);
+            InventoryUI.Instance.OpenInventory();
+
+            Action<CreatureInstance> callback = itemTargetCallback;
+            itemTargetCallback = null;
+
+            callback?.Invoke(creature);
             return;
         }
-        if(movingCreature)
+
+        if (movingCreature)
         {
             FinishPartyMove(index);
             return;
         }
+
         selectedIndex = index;
         OpenActionPanel(index);
     }

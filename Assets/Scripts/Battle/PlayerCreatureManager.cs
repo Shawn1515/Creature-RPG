@@ -12,7 +12,7 @@ public class PlayerCreatureManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        starterCreature = new CreatureInstance(starterCreatureData);
+        starterCreature = new CreatureInstance(starterCreatureData, 5);
         PartyManager.Instance.AddCreature(starterCreature);
     }
 }
