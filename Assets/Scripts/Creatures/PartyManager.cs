@@ -56,12 +56,37 @@ public class PartyManager : MonoBehaviour
 
     public void SwapCreatures(int firstIndex, int secondIndex)
     {
-        (party[firstIndex], party[secondIndex]) = (party[secondIndex], party[firstIndex]);
-        if((firstIndex == 0 || secondIndex == 0) && (firstIndex != secondIndex))
+        CreatureInstance oldFollower = null;
+
+        foreach (CreatureInstance creature in party)
         {
-            if(GameManager.Instance.GetState() == GameState.Party)
+            if (creature.currentHP > 0)
             {
-                ScreenFade.Instance.BattleTransition(FollowerManager.Instance.SpawnFollower);
+                oldFollower = creature;
+                break;
+            }
+        }
+
+        (party[firstIndex], party[secondIndex]) = (party[secondIndex], party[firstIndex]);
+
+        CreatureInstance newFollower = null;
+
+        foreach (CreatureInstance creature in party)
+        {
+            if (creature.currentHP > 0)
+            {
+                newFollower = creature;
+                break;
+            }
+        }
+
+        if (oldFollower != newFollower)
+        {
+            if (GameManager.Instance.GetState() == GameState.Party)
+            {
+                ScreenFade.Instance.BattleTransition(
+                    FollowerManager.Instance.SpawnFollower
+                );
             }
             else
             {

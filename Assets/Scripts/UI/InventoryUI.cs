@@ -54,6 +54,17 @@ public class InventoryUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+    
+    private CreatureInstance GetCurrentFollowerCreature()
+    {
+        foreach (CreatureInstance creature in PartyManager.Instance.party)
+        {
+            if (creature.currentHP > 0)
+                return creature;
+        }
+
+        return null;
+    }
 
     public void RefreshInventory()
     {
@@ -133,6 +144,8 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
+        CreatureInstance oldFollower = GetCurrentFollowerCreature();
+
         bool itemUsed = false;
 
         switch (itemBeingUsed.effect)
@@ -175,6 +188,14 @@ public class InventoryUI : MonoBehaviour
         if (itemUsed)
         {
             inventory.RemoveItem(itemBeingUsed);
+            CreatureInstance newFollower = GetCurrentFollowerCreature();
+
+            if (oldFollower != newFollower)
+            {
+                ScreenFade.Instance.BattleTransition(
+                    FollowerManager.Instance.SpawnFollower
+                );
+            }
 
             Debug.Log(creature.CreatureName + " used " +
                       itemBeingUsed.displayName + "!");

@@ -194,6 +194,11 @@ public class BattleManager : MonoBehaviour
         {
             if(enemy == null)
             {
+                if(playerFainted)
+                {
+                    playerCreatureTransform.gameObject.SetActive(false);
+                    OnPlayerCreatureFainted(startPosition);
+                }
                 yield break;
             }
             timer += Time.deltaTime;
@@ -205,7 +210,8 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
         if(playerFainted) {
-            OnPlayerCreatureFainted();
+            playerCreatureTransform.gameObject.SetActive(false);
+            OnPlayerCreatureFainted(startPosition);
         }
         else
         {
@@ -497,11 +503,13 @@ public class BattleManager : MonoBehaviour
 
         playerCreature = creature;
 
-        ScreenFade.Instance.BattleTransition(() =>
+        if(forcedSwitch)
         {
             PartyManager.Instance.SetLeader(partyIndex);
+            FollowerManager.Instance.SpawnFollower();
             playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
             playerCreatureTransform.gameObject.SetActive(false);
+            playerCreatureTransform.position = GetGroundPosition(playerCreatureTransform.position, playerCreature);
             FaceHorizontally(
                 playerCreatureTransform,
                 enemyTransform
@@ -557,7 +565,70 @@ public class BattleManager : MonoBehaviour
                     }
                 }
             );
-        });
+        }
+        else {
+            ScreenFade.Instance.BattleTransition(() =>
+            {
+                PartyManager.Instance.SetLeader(partyIndex);
+                playerCreatureTransform = FollowerManager.Instance.currentFollower.transform;
+                playerCreatureTransform.gameObject.SetActive(false);
+                FaceHorizontally(
+                    playerCreatureTransform,
+                    enemyTransform
+                );
+
+                playerUI = playerCreatureTransform.GetComponent<CreatureBattleUI>();
+                playerUI.Setup(playerCreature);
+                playerUI.Show();
+
+                UpdateHPUI();
+                SetupMoveButtons();
+                SetMoveButtonsActive(false);
+
+                PartyUI.Instance.CloseParty();
+
+                System.Action continueBattle = () =>
+                {
+                    if (forcedSwitch)
+                    {
+                        forcedSwitch = false;
+                        SetupMoveButtons();
+                        SetMoveButtonsActive(true);
+                    }
+                    else
+                    {
+                        EnemyFreeAttack();
+                    }
+                };
+
+                BattleDialogueUI.Instance.ShowMessage(
+                    $"Go {creature.CreatureName}!",
+                    () =>
+                    {
+                        TrainerSendOut trainerSendOut = playerObject.GetComponent<TrainerSendOut>();
+                        if (trainerSendOut != null)
+                        {
+                            StartCoroutine(trainerSendOut.StartSendOut(
+                                playerCreatureTransform,
+                                () =>
+                                {
+                                    if (playerCreatureTransform != null)
+                                    {
+                                        playerCreatureTransform.gameObject.SetActive(true);
+                                    }
+                                    continueBattle();
+                                },
+                                0f
+                            ));
+                        }
+                        else
+                        {
+                            continueBattle();
+                        }
+                    }
+                );
+            });
+        }
     }
 
     void OpenSwitchMenu()
@@ -946,7 +1017,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerCreatureFainted()
+    public void OnPlayerCreatureFainted(Vector3 startPosition)
     {
         if(!PartyManager.Instance.HasUsableCreature())
         {
@@ -967,6 +1038,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
         forcedSwitch = true;
+        playerCreatureTransform.position = startPosition;
         PartyUI.Instance.OpenForBattle();
     }
 

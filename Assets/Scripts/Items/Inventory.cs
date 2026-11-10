@@ -47,6 +47,12 @@ public class Inventory : MonoBehaviour
                 amount -= quantityToAdd;
             }
         }
+
+        if (HatManager.Instance != null &&
+            item == HatManager.Instance.hatItem)
+        {
+            HatManager.Instance.RefreshHatCount();
+        }
     }
 
     public bool RemoveItem(ItemData item, int amount = 1)
@@ -70,6 +76,12 @@ public class Inventory : MonoBehaviour
 
             if (items[i].quantity <= 0)
                 items.RemoveAt(i);
+        }
+
+        if (HatManager.Instance != null &&
+            item == HatManager.Instance.hatItem)
+        {
+            HatManager.Instance.RefreshHatCount();
         }
 
         return true;
