@@ -35,6 +35,10 @@ public class PartyUI : MonoBehaviour
     public GameObject movesetPanel;
     public Button moveButtonPrefab;
 
+    public TextMeshProUGUI heldItemText;
+    public Button removeHeldItemButton;
+
+    private CreatureInstance summaryCreature;
     private bool movingCreature = false;
     private int movingIndex = -1;
     private bool closePressed = false;
@@ -83,6 +87,7 @@ public class PartyUI : MonoBehaviour
             }
             BattleManager.Instance.SwitchCreature(selectedIndex);
         });
+        removeHeldItemButton.onClick.AddListener(RemoveHeldItem);
     }
 
     void Update()
@@ -295,7 +300,7 @@ public class PartyUI : MonoBehaviour
 
     void DisplayCreature(CreatureInstance creature)
     {
-        summaryPanel.SetActive(true);
+        summaryCreature = creature;
         creatureNameText.text = creature.CreatureName;
 
         levelText.text = "Level: " + creature.level;
@@ -320,6 +325,38 @@ public class PartyUI : MonoBehaviour
         }
 
         movesText.text = moveString;
+        if (creature.heldItem != null)
+        {
+            heldItemText.text = "Held Item: " + creature.heldItem.displayName;
+            removeHeldItemButton.interactable = true;
+        }
+        else
+        {
+            heldItemText.text = "Held Item: None";
+            removeHeldItemButton.interactable = false;
+        }
+        summaryPanel.SetActive(true);
+    }
+
+    void RemoveHeldItem()
+    {
+        if (summaryCreature == null || summaryCreature.heldItem == null) {
+            return;
+        }
+
+        Inventory inventory = FindAnyObjectByType<Inventory>();
+
+        if (inventory == null)
+        {
+            return;
+        }
+
+        summaryCreature.RemoveHeldItem(inventory);
+
+        DisplayCreature(summaryCreature);
+        UpdateSlots();
+
+        InventoryUI.Instance.RefreshInventory();
     }
 
     public void OpenForBattle()

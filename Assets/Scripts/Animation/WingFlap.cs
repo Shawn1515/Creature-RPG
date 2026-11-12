@@ -15,9 +15,9 @@ public class WingFlap : MonoBehaviour
 
     void Update()
     {
-        float angle = Mathf.Sin(Time.time * flapSpeed) * flapAngle;
-
-        transform.localRotation =
-            startRotation * Quaternion.Euler(0f, angle, 0f);
+        if(GameManager.Instance.GetState() != GameState.Party) {
+            float angle = Mathf.Sin(Time.time * flapSpeed) * flapAngle;
+            transform.localRotation = startRotation * Quaternion.Euler(0f, angle, 0f);
+        }
     }
 }

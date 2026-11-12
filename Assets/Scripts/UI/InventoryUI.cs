@@ -15,6 +15,7 @@ public class InventoryUI : MonoBehaviour
     private Inventory inventory;
     private ItemData selectedItem;
     private ItemData itemBeingUsed;
+    private ItemData itemBeingGiven;
 
     public static InventoryUI Instance;
 
@@ -30,7 +31,7 @@ public class InventoryUI : MonoBehaviour
         inventoryPanel.SetActive(false);
 
         closeButton.onClick.AddListener(CloseInventory);
-        useButton.onClick.AddListener(UseSelectedItem);
+        useButton.onClick.AddListener(OnItemButtonClicked);
 
         useButton.interactable = false;
     }
@@ -68,8 +69,9 @@ public class InventoryUI : MonoBehaviour
 
     public void RefreshInventory()
     {
-        if (inventory == null)
+        if (inventory == null) {
             return;
+        }
 
         itemDescription.text = "Select an item to see its description.";
 
@@ -99,18 +101,20 @@ public class InventoryUI : MonoBehaviour
     private void SelectItem(ItemData item)
     {
         selectedItem = item;
-
         itemDescription.text = item.displayName + "\n" + item.description;
-
-        useButton.interactable =
-            item.category == ItemCategory.Consumable;
-
-        if (useButton.interactable)
+        if (item.category == ItemCategory.Consumable)
         {
+            useButton.interactable = true;
             useButton.GetComponentInChildren<TMP_Text>().text = "Use";
+        }
+        else if (item.category == ItemCategory.Held)
+        {
+            useButton.interactable = true;
+            useButton.GetComponentInChildren<TMP_Text>().text = "Give";
         }
         else
         {
+            useButton.interactable = false;
             useButton.GetComponentInChildren<TMP_Text>().text = "";
         }
     }
@@ -211,6 +215,57 @@ public class InventoryUI : MonoBehaviour
                 "That item cannot be used on " + creature.CreatureName + ".";
 
             itemBeingUsed = null;
+        }
+    }
+
+    private void OnItemButtonClicked()
+    {
+        if (selectedItem == null) {
+            return;
+        }
+        if (selectedItem.category == ItemCategory.Consumable)
+        {
+            UseSelectedItem();
+        }
+        else if (selectedItem.category == ItemCategory.Held)
+        {
+            GiveSelectedItem();
+        }
+    }
+
+    private void GiveSelectedItem()
+    {
+        itemBeingGiven = selectedItem;
+
+        inventoryPanel.SetActive(false);
+
+        PartyUI.Instance.BeginItemTargetSelection(ApplyHeldItem);
+    }
+
+    private void ApplyHeldItem(CreatureInstance creature)
+    {
+        if (creature == null)
+        {
+            itemBeingGiven = null;
+            return;
+        }
+        if (itemBeingGiven == null) {
+            return;
+        }
+        if (creature.EquipItem(itemBeingGiven, inventory))
+        {
+            Debug.Log(creature.CreatureName + " was given " +
+                    itemBeingGiven.displayName + "!");
+
+            itemBeingGiven = null;
+
+            RefreshInventory();
+            PartyUI.Instance.RefreshPartySlots();
+        }
+        else
+        {
+            itemBeingGiven = null;
+            RefreshInventory();
         }
     }
 

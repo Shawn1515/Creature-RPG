@@ -53,6 +53,14 @@ public class TrainerWander : MonoBehaviour
 
     private void Update()
     {
+        if(GameManager.Instance.GetState() == GameState.Party)
+        {
+            animator.speed = 0f;
+        }
+        else
+        {
+            animator.speed = 1f;
+        }
         if (trainerEncounter == null || trainerEncounter.Defeated())
         {
             UpdateAnimation(false);

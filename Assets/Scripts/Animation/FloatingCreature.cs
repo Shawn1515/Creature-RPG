@@ -19,13 +19,12 @@ public class FloatingCreature : MonoBehaviour
 
     void Update()
     {
-        float bounce = Mathf.Sin(Time.time * bounceSpeed) * bounceHeight;
-
-        transform.localPosition = startPosition + Vector3.up * bounce;
-
-        float tilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAngle;
-
-        transform.localRotation =
-            startRotation * Quaternion.Euler(0f, 0f, tilt);
+        if(GameManager.Instance.GetState() != GameState.Party)
+        {
+            float bounce = Mathf.Sin(Time.time * bounceSpeed) * bounceHeight;
+            transform.localPosition = startPosition + Vector3.up * bounce;
+            float tilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAngle;
+            transform.localRotation = startRotation * Quaternion.Euler(0f, 0f, tilt);
+        }
     }
 }

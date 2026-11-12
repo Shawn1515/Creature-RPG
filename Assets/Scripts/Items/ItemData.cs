@@ -31,4 +31,11 @@ public class ItemData : ScriptableObject
     [Header("Consumable Effect")]
     public ItemEffect effect;
     public int effectAmount = 20;
+    
+    [Header("Held Item Stat Bonuses")]
+    public float attackBonus = 1f;
+    public float defenseBonus = 1f;
+    public float speedBonus = 1f;
+    public float healthBonus = 1f;
+    public float experienceBonus = 1f;
 }

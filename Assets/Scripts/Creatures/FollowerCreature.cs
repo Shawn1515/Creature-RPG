@@ -46,6 +46,15 @@ public class FollowerCreature : MonoBehaviour
 
     private void Update()
     {
+        if(GameManager.Instance.GetState() == GameState.Party)
+        {
+            agent.enabled = false;
+            return;
+        }
+        else
+        {
+            agent.enabled = true;
+        }
         UpdateAnimation();
         if (GameManager.Instance.CurrentState != GameState.Exploration)
         {

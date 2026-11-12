@@ -12,7 +12,20 @@ public class CreatureAnimationController : MonoBehaviour
 
     private void Awake()
     {
-        if (animator == null)
+        if (animator == null) {
             animator = GetComponentInChildren<Animator>();
+        }
+    }
+
+    private void Update()
+    {
+        if(GameManager.Instance.GetState() == GameState.Party)
+        {
+            animator.speed = 0f;
+        }
+        else
+        {
+            animator.speed = 1f;
+        }
     }
 }

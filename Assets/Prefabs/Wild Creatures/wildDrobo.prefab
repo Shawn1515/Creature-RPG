@@ -710,6 +710,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b749868156b8bd046a8152188b11a62f, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1027311067172323638}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b749868156b8bd046a8152188b11a62f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8599441132460169583}
   m_SourcePrefab: {fileID: 100100000, guid: b749868156b8bd046a8152188b11a62f, type: 3}
 --- !u!4 &7057106169650035699 stripped
 Transform:
@@ -837,3 +840,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CreatureEncounter
   creatureSpecies: {fileID: 11400000, guid: c840ce3073fb1c340869f51907abc5dc, type: 2}
   spawnPoint: {fileID: 0}
+--- !u!114 &8599441132460169583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7684319672074068297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac57e20e2e829349864d751b78ea0de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureAnimationController
+  animator: {fileID: 9007466168635161704}

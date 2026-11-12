@@ -12,23 +12,40 @@ public class CreatureInstance
 
     public int experience;
 
-    public int MaxHP;
+    public int baseHP;
 
-    public int Attack;
+    public float statMultiplier = 1f;
 
-    public int Defense;
+    private int baseAttack;
+    private int baseDefense;
+    private int baseSpeed;
 
-    public int Speed;
+    public int MaxHP => Mathf.RoundToInt(
+        baseHP * statMultiplier * (heldItem != null ? heldItem.healthBonus : 1f)
+    );
+
+    public int Attack => Mathf.RoundToInt(
+        baseAttack * statMultiplier * (heldItem != null ? heldItem.attackBonus : 1f)
+    );
+
+    public int Defense => Mathf.RoundToInt(
+        baseDefense * statMultiplier * (heldItem != null ? heldItem.defenseBonus : 1f)
+    );
+
+    public int Speed => Mathf.RoundToInt(
+        baseSpeed * statMultiplier * (heldItem != null ? heldItem.speedBonus : 1f)
+    );
+
+    public ItemData heldItem;
 
     public List<MoveData> Moves = new List<MoveData>();
 
     public List<MoveData> UnlockedMoves = new List<MoveData>();
 
-    public MoveData NewlyUnlockedMove {get; private set;}
+    public MoveData NewlyUnlockedMove { get; private set; }
 
     public bool CanEvolve;
     private int statTotal;
-
 
     public CreatureInstance(CreatureData data)
     {
@@ -42,28 +59,27 @@ public class CreatureInstance
 
         statTotal = species.total;
 
-        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
-
+        baseHP = Mathf.CeilToInt(species.maxHP * statTotal);
         currentHP = MaxHP;
 
-        Attack = Mathf.CeilToInt(species.attack * statTotal);
+        baseAttack = Mathf.CeilToInt(species.attack * statTotal);
 
-        Defense = Mathf.CeilToInt(species.defense * statTotal);
+        baseDefense = Mathf.CeilToInt(species.defense * statTotal);
 
-        Speed = Mathf.CeilToInt(species.speed * statTotal);
+        baseSpeed = Mathf.CeilToInt(species.speed * statTotal);
 
-        foreach(MoveData move in species.moves)
+        foreach (MoveData move in species.moves)
         {
             Moves.Add(move);
         }
-        foreach(LearnableMove learnable in species.learnableMoves)
+
+        foreach (LearnableMove learnable in species.learnableMoves)
         {
-            if(learnable.level <= level && !UnlockedMoves.Contains(learnable.move))
+            if (learnable.level <= level && !UnlockedMoves.Contains(learnable.move))
             {
                 UnlockedMoves.Add(learnable.move);
             }
         }
-
     }
 
     public CreatureInstance(CreatureData data, int lvl)
@@ -76,29 +92,29 @@ public class CreatureInstance
 
         statTotal = species.total + (level - 1) * 5;
 
-
         experience = 0;
 
-        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
-        Attack = Mathf.CeilToInt(species.attack * statTotal);
-        Defense = Mathf.CeilToInt(species.defense * statTotal);
-        Speed = Mathf.CeilToInt(species.speed * statTotal);
-        
+        baseHP = Mathf.CeilToInt(species.maxHP * statTotal);
+        baseAttack = Mathf.CeilToInt(species.attack * statTotal);
+
+        baseDefense = Mathf.CeilToInt(species.defense * statTotal);
+
+        baseSpeed = Mathf.CeilToInt(species.speed * statTotal);
+
         currentHP = MaxHP;
 
-        foreach(MoveData move in species.moves)
+        foreach (MoveData move in species.moves)
         {
             Moves.Add(move);
         }
 
-        foreach(LearnableMove learnable in species.learnableMoves)
+        foreach (LearnableMove learnable in species.learnableMoves)
         {
-            if(learnable.level <= level && !UnlockedMoves.Contains(learnable.move))
+            if (learnable.level <= level && !UnlockedMoves.Contains(learnable.move))
             {
                 UnlockedMoves.Add(learnable.move);
             }
         }
-
     }
 
     public GameObject CreaturePrefab => species.creaturePrefab;
@@ -113,11 +129,16 @@ public class CreatureInstance
     public bool GainExperience(int amount)
     {
         bool up = false;
+        if (heldItem != null)
+        {
+            amount = Mathf.RoundToInt(amount * heldItem.experienceBonus);
+        }
         experience += amount;
-        while(experience >= ExperienceNeeded())
+        while (experience >= ExperienceNeeded())
         {
             experience -= ExperienceNeeded();
-            if(level >= 50)
+
+            if (level >= 50)
             {
                 experience = 0;
             }
@@ -137,17 +158,24 @@ public class CreatureInstance
         CanEvolve = CheckEvolution();
 
         int prevMaxHP = MaxHP;
+
         statTotal += 5;
-        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
-        Attack = Mathf.CeilToInt(species.attack * statTotal);
-        Defense = Mathf.CeilToInt(species.defense * statTotal);
-        Speed = Mathf.CeilToInt(species.speed * statTotal);
+
+        baseHP = Mathf.CeilToInt(species.maxHP * statTotal);
+        
+        baseAttack = Mathf.CeilToInt(species.attack * statTotal);
+
+        baseDefense = Mathf.CeilToInt(species.defense * statTotal);
+
+        baseSpeed = Mathf.CeilToInt(species.speed * statTotal);
 
         currentHP += MaxHP - prevMaxHP;
 
         MoveData newMove = UnlockMoves();
+
         NewlyUnlockedMove = null;
-        if(newMove != null)
+
+        if (newMove != null)
         {
             NewlyUnlockedMove = newMove;
         }
@@ -162,6 +190,7 @@ public class CreatureInstance
                 return learnable.move;
             }
         }
+
         return null;
     }
 
@@ -183,23 +212,71 @@ public class CreatureInstance
 
     public bool CheckEvolution()
     {
-        if(species.evolution != null && level >= species.evolutionLevel)
+        if (species.evolution != null && level >= species.evolutionLevel)
         {
             return true;
         }
+
         return false;
     }
 
     public void Evolve()
     {
         species = species.evolution;
+
         int temp = MaxHP - currentHP;
+
         statTotal = species.total + (level - 1) * 5;
-        MaxHP = Mathf.CeilToInt(species.maxHP * statTotal);
-        Attack = Mathf.CeilToInt(species.attack * statTotal);
-        Defense = Mathf.CeilToInt(species.defense * statTotal);
-        Speed = Mathf.CeilToInt(species.speed * statTotal);
+
+        baseHP = Mathf.CeilToInt(species.maxHP * statTotal);
+
+        baseAttack = Mathf.CeilToInt(species.attack * statTotal);
+
+        baseDefense = Mathf.CeilToInt(species.defense * statTotal);
+
+        baseSpeed = Mathf.CeilToInt(species.speed * statTotal);
+
         currentHP = MaxHP - temp;
+
         FollowerManager.Instance.SpawnFollower();
+    }
+
+    public bool EquipItem(ItemData item, Inventory inventory)
+    {
+        if (item == null ||
+            item.category != ItemCategory.Held ||
+            inventory == null ||
+            inventory.GetItemCount(item) <= 0)
+        {
+            return false;
+        }
+
+        if (!inventory.RemoveItem(item))
+        {
+            return false;
+        }
+
+        if (heldItem != null)
+        {
+            currentHP = Mathf.RoundToInt(currentHP / heldItem.healthBonus);
+            inventory.AddItem(heldItem);
+        }
+        currentHP = Mathf.RoundToInt(currentHP * item.healthBonus);
+        heldItem = item;
+        currentHP = Mathf.Min(currentHP, MaxHP);
+        return true;
+    }
+
+    public void RemoveHeldItem(Inventory inventory)
+    {
+        if (heldItem == null || inventory == null)
+        {
+            return;
+        }
+        ItemData oldItem = heldItem;
+        currentHP = Mathf.RoundToInt(currentHP / oldItem.healthBonus);
+        heldItem = null;
+        currentHP = Mathf.Min(currentHP, MaxHP);
+        inventory.AddItem(oldItem);
     }
 }

@@ -13,8 +13,15 @@ MonoBehaviour:
   m_Name: Ring
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   displayName: Ring
-  description: Gives 25% XP boost when held. Hurts to put on.
+  description: Gives 20% XP boost when held. Hurts to put on.
   icon: {fileID: 21300000, guid: 8bcb07d9c2c4c484caf61c33f48e3dd8, type: 3}
   category: 2
   stackable: 1
   maxStack: 99
+  effect: 0
+  effectAmount: 20
+  attackBonus: 1
+  defenseBonus: 1
+  speedBonus: 1
+  healthBonus: 1
+  experienceBonus: 1.2

@@ -20,12 +20,10 @@ public class BossEncounter : MonoBehaviour
 
     private void Start()
     {
-        bossCreature = new CreatureInstance(creatureSpecies, bossLevel);
-
-        bossCreature.MaxHP = Mathf.CeilToInt(bossCreature.MaxHP * statMultiplier);
-        bossCreature.Attack = Mathf.CeilToInt(bossCreature.Attack * statMultiplier);
-        bossCreature.Defense = Mathf.CeilToInt(bossCreature.Defense * statMultiplier);
-        bossCreature.Speed = Mathf.CeilToInt(bossCreature.Speed * statMultiplier);
+        bossCreature = new CreatureInstance(creatureSpecies, bossLevel)
+        {
+            statMultiplier = statMultiplier
+        };
 
         bossCreature.currentHP = bossCreature.MaxHP;
 
