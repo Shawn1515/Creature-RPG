@@ -8,11 +8,36 @@ public class CreatureInstance
 
     public int level;
 
-    public int currentHP;
-
     public int experience;
 
     public int baseHP;
+
+    private float baseCurrentHP;
+
+    private float HealthMultiplier =>
+    statMultiplier * (heldItem != null && heldItem.healthBonus > 0f
+        ? heldItem.healthBonus
+        : 1f);
+
+    public int currentHP
+    {
+        get => Mathf.Clamp(
+            Mathf.RoundToInt(baseCurrentHP * HealthMultiplier),
+            0,
+            MaxHP
+        );
+
+        set
+        {
+            int clampedValue = Mathf.Clamp(value, 0, MaxHP);
+
+            baseCurrentHP = Mathf.Clamp(
+                clampedValue / HealthMultiplier,
+                0f,
+                baseHP
+            );
+        }
+    }
 
     public float statMultiplier = 1f;
 
@@ -222,9 +247,9 @@ public class CreatureInstance
 
     public void Evolve()
     {
-        species = species.evolution;
+        int previousMissingHP = MaxHP - currentHP;
 
-        int temp = MaxHP - currentHP;
+        species = species.evolution;
 
         statTotal = species.total + (level - 1) * 5;
 
@@ -236,7 +261,7 @@ public class CreatureInstance
 
         baseSpeed = Mathf.CeilToInt(species.speed * statTotal);
 
-        currentHP = MaxHP - temp;
+        currentHP = MaxHP - previousMissingHP;
 
         FollowerManager.Instance.SpawnFollower();
     }
@@ -250,20 +275,15 @@ public class CreatureInstance
         {
             return false;
         }
-
         if (!inventory.RemoveItem(item))
         {
             return false;
         }
-
         if (heldItem != null)
         {
-            currentHP = Mathf.RoundToInt(currentHP / heldItem.healthBonus);
             inventory.AddItem(heldItem);
         }
-        currentHP = Mathf.RoundToInt(currentHP * item.healthBonus);
         heldItem = item;
-        currentHP = Mathf.Min(currentHP, MaxHP);
         return true;
     }
 
@@ -274,9 +294,7 @@ public class CreatureInstance
             return;
         }
         ItemData oldItem = heldItem;
-        currentHP = Mathf.RoundToInt(currentHP / oldItem.healthBonus);
         heldItem = null;
-        currentHP = Mathf.Min(currentHP, MaxHP);
         inventory.AddItem(oldItem);
     }
 }

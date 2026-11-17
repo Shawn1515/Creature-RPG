@@ -1085,7 +1085,7 @@ public class BattleManager : MonoBehaviour
     {
         SetMoveButtonsActive(false);
 
-        if(!HatManager.Instance.UseHat())
+        if(!HatManager.Instance.UseHat(trainerBattle))
         {
             BattleDialogueUI.Instance.ShowMessage("Uh oh! You are out of hats!", EnemyFreeAttack);
             return;

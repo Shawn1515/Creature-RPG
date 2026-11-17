@@ -71,13 +71,17 @@ public class HatManager : MonoBehaviour
                inv.GetItemCount(hatItem) > 0;
     }
 
-    public bool UseHat()
+    public bool UseHat(bool trainerBattle)
     {
         Inventory inv = GetInventory();
 
-        if (inv == null || hatItem == null)
+        if (inv == null || hatItem == null) {
             return false;
-
+        }
+        if(trainerBattle)
+        {
+            return true;
+        }
         return inv.RemoveItem(hatItem, 1);
     }
 
